@@ -12,7 +12,7 @@ class BuyerItemsList extends StatelessWidget {
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       ),
-      drawer: NavigationDrawer(),
+      drawer: const NavigationDrawer(),
     );
   }
 }

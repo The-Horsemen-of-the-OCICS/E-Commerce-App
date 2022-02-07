@@ -1,3 +1,5 @@
+import 'package:ecommerceapp/routes/AppRoutes.dart';
+import 'package:ecommerceapp/widgets/drawer_item.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -9,9 +11,7 @@ class NavigationDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          ListTile(
-            title: Row(children: const [Text('Home')]),
-          )
+          drawerItem(text: 'Home', onTap: () => Navigator.pushReplacementNamed(context, AppRoutes.home))
         ],
       ),
     );
