@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/screens/buyer/items_list/buyer_items_list.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class ECommerceApp extends StatelessWidget {
     return MaterialApp(
       title: "E-Commerce App",
       routes: {
-        '/': (context) => const MyLoginPage()
+        '/': (context) => const BuyerItemsList()
       }
     );
   }
