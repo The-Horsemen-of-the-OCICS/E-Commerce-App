@@ -1,5 +1,5 @@
 import 'package:ecommerceapp/routes/AppRoutes.dart';
-import 'package:ecommerceapp/screens/buyer/items_list/buyer_items_list.dart';
+import 'package:ecommerceapp/screens/home/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,9 +13,9 @@ class ECommerceApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "E-Commerce App",
-      home: const BuyerItemsList(),
+      home: const Home(),
       routes: {
-        AppRoutes.home: (context) => const BuyerItemsList()
+        AppRoutes.home: (context) => const Home()
       }
     );
   }
