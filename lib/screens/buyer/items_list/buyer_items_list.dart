@@ -38,8 +38,16 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
   Future _loadData(int pageKey) async {
     final newItems = [
       Item('Men Cloth', 'Men cloth desc', 100, 'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'), 
-      Item('Women Cloth', 'Men cloth desc', 50, 'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
-      Item('Kids Cloth', 'Men cloth desc', 80, 'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'), 
+      Item('Women Cloth', 'Women cloth desc', 50, 'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
+      Item('Kids Cloth', 'Kids cloth desc', 80, 'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'), 
+      Item('Home products', 'Home products desc', 120, 'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
+      Item('Men Cloth', 'Men cloth desc', 100, 'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'), 
+      Item('Women Cloth', 'Women cloth desc', 50, 'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
+      Item('Kids Cloth', 'Kids cloth desc', 80, 'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'), 
+      Item('Home products', 'Home products desc', 120, 'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
+      Item('Men Cloth', 'Men cloth desc', 100, 'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'), 
+      Item('Women Cloth', 'Women cloth desc', 50, 'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
+      Item('Kids Cloth', 'Kids cloth desc', 80, 'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'), 
       Item('Home products', 'Home products desc', 120, 'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
     ];
     await Future.delayed(const Duration(seconds: 2));
@@ -149,7 +157,7 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
               crossAxisCount: 2,
               crossAxisSpacing: 0,
               mainAxisSpacing: 15,
-              childAspectRatio: 0.65
+              childAspectRatio: 0.63
             ))
         ],
       ),
