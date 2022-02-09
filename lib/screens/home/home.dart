@@ -9,7 +9,10 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+        title: const Text(
+          'Home',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       ),

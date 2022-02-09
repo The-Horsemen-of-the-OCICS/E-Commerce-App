@@ -11,7 +11,10 @@ class NavigationDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          drawerItem(text: 'Home', onTap: () => Navigator.pushReplacementNamed(context, AppRoutes.home))
+          drawerItem(
+              text: 'Home',
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, AppRoutes.home))
         ],
       ),
     );
