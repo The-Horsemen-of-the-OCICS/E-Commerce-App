@@ -13,45 +13,45 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
-  var allResponses =  Column(
-    children: widget.question.responses.map((res) =>
-          ResponsePost(response: res)
-        ).toList()
-  );
+    var allResponses = Column(
+        children: widget.question.responses
+            .map((res) => ResponsePost(response: res))
+            .toList());
 
-  var responseTextBox = Container(
-                  width: 630,
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  child: const TextField(
-                    maxLength: 200,
-                    minLines: 4,
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Type your response',
-                    ),
-                  ),
-                );
+    var responseTextBox = Container(
+      width: 630,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: const TextField(
+        maxLength: 200,
+        minLines: 4,
+        maxLines: 4,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: 'Type your response',
+        ),
+      ),
+    );
 
-  final submitButton = ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            onPrimary: Colors.black,
-            primary: Colors.black,
-            minimumSize: const Size(200, 60),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(2)),
+    final submitButton = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          onPrimary: Colors.black,
+          primary: Colors.black,
+          minimumSize: const Size(200, 60),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(2)),
           )),
-          onPressed: () {},
-          child: const Text('Submit',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.bold)),
-            );
-    
-  return Scaffold(
+      onPressed: () {},
+      child: const Text('Submit',
+          style: TextStyle(
+              fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+    );
+
+    return Scaffold(
       appBar: AppBar(
-        title: const Text('Question Detail', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+        title: const Text(
+          'Question Detail',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       ),
@@ -60,31 +60,26 @@ class _PostScreenState extends State<PostScreen> {
         child: Column(
           children: <Widget>[
             QuestionPost(question: widget.question),
-
             Text(
-                "Replies [${widget.question.responses.length}]",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+              "Replies [${widget.question.responses.length}]",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-
-            allResponses,
-
-          
-          Text(
-                "Add a response",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
             ),
-            
+            allResponses,
+            Text(
+              "Add a response",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
             responseTextBox,
             submitButton
-          ], 
+          ],
         ),
       ),
     );
