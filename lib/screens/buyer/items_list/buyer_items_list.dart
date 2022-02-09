@@ -149,7 +149,7 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
               crossAxisCount: 2,
               crossAxisSpacing: 0,
               mainAxisSpacing: 15,
-              childAspectRatio: 0.65
+              childAspectRatio: 0.63
             ))
         ],
       ),
