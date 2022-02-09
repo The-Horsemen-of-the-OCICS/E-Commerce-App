@@ -13,8 +13,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-    Widget build(BuildContext context) {
-    
+  Widget build(BuildContext context) {
     final emailField = TextFormField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
@@ -28,9 +27,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
         contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
       ),
       validator: (value) {
-        if (value == null || value.isEmpty ||
-            !RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(value)) {
-           return 'Please enter a valid email address';
+        if (value == null ||
+            value.isEmpty ||
+            !RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                .hasMatch(value)) {
+          return 'Please enter a valid email address';
         }
         return null;
       },
@@ -51,7 +52,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-           return 'Please enter password';
+          return 'Please enter password';
         }
         return null;
       },
@@ -61,12 +62,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
       width: MediaQuery.of(context).size.width / 2.5,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          onPrimary: Colors.black,
-          primary: Colors.black,
-          minimumSize: const Size(80, 60),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(2)),
-        )),
+            onPrimary: Colors.black,
+            primary: Colors.black,
+            minimumSize: const Size(80, 60),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(2)),
+            )),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             if (isChecked) {
@@ -113,21 +114,18 @@ class _MyLoginPageState extends State<MyLoginPage> {
     );
 
     return Form(
-      key: _formKey,
-      child: Scaffold(
-      backgroundColor: const Color(0xFF212332),
-      body: 
-          Center(
+        key: _formKey,
+        child: Scaffold(
+          backgroundColor: const Color(0xFF212332),
+          body: Center(
             child: Card(
               elevation: 5.0,
               child: Container(
                 padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width / 2.5,
                 height: MediaQuery.of(context).size.height / 3,
-                constraints: const BoxConstraints(
-                  maxWidth: 500,
-                  maxHeight: 400
-                ),
+                constraints:
+                    const BoxConstraints(maxWidth: 500, maxHeight: 400),
                 child: Column(
                   children: <Widget>[
                     const Center(
@@ -145,17 +143,14 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     const SizedBox(height: 20.0),
                     loginCheckBox,
                     Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: loginButton
-                      )
-                    )
+                        child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: loginButton))
                   ],
                 ),
               ),
             ),
           ),
-        )
-      );
-    }
+        ));
+  }
 }
