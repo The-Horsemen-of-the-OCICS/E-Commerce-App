@@ -1,35 +1,28 @@
 import 'package:flutter/material.dart';
-import '../screens/forum/question_detail_screen.dart';
-import '../models/question.dart';
+import '../models/response.dart';
 
-class Posts extends StatefulWidget {
+class ResponsePost extends StatefulWidget {
+  const ResponsePost({
+    Key? key,
+    required this.response
+  }): super(key: key);
+
+  final Response response;
+
   @override
-  _PostsState createState() => _PostsState();
+  _ResponsePostState createState() => _ResponsePostState();
+
 }
 
-class _PostsState extends State<Posts> {
+class _ResponsePostState  extends State<ResponsePost> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: questions.map((question) =>
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => PostScreen(
-                    question: question,
-                  )
-                )
-              );
-            },
-            child: Row(
-              children: [
-                Container(
+     return Column(
+      children: [Container(
                   constraints: const BoxConstraints(
                       maxWidth: 600,
-                  ),                  
-                  margin: EdgeInsets.all(15.0),
+                  ), 
+                  margin: EdgeInsets.all(2.0),
                   decoration: BoxDecoration( 
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10.0),
@@ -60,28 +53,17 @@ class _PostsState extends State<Posts> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Container( 
-                                          child: Text(
-                                            question.title,
-                                            style: TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: .4
-                                            ),
-                                          ),
-                                        ), 
-                                        SizedBox(height: 2.0),
                                         Row(
                                           children: <Widget>[
                                             Text(
-                                              question.user.name,
+                                              widget.response.user.name,
                                               style: TextStyle(
                                                 color: Colors.grey
                                               ),
                                             ),
                                             SizedBox(width: 15),
                                             Text(
-                                              question.createdDate,
+                                              widget.response.createdDate,
                                               style: TextStyle(
                                                 color: Colors.grey
                                               ),
@@ -100,13 +82,13 @@ class _PostsState extends State<Posts> {
                             children: [ SizedBox(
                               width: 500,
                               child: Text(
-                                question.body,
+                                widget.response.body,
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(
                                 color: Colors.black.withOpacity(0.6),
-                                fontSize: 20, 
+                                fontSize: 18, 
                                 letterSpacing: .2
                               ),
                               ),
@@ -120,50 +102,28 @@ class _PostsState extends State<Posts> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Icon(
-                                    Icons.thumb_up,
-                                    color: Colors.grey.withOpacity(0.8),
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 4.0),
-                                  Text(
-                                    "${question.upvotes} votes",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    color: Colors.grey.withOpacity(0.8),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(width: 20),
-                              Row(
-                                children: <Widget>[
                                   const Icon(
-                                    Icons.chat,
+                                    Icons.thumb_up,
                                     color: Colors.grey,
-                                    size: 29,
+                                    size: 20,
                                   ),
                                   const SizedBox(width: 4.0),
                                   Text(
-                                    "${question.responses.length} responses",
+                                    "${widget.response.upvotes} votes",
                                     style: const TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       color: Colors.grey
                                     ),
                                   )
                                 ],
-                              )
+                              ),
                             ]
                           ),
                         )
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ).toList()
+                )]
     );
   }
 }

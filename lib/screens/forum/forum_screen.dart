@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ecommerceapp/widgets/post.dart';
+import 'package:ecommerceapp/widgets/question_post.dart';
+import 'package:ecommerceapp/models/question.dart';
 
 class ForumPage extends StatefulWidget {
   @override
@@ -8,9 +9,7 @@ class ForumPage extends StatefulWidget {
 
 class _ForumPageState extends State<ForumPage> {
 
-  var titleTextBox = Row(
-              children: [
-                Container(
+  var titleTextBox = Container(
                   width: 630,
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   child: const TextField(
@@ -21,13 +20,9 @@ class _ForumPageState extends State<ForumPage> {
                       hintText: 'Type your question title',
                     ),
                   ),
-                ),
-              ],
-            );
+                );
 
-    var bodyTextBox = Row(
-              children: [
-                Container(
+  var bodyTextBox = Container(
                   width: 630,
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   child: const TextField(
@@ -39,109 +34,61 @@ class _ForumPageState extends State<ForumPage> {
                       hintText: 'Type your question detail',
                     ),
                   ),
-                ),
-              ],
-            );
+                );
 
-  final submitButton = Padding(
-    padding: EdgeInsets.only(left: 15.0),
-    child: Row(children: [
-      SizedBox(
-        width: 200,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            onPrimary: Colors.black,
-            primary: Colors.black,
-            minimumSize: const Size(80, 60),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(2)),
-          )),
-          onPressed: () {},
-          child: const Text('Submit',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.bold)),
-            ),
+  final submitQuestionButton = ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      onPrimary: Colors.black,
+      primary: Colors.black,
+      minimumSize: const Size(200, 60),
+      shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(2)),
+    )),
+    onPressed: () {},
+    child: const Text('Submit',
+      style: TextStyle(
+        fontSize: 16,
+        color: Colors.white,
+        fontWeight: FontWeight.bold
       )
-      ]
-      )
-    );
+    )
+  );
 
-  final submitQuestionButton = Padding(
-    padding: EdgeInsets.only(left: 15.0),
-    child: Row(children: [
-      SizedBox(
-        width: 200,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            onPrimary: Colors.black,
-            primary: Colors.black,
-            minimumSize: const Size(80, 60),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(2)),
-          )),
-          onPressed: () {},
-          child: const Text('Submit',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.bold)),
-            ),
-      )
-      ]
-      )
-    );
+  final allQuestions = Column(
+    children: questions.map((question) =>
+          QuestionPost(question: question)
+        ).toList()
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Forum', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white,
+      ),
       backgroundColor: Colors.white,
       body: Center(
-        child: ListView(
-          children: <Widget>[
-            Container( 
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(35.0),
-                  topRight: Radius.circular(35.0)
-                )
+        child: Column(
+          children: <Widget>[ 
+          const SizedBox(height: 30),
+          allQuestions,
+          const Padding(
+          padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+            child: Text(
+             "Add a question",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[ 
-                  const Padding(
-                    padding: EdgeInsets.only(left: 20.0, top: 20.0, bottom: 10.0),
-                    child: Text(
-                      "All Questions",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  Posts(),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                    child: Text(
-                      "Add a question",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                ),
-            
-                titleTextBox,
-                bodyTextBox,
-                submitQuestionButton
-                ],
-              )
-            )
-          ],
+          ),
+        ),
+        titleTextBox,
+        bodyTextBox,
+        submitQuestionButton
+        ],
         )
       ),
     );
