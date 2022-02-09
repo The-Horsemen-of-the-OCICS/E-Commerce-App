@@ -1,4 +1,6 @@
+import 'package:ecommerceapp/models/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({Key? key}) : super(key: key);
@@ -8,14 +10,18 @@ class MyLoginPage extends StatefulWidget {
 }
 
 class _MyLoginPageState extends State<MyLoginPage> {
-  bool isChecked = false;
+  TextEditingController _email = TextEditingController(text: "");
+  TextEditingController _password = TextEditingController(text: "");
 
   final _formKey = GlobalKey<FormState>();
 
   @override
     Widget build(BuildContext context) {
+
+    final userAuth = Provider.of<AuthModel>(context);
     
     final emailField = TextFormField(
+      controller: _email,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: const InputDecoration(
@@ -37,8 +43,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
     );
 
     final passwordField = TextFormField(
+      controller: _password,
       autofocus: false,
-      initialValue: '',
       obscureText: true,
       decoration: const InputDecoration(
         icon: Icon(
@@ -69,10 +75,19 @@ class _MyLoginPageState extends State<MyLoginPage> {
         )),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            if (isChecked) {
-              // Launch admin page
+            if (userAuth.login(_email.text, _password.text)) {
+              Navigator.pop(context);
             } else {
-              // Launch customer page
+              final snackBar = SnackBar(
+                content: const Text('Invalid Account Credentials!'),
+                action: SnackBarAction(
+                  label: 'Ok',
+                  onPressed: () {
+                    // Some code to undo the change.
+                  },
+                ),
+              );
+              //ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
           }
         },
@@ -95,22 +110,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
       }
       return Colors.black;
     }
-
-    final loginCheckBox = Row(
-      children: <Widget>[
-        Checkbox(
-          checkColor: Colors.white,
-          fillColor: MaterialStateProperty.resolveWith(getCheckBoxColor),
-          value: isChecked,
-          onChanged: (value) {
-            setState(() {
-              isChecked = value!;
-            });
-          },
-        ),
-        const Text("Login as Admin?")
-      ],
-    );
 
     return Form(
       key: _formKey,
@@ -143,7 +142,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     const SizedBox(height: 10.0),
                     passwordField,
                     const SizedBox(height: 20.0),
-                    loginCheckBox,
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomCenter,
