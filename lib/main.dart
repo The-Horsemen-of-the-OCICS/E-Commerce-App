@@ -19,11 +19,14 @@ class ECommerceApp extends StatelessWidget {
         providers: [
           Provider(create: (context) => AuthModel()),
         ],
-        child:
-            MaterialApp(title: "E-Commerce App", home: const Home(), routes: {
-          AppRoutes.home: (context) => const Home(),
-          AppRoutes.login: (context) => const MyLoginPage(),
-          AppRoutes.forum: (context) => ForumPage()
-        }));
+        child: MaterialApp(
+            title: "E-Commerce App",
+            debugShowCheckedModeBanner: false,
+            home: const Home(),
+            routes: {
+              AppRoutes.home: (context) => const Home(),
+              AppRoutes.login: (context) => const MyLoginPage(),
+              AppRoutes.forum: (context) => ForumPage()
+            }));
   }
 }
