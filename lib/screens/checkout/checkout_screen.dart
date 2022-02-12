@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:ecommerceapp/routes/app_routes.dart';
+import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:ecommerceapp/widgets/item_pickup.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/models/item.dart';
@@ -149,6 +150,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           Align(alignment: Alignment.bottomCenter, child: checkoutButton)
         ],
       ),
+      drawer: const NavigationDrawer(),
     );
   }
 }
