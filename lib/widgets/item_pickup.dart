@@ -22,10 +22,8 @@ class _ItemPickedupState extends State<ItemPickedup> {
             Navigator.pushNamed(context, AppRoutes.home);
           },
           child: Container(
-            constraints: const BoxConstraints(
-              maxWidth: 300,
-            ),
-            margin: EdgeInsets.all(2.0),
+            constraints: const BoxConstraints(maxWidth: 245, minHeight: 400),
+            margin: EdgeInsets.all(8),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10.0),

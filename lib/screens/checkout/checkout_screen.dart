@@ -3,13 +3,9 @@ import 'dart:developer';
 import 'package:ecommerceapp/routes/app_routes.dart';
 import 'package:ecommerceapp/widgets/item_pickup.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerceapp/models/user.dart';
 import 'package:ecommerceapp/models/item.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/auth.dart';
-import '../../models/response.dart';
-import '../../models/user.dart';
 import '../../models/item.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -21,6 +17,7 @@ class CheckoutPage extends StatefulWidget {
 
 class _CheckoutPageState extends State<CheckoutPage> {
   final _checkoutKey = GlobalKey<FormState>(debugLabel: 'checkoutKey');
+  TextEditingController _address = TextEditingController(text: "");
 
   final List<Item> _items = [
     Item('Men Cloth', 'Men cloth desc', 100,
@@ -37,13 +34,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     final userAuth = Provider.of<AuthModel>(context);
 
-    final checkoutButton = SizedBox(
+    final checkoutButton = Container(
       width: MediaQuery.of(context).size.width / 1.5,
+      margin: const EdgeInsets.all(10),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             onPrimary: Colors.black,
             primary: Colors.black,
-            minimumSize: const Size(80, 60),
+            minimumSize: const Size(80, 50),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
@@ -70,13 +68,41 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 fontWeight: FontWeight.bold)),
       ),
     );
-    final allItems = Column(
-        children: _items.map((item) => ItemPickedup(item: item)).toList());
 
-    final allItemsGrid = GridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 2,
-      children: _items.map((item) => ItemPickedup(item: item)).toList(),
+    final allItemsHorizontal = Container(
+      height: MediaQuery.of(context).size.height / 2,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _items.length,
+        itemBuilder: (context, index) {
+          return ItemPickedup(item: _items[index]);
+        },
+      ),
+    );
+
+    final sumPrice =
+        _items.map((e) => e.price).reduce((value, element) => value + element);
+
+    final addressTextBox = Container(
+      width: 630,
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: TextFormField(
+        controller: _address,
+        maxLength: 400,
+        minLines: 2,
+        maxLines: 3,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: 'Input your address here',
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter something';
+          }
+          return null;
+        },
+      ),
     );
 
     return Scaffold(
@@ -89,29 +115,39 @@ class _CheckoutPageState extends State<CheckoutPage> {
         backgroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
-      body: Center(
-        child: ListView(
-          children: [
-            Column(
-              children: <Widget>[
-                const SizedBox(height: 30),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                  child: Text(
-                    "Here is your order",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+      body: Stack(
+        children: [
+          Column(
+            children: <Widget>[
+              const SizedBox(height: 30),
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+                child: Text(
+                  "Here is your order",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-                allItemsGrid,
-                checkoutButton,
-              ],
-            ),
-          ],
-        ),
+              ),
+              allItemsHorizontal,
+              addressTextBox,
+              Padding(
+                padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+                child: Text(
+                  "Overall price :" + sumPrice.toString(),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Align(alignment: Alignment.bottomCenter, child: checkoutButton)
+        ],
       ),
     );
   }
