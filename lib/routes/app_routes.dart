@@ -3,4 +3,5 @@ class AppRoutes {
   static const String login = '/login';
   static const String forum = '/forum';
   static const String checkout = '/checkout';
+  static const String merchant = "/merchant";
 }

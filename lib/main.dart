@@ -4,6 +4,7 @@ import 'package:ecommerceapp/screens/forum/forum_screen.dart';
 import 'package:ecommerceapp/screens/home/home.dart';
 import 'package:ecommerceapp/screens/login.dart';
 import 'package:ecommerceapp/screens/checkout/checkout_screen.dart';
+import 'package:ecommerceapp/screens/merchant/items_list/merchant_items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,8 @@ class ECommerceApp extends StatelessWidget {
               AppRoutes.home: (context) => const Home(),
               AppRoutes.login: (context) => const MyLoginPage(),
               AppRoutes.forum: (context) => ForumPage(),
-              AppRoutes.checkout: (context) => CheckoutPage()
+              AppRoutes.checkout: (context) => const CheckoutPage(),
+              AppRoutes.merchant: (context) => const MerchantItemsList(),
             }));
   }
 }
