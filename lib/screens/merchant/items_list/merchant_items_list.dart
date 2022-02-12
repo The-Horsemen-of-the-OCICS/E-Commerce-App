@@ -1,4 +1,5 @@
 import 'package:ecommerceapp/models/item.dart';
+import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:ecommerceapp/widgets/merchant_item_cell.dart';
 import 'package:ecommerceapp/widgets/merchant_item_form.dart';
 import 'package:flutter/material.dart';
@@ -49,39 +50,39 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
                 fontWeight: FontWeight.bold)));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Merchant Item List',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        appBar: AppBar(
+          title: const Text(
+            'Merchant Item List',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
         ),
-        foregroundColor: Colors.black,
         backgroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: Center(
-          child: ListView(
-        children: [
-          Column(
-            children: <Widget>[
-              const SizedBox(height: 30),
-              merchantItems,
-              const Padding(
-                padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                child: Text(
-                  "Add an item",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+        body: Center(
+            child: ListView(
+          children: [
+            Column(
+              children: <Widget>[
+                const SizedBox(height: 30),
+                merchantItems,
+                const Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+                  child: Text(
+                    "Add an item",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              const MerchantItemForm(),
-              submitItemButton
-            ],
-          ),
-        ],
-      )),
-    );
+                const MerchantItemForm(),
+                submitItemButton
+              ],
+            ),
+          ],
+        )),
+        drawer: const NavigationDrawer());
   }
 }
