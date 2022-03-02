@@ -20,7 +20,7 @@ public class QuestionService {
         return questions;
     }
 
-    public async Task<Question> GetAsync(string Id) {
+    public async Task<Question?> GetAsync(string Id) {
         return questions.Find(x => x.Id == Id);
     }
 

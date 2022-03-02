@@ -20,7 +20,7 @@ public class CategoryService {
         return categories;
     }
 
-    public async Task<Category> GetAsync(string Id) {
+    public async Task<Category?> GetAsync(string Id) {
         return categories.Find(x => x.Id == Id);
     }
 
