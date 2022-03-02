@@ -28,7 +28,7 @@ public class ResponseService {
         return list;
     }
 
-    public async Task<Response?> GetAsync(string Id) {
+    public async Task<Response> GetAsync(string Id) {
         return responses.Find(x => x.Id == Id);
     }
 
