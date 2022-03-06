@@ -53,7 +53,7 @@ class _ResponsePostState extends State<ResponsePost> {
                           Row(
                             children: <Widget>[
                               Text(
-                                widget.response.user.name,
+                                widget.response.userName,
                                 style: TextStyle(color: Colors.grey),
                               ),
                               SizedBox(width: 15),

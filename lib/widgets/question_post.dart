@@ -73,7 +73,7 @@ class _QuestionPostState extends State<QuestionPost> {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    widget.question.user.name,
+                                    widget.question.userName,
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                   SizedBox(width: 15),
@@ -140,7 +140,7 @@ class _QuestionPostState extends State<QuestionPost> {
                           ),
                           const SizedBox(width: 4.0),
                           Text(
-                            "${widget.question.responses.length} responses",
+                            "${widget.question.responseCount} responses",
                             style: const TextStyle(
                                 fontSize: 15, color: Colors.grey),
                           )
