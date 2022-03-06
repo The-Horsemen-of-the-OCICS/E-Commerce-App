@@ -1,6 +1,7 @@
 import 'package:ecommerceapp/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../size_config.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     final userAuth = Provider.of<AuthModel>(context);
 
     final emailField = TextFormField(

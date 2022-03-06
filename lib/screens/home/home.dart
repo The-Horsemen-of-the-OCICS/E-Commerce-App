@@ -2,12 +2,14 @@ import 'package:ecommerceapp/routes/app_routes.dart';
 import 'package:ecommerceapp/screens/buyer/items_list/buyer_items_list.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:flutter/material.dart';
+import '../../../size_config.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
