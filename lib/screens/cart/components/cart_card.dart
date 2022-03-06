@@ -24,9 +24,15 @@ class CartCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(getProportionateScreenWidth(5)),
               decoration: BoxDecoration(
-                color: Color(0xFFF5F6F9),
-                borderRadius: BorderRadius.circular(5),
-              ),
+                  color: Color(0xFFF5F6F9),
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black26.withOpacity(0.1),
+                        offset: Offset(0.0, 0.0),
+                        blurRadius: 10.0,
+                        spreadRadius: 0.10)
+                  ]),
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: cart.item.image,

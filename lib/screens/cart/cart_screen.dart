@@ -6,12 +6,16 @@ import 'components/check_out_card.dart';
 
 class CartScreen extends StatelessWidget {
   static String routeName = "/cart";
+
+  final overallPrice = demoCarts
+      .map((cart) => cart.item.price * cart.numOfItem)
+      .reduce((value, element) => value + element);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
       body: Body(),
-      bottomNavigationBar: CheckoutCard(),
+      bottomNavigationBar: CheckoutCard(overallPrice: overallPrice),
     );
   }
 
