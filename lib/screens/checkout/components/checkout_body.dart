@@ -104,7 +104,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          'Overall Price',
+                          'Invoice',
                           style: TextStyle(
                             color: Color(0xff202020),
                             fontSize: 22,
