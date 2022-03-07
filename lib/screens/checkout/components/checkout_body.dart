@@ -21,6 +21,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   TextEditingController cvc = TextEditingController();
   TextEditingController cardHolder = TextEditingController();
 
+  TextEditingController phoneNumber = TextEditingController();
   TextEditingController streetAddress = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController state = TextEditingController();
@@ -41,7 +42,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   @override
   Widget build(BuildContext context) {
     final userAuth = Provider.of<AuthModel>(context);
-    Widget submitOrder = InkWell(
+    Widget submitOrderBtn = InkWell(
       onTap: () => {
         if (userAuth.getCurrentUser() != null)
           {
@@ -84,6 +85,292 @@ class _CheckoutBodyState extends State<CheckoutBody> {
       ),
     );
 
+    Widget invoiceCard = Container(
+      margin: const EdgeInsets.only(top: 16, bottom: 16),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black12, offset: Offset(0, 3), blurRadius: 6)
+          ],
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10))),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            title: Text('Cart value'),
+            trailing: Text("\$${widget.overallPrice.toStringAsFixed(2)}"),
+          ),
+          ListTile(
+            title: Text('Tax'),
+            trailing:
+                Text("\$${(widget.overallPrice * 0.13).toStringAsFixed(2)}"),
+          ),
+          ListTile(
+            title: Text('Subtotal'),
+            trailing:
+                Text("\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}"),
+          ),
+          ListTile(
+            title: Text('Promocode'),
+            trailing: Text("-\$${widget.promoDiscount.toStringAsFixed(2)}"),
+          ),
+          Divider(),
+          ListTile(
+            title: Text(
+              'Total',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            trailing: Text(
+              "\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ),
+    );
+
+    Widget paymentCard = Container(
+      padding: EdgeInsets.all(16.0),
+      margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
+      height: 250,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black12, offset: Offset(0, 3), blurRadius: 6)
+          ],
+          borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10))),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 16.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Colors.grey[200],
+            ),
+            child: TextField(
+              inputFormatters: [LengthLimitingTextInputFormatter(16)],
+              keyboardType: TextInputType.number,
+              controller: cardNumber,
+              onChanged: (val) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Card Number',
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextField(
+                    inputFormatters: [LengthLimitingTextInputFormatter(2)],
+                    keyboardType: TextInputType.number,
+                    controller: month,
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'Month'),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 8.0,
+              ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextField(
+                    inputFormatters: [LengthLimitingTextInputFormatter(2)],
+                    keyboardType: TextInputType.number,
+                    controller: year,
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'Year'),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 8.0,
+              ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextField(
+                    controller: cvc,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'CVC'),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 16.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Colors.grey[200],
+            ),
+            child: TextField(
+              controller: cardHolder,
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: 'Name on card'),
+              onChanged: (val) {
+                setState(() {});
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Widget shippingInfoCard = Container(
+      padding: EdgeInsets.all(16.0),
+      margin: EdgeInsets.only(top: 8.0),
+      height: 200,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black12, offset: Offset(0, 3), blurRadius: 6)
+          ],
+          borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10))),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 16.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Colors.grey[200],
+            ),
+            child: TextField(
+              inputFormatters: [LengthLimitingTextInputFormatter(16)],
+              keyboardType: TextInputType.number,
+              controller: phoneNumber,
+              onChanged: (val) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: 'Phone Number'),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 16.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Colors.grey[200],
+            ),
+            child: TextField(
+              inputFormatters: [LengthLimitingTextInputFormatter(16)],
+              controller: streetAddress,
+              onChanged: (val) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: 'Street Address'),
+            ),
+          ),
+          Row(
+            children: <Widget>[
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextField(
+                    inputFormatters: [LengthLimitingTextInputFormatter(16)],
+                    controller: city,
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'City'),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 8.0,
+              ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextField(
+                    inputFormatters: [LengthLimitingTextInputFormatter(16)],
+                    controller: state,
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'State'),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 8.0,
+              ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextField(
+                    controller: country,
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'Country'),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: LayoutBuilder(
@@ -116,59 +403,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         )
                       ],
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 16, bottom: 16),
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(0, 3),
-                                blurRadius: 6)
-                          ],
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10))),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            title: Text('Cart value'),
-                            trailing: Text(
-                                "\$${widget.overallPrice.toStringAsFixed(2)}"),
-                          ),
-                          ListTile(
-                            title: Text('Tax'),
-                            trailing: Text(
-                                "\$${(widget.overallPrice * 0.13).toStringAsFixed(2)}"),
-                          ),
-                          ListTile(
-                            title: Text('Subtotal'),
-                            trailing: Text(
-                                "\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}"),
-                          ),
-                          ListTile(
-                            title: Text('Promocode'),
-                            trailing: Text(
-                                "-\$${widget.promoDiscount.toStringAsFixed(2)}"),
-                          ),
-                          Divider(),
-                          ListTile(
-                            title: Text(
-                              'Total',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            trailing: Text(
-                              "\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    invoiceCard,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -185,143 +420,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         )
                       ],
                     ),
-                    Container(
-                      padding: EdgeInsets.all(16.0),
-                      margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      height: 250,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(0, 3),
-                                blurRadius: 6)
-                          ],
-                          borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10))),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(left: 16.0),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              color: Colors.grey[200],
-                            ),
-                            child: TextField(
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(16)
-                              ],
-                              controller: cardNumber,
-                              onChanged: (val) {
-                                setState(() {});
-                              },
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Card Number'),
-                            ),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 16.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: TextField(
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(2)
-                                    ],
-                                    controller: month,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Month'),
-                                    onChanged: (val) {
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8.0,
-                              ),
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 16.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: TextField(
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(2)
-                                    ],
-                                    controller: year,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Year'),
-                                    onChanged: (val) {
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8.0,
-                              ),
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 16.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: TextField(
-                                    controller: cvc,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'CVC'),
-                                    onChanged: (val) {
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 16.0),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              color: Colors.grey[200],
-                            ),
-                            child: TextField(
-                              controller: cardHolder,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Name on card'),
-                              onChanged: (val) {
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    paymentCard,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          'Address',
+                          'Shipping Info',
                           style: TextStyle(
                             color: Color(0xff202020),
                             fontSize: 22,
@@ -333,126 +437,12 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         )
                       ],
                     ),
-                    Container(
-                      padding: EdgeInsets.all(16.0),
-                      margin: EdgeInsets.only(top: 8.0),
-                      height: 200,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(0, 3),
-                                blurRadius: 6)
-                          ],
-                          borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10))),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(left: 16.0),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              color: Colors.grey[200],
-                            ),
-                            child: TextField(
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(16)
-                              ],
-                              controller: streetAddress,
-                              onChanged: (val) {
-                                setState(() {});
-                              },
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'House Number'),
-                            ),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 16.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: TextField(
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(2)
-                                    ],
-                                    controller: city,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'City'),
-                                    onChanged: (val) {
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8.0,
-                              ),
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 16.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: TextField(
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(2)
-                                    ],
-                                    controller: state,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'State'),
-                                    onChanged: (val) {
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8.0,
-                              ),
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 16.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: TextField(
-                                    controller: country,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Country'),
-                                    onChanged: (val) {
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    shippingInfoCard,
                     SizedBox(height: 24.0),
                     Center(
                         child: Padding(
                       padding: EdgeInsets.only(bottom: 20),
-                      child: submitOrder,
+                      child: submitOrderBtn,
                     ))
                   ],
                 ),
