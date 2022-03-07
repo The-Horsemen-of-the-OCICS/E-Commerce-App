@@ -1,5 +1,3 @@
-import 'package:ecommerceapp/models/user.dart';
-
 class Question {
   String id;
   String userId;

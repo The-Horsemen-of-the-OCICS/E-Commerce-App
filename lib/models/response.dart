@@ -1,6 +1,3 @@
-import 'package:ecommerceapp/models/question.dart';
-import 'package:ecommerceapp/models/user.dart';
-
 class Response {
   String id;
   String questionId;
