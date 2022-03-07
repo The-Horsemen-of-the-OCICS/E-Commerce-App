@@ -23,6 +23,9 @@ class NavigationDrawer extends StatelessWidget {
               text: 'Cart',
               onTap: () =>
                   Navigator.pushReplacementNamed(context, AppRoutes.cart)),
+          drawerItem(
+              text: 'Profile',
+              onTap: () => Navigator.pushNamed(context, AppRoutes.profile)),
         ],
       ),
     );
