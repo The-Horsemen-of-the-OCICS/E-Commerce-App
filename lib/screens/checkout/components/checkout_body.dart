@@ -8,6 +8,7 @@ import '../../../models/auth.dart';
 class CheckoutBody extends StatefulWidget {
   const CheckoutBody({Key? key, required this.overallPrice}) : super(key: key);
   final int overallPrice;
+  final int promoDiscount = 0;
   @override
   _CheckoutBodyState createState() => _CheckoutBodyState();
 }
@@ -115,19 +116,58 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                         )
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text.rich(
-                          TextSpan(
-                            text: "\$${widget.overallPrice}",
-                            style: TextStyle(fontSize: 20, color: Colors.black),
+                    Container(
+                      margin: const EdgeInsets.only(top: 16, bottom: 16),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 3),
+                                blurRadius: 6)
+                          ],
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10))),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            title: Text('Cart value'),
+                            trailing: Text(
+                                "\$${widget.overallPrice.toStringAsFixed(2)}"),
                           ),
-                        ),
-                        SizedBox(
-                          height: 35,
-                        )
-                      ],
+                          ListTile(
+                            title: Text('Tax'),
+                            trailing: Text(
+                                "\$${(widget.overallPrice * 0.13).toStringAsFixed(2)}"),
+                          ),
+                          ListTile(
+                            title: Text('Subtotal'),
+                            trailing: Text(
+                                "\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}"),
+                          ),
+                          ListTile(
+                            title: Text('Promocode'),
+                            trailing: Text(
+                                "-\$${widget.promoDiscount.toStringAsFixed(2)}"),
+                          ),
+                          Divider(),
+                          ListTile(
+                            title: Text(
+                              'Total',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            trailing: Text(
+                              "\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
