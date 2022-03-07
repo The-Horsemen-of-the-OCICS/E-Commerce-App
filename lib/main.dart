@@ -5,7 +5,7 @@ import 'package:ecommerceapp/screens/home/home.dart';
 import 'package:ecommerceapp/screens/login.dart';
 import 'package:ecommerceapp/screens/cart/cart_screen.dart';
 import 'package:ecommerceapp/screens/checkout/checkout_screen.dart';
-import 'package:ecommerceapp/screens/checkout/checkout_screen1.dart';
+import 'package:ecommerceapp/screens/checkout/checkout_screen_new.dart';
 import 'package:ecommerceapp/screens/merchant/items_list/merchant_items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

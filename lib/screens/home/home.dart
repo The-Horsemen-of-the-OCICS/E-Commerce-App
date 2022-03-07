@@ -21,6 +21,12 @@ class Home extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.cart);
+              },
+              icon: const Icon(Icons.shopping_cart),
+              padding: const EdgeInsets.only(right: 15)),
+          IconButton(
+              onPressed: () {
                 Navigator.of(context).pushNamed(AppRoutes.login);
               },
               icon: const Icon(Icons.login),

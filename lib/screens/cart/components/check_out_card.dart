@@ -1,4 +1,4 @@
-import 'package:ecommerceapp/screens/checkout/checkout_screen1.dart';
+import 'package:ecommerceapp/screens/checkout/checkout_screen_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ecommerceapp/widgets/default_button.dart';
