@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/auth.dart';
-import '../../models/response.dart';
 import '../../models/user.dart';
 
 String API_BASE_URL = "https://localhost:5000/api/";

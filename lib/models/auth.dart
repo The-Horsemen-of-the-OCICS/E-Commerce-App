@@ -21,12 +21,12 @@ class AuthModel {
     if (email == "admin@gmail.com" && password == "123456") {
       _isLoggedIn = true;
       _loginType = Type.merchant;
-      _user = User(id: "0", name: "admin", email: "admin@gmail.com");
+      _user = admin;
       return true;
     } else if (email == "user1@gmail.com" && password == "123456") {
       _isLoggedIn = true;
       _loginType = Type.buyer;
-      _user = User(id: "1", name: "user1", email: "user1@gmail.com");
+      _user = customer;
       return true;
     }
     return false;
