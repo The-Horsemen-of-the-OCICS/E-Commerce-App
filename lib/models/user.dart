@@ -21,27 +21,3 @@ class User {
     );
   }
 }
-
-final User admin = User(
-    id: "0",
-    name: "Admin",
-    email: "admin@gmail.com",
-    defaultShippingInfo: ShippingInfo(
-        phone: "(111) 222-3333",
-        street: "75 Laurier Ave. E",
-        city: "Ottawa",
-        state: "ON",
-        country: "Canada"));
-
-final User customer = User(
-    id: "1",
-    name: "Test Customer",
-    email: "user1@gmail.com",
-    defaultShippingInfo: ShippingInfo(
-        phone: "(111) 222-3333",
-        street: "75 Laurier Ave. E",
-        city: "Ottawa",
-        state: "ON",
-        country: "Canada"));
-
-List<User> users = [admin, customer];

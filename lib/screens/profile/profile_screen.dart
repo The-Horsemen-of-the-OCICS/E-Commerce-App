@@ -27,8 +27,33 @@ Future<List<Order>> fetchOrders(http.Client client, String userId) async {
 
 Future<List<Order>> parseOrders(String responseBody) async {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-  print(parsed);
   return parsed.map<Order>((json) => Order.fromJson(json)).toList();
+}
+
+// POST
+void updateShipInfo(String userId, String phone, String street, String city,
+    String state, String country) async {
+  final response = await http.put(
+    Uri.parse(NetworkConfig.API_BASE_URL + 'user/shippingInfo/$userId'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'phone': phone,
+      'street': street,
+      'city': city,
+      'state': state,
+      'country': country
+    }),
+  );
+  debugPrint("LOL");
+  debugPrint(response.body);
+
+  if (response.statusCode == 204) {
+    debugPrint("Shipping info change successed");
+  } else {
+    throw Exception('Failed to change address.');
+  }
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -45,15 +70,26 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final userAuth = Provider.of<AuthModel>(context);
-    late User user;
+    User? user = userAuth.getCurrentUser();
 
-    user = customer;
+    if (user == null) {
+      return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'User Profile',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
+          ),
+          backgroundColor: Colors.white,
+          body: Center(child: Text('Please login to access this page!')));
+    }
 
     final futureOrders = FutureBuilder<List<Order>>(
-      future: fetchOrders(http.Client(), user.id),
+      future: fetchOrders(http.Client(), user!.id),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print(snapshot.error);
           return const Center(
             child: Text('Failed to load order history from the server!'),
           );
@@ -96,7 +132,12 @@ class _ProfilePageState extends State<ProfilePage> {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            updateShipInfo(user.id, phoneNumber.text, streetAddress.text,
+                city.text, state.text, country.text);
+          });
+        },
         child: const Text('Submit',
             style: TextStyle(
                 fontSize: 16,
@@ -134,9 +175,6 @@ class _ProfilePageState extends State<ProfilePage> {
               keyboardType: TextInputType.number,
               controller: phoneNumber,
               enabled: _isEditEnabled,
-              onChanged: (val) {
-                setState(() {});
-              },
               decoration: InputDecoration(
                   border: InputBorder.none, hintText: 'Phone Number'),
             ),
@@ -151,9 +189,6 @@ class _ProfilePageState extends State<ProfilePage> {
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               controller: streetAddress,
               enabled: _isEditEnabled,
-              onChanged: (val) {
-                setState(() {});
-              },
               decoration: InputDecoration(
                   border: InputBorder.none, hintText: 'Street Address'),
             ),
@@ -173,9 +208,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     enabled: _isEditEnabled,
                     decoration: InputDecoration(
                         border: InputBorder.none, hintText: 'City'),
-                    onChanged: (val) {
-                      setState(() {});
-                    },
                   ),
                 ),
               ),
@@ -195,9 +227,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     enabled: _isEditEnabled,
                     decoration: InputDecoration(
                         border: InputBorder.none, hintText: 'State'),
-                    onChanged: (val) {
-                      setState(() {});
-                    },
                   ),
                 ),
               ),
@@ -216,9 +245,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     enabled: _isEditEnabled,
                     decoration: InputDecoration(
                         border: InputBorder.none, hintText: 'Country'),
-                    onChanged: (val) {
-                      setState(() {});
-                    },
                   ),
                 ),
               )

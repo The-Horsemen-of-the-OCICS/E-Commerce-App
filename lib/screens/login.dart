@@ -76,9 +76,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState!.validate()) {
-            if (userAuth.login(_email.text, _password.text)) {
+            if (await userAuth.login(_email.text, _password.text)) {
               Navigator.pop(context);
             } else {
               final snackBar = SnackBar(
