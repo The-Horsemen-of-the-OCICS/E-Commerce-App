@@ -41,7 +41,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   @override
   Widget build(BuildContext context) {
     final userAuth = Provider.of<AuthModel>(context);
-    Widget addThisCard = InkWell(
+    Widget submitOrder = InkWell(
       onTap: () => {
         if (userAuth.getCurrentUser() != null)
           {
@@ -452,7 +452,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     Center(
                         child: Padding(
                       padding: EdgeInsets.only(bottom: 20),
-                      child: addThisCard,
+                      child: submitOrder,
                     ))
                   ],
                 ),
