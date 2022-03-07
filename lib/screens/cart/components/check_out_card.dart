@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/screens/checkout/checkout_screen1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ecommerceapp/widgets/default_button.dart';
@@ -56,7 +57,15 @@ class CheckoutCard extends StatelessWidget {
                   width: getProportionateScreenWidth(190),
                   child: DefaultButton(
                     text: "Check Out",
-                    press: () {},
+                    press: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CheckoutScreen(overallPrice: overallPrice),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],

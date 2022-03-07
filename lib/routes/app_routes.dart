@@ -5,4 +5,5 @@ class AppRoutes {
   static const String cart = '/cart';
   static const String checkout = '/checkout';
   static const String merchant = "/merchant";
+  static const String payment = "/payment";
 }

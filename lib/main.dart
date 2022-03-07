@@ -5,9 +5,11 @@ import 'package:ecommerceapp/screens/home/home.dart';
 import 'package:ecommerceapp/screens/login.dart';
 import 'package:ecommerceapp/screens/cart/cart_screen.dart';
 import 'package:ecommerceapp/screens/checkout/checkout_screen.dart';
+import 'package:ecommerceapp/screens/checkout/checkout_screen1.dart';
 import 'package:ecommerceapp/screens/merchant/items_list/merchant_items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ecommerceapp/screens/checkout/components/checkout_body.dart';
 
 void main() {
   runApp(const ECommerceApp());
@@ -31,7 +33,9 @@ class ECommerceApp extends StatelessWidget {
               AppRoutes.login: (context) => const MyLoginPage(),
               AppRoutes.forum: (context) => ForumPage(),
               AppRoutes.cart: (context) => CartScreen(),
-              AppRoutes.checkout: (context) => const CheckoutPage(),
+              AppRoutes.checkout: (context) => const CheckoutScreen(
+                    overallPrice: 120,
+                  ),
               AppRoutes.merchant: (context) => const MerchantItemsList(),
             }));
   }
