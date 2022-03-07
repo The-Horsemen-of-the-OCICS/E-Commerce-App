@@ -10,8 +10,7 @@ import 'package:http/http.dart' as http;
 
 import '../../models/auth.dart';
 import '../../models/user.dart';
-
-String API_BASE_URL = "https://localhost:5000/api/";
+import '../../utils/network_config.dart';
 
 class ForumPage extends StatefulWidget {
   @override
@@ -20,7 +19,8 @@ class ForumPage extends StatefulWidget {
 
 // GET
 Future<List<Question>> fetchQuestions(http.Client client) async {
-  final response = await client.get(Uri.parse(API_BASE_URL + 'question/'));
+  final response =
+      await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'question/'));
   return compute(parseQuestions, response.body);
 }
 
@@ -37,15 +37,16 @@ Future<List<Question>> parseQuestions(String responseBody) async {
 }
 
 Future<String> fetchUserName(http.Client client, String userId) async {
-  final response = await client.get(Uri.parse(API_BASE_URL + 'user/$userId'));
+  final response =
+      await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'user/$userId'));
 
   final parsed = jsonDecode(response.body);
   return parsed["name"];
 }
 
 Future<int> fetchResponseCount(http.Client client, String questionId) async {
-  final response =
-      await client.get(Uri.parse(API_BASE_URL + 'response/count/$questionId'));
+  final response = await client.get(
+      Uri.parse(NetworkConfig.API_BASE_URL + 'response/count/$questionId'));
 
   return int.parse(response.body);
 }
@@ -54,7 +55,7 @@ Future<int> fetchResponseCount(http.Client client, String questionId) async {
 Future<Question> createQuestion(
     String title, String body, User user, int newId) async {
   final response = await http.post(
-    Uri.parse(API_BASE_URL + 'question'),
+    Uri.parse(NetworkConfig.API_BASE_URL + 'question'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

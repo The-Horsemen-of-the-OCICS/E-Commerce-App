@@ -1,16 +1,39 @@
+import 'dart:convert';
+
+import 'package:ecommerceapp/widgets/order_history_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../models/auth.dart';
+import '../../models/order.dart';
 import '../../models/user.dart';
 import '../../routes/app_routes.dart';
+import 'package:http/http.dart' as http;
+
+import '../../utils/network_config.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
+// GET
+Future<List<Order>> fetchOrders(http.Client client, String userId) async {
+  final response = await client
+      .get(Uri.parse(NetworkConfig.API_BASE_URL + 'order/u/' + userId));
+  return compute(parseOrders, response.body);
+}
+
+Future<List<Order>> parseOrders(String responseBody) async {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  print(parsed);
+  return parsed.map<Order>((json) => Order.fromJson(json)).toList();
+}
+
 class _ProfilePageState extends State<ProfilePage> {
+  List<Order> _orders = [];
+
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController streetAddress = TextEditingController();
   TextEditingController city = TextEditingController();
@@ -25,6 +48,28 @@ class _ProfilePageState extends State<ProfilePage> {
     late User user;
 
     user = customer;
+
+    final futureOrders = FutureBuilder<List<Order>>(
+      future: fetchOrders(http.Client(), user.id),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          print(snapshot.error);
+          return const Center(
+            child: Text('Failed to load order history from the server!'),
+          );
+        } else if (snapshot.hasData) {
+          _orders = snapshot.data!;
+          return Column(
+              children: _orders
+                  .map((order) => OrderHistroyItem(order: order))
+                  .toList());
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
 
     phoneNumber.text = user.defaultShippingInfo.phone;
     streetAddress.text = user.defaultShippingInfo.street;
@@ -249,6 +294,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     )),
+                futureOrders
               ],
             ),
           ],

@@ -1,7 +1,7 @@
 class CartItem {
   String id;
   String name;
-  String totalPrice;
+  double totalPrice;
   String image;
   int quantity;
 
@@ -14,9 +14,9 @@ class CartItem {
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
-      id: json['id'] as String,
+      id: json['itemId'] as String,
       name: json['name'] as String,
-      totalPrice: json['totalPrice'] as String,
+      totalPrice: json['totalPrice'] as double,
       image: json['image'] as String,
       quantity: json['quantity'] as int,
     );
