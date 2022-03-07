@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ecommerceapp/models/cart.dart';
 import 'cart_card.dart';
+import 'cart_cart1.dart';
 import '../../../size_config.dart';
 
 class Body extends StatefulWidget {
