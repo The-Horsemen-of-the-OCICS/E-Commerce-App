@@ -12,8 +12,7 @@ import '../../models/auth.dart';
 import '../../models/response.dart';
 import '../../models/user.dart';
 import '../../routes/app_routes.dart';
-
-String API_BASE_URL = "https://localhost:5000/api/";
+import '../../utils/network_config.dart';
 
 class PostScreen extends StatefulWidget {
   @override
@@ -25,13 +24,14 @@ class PostScreen extends StatefulWidget {
 // Get
 Future<List<Response>> fetchResponses(
     http.Client client, String questionId) async {
-  final response =
-      await client.get(Uri.parse(API_BASE_URL + 'response/q/' + questionId));
+  final response = await client
+      .get(Uri.parse(NetworkConfig.API_BASE_URL + 'response/q/' + questionId));
   return compute(parseResponses, response.body);
 }
 
 Future<String> fetchUserName(http.Client client, String userId) async {
-  final response = await client.get(Uri.parse(API_BASE_URL + 'user/$userId'));
+  final response =
+      await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'user/$userId'));
 
   final parsed = jsonDecode(response.body);
   return parsed["name"];
@@ -51,7 +51,7 @@ Future<List<Response>> parseResponses(String responseBody) async {
 Future<Response> createResponse(
     String body, User user, String questionId, String newId) async {
   final response = await http.post(
-    Uri.parse(API_BASE_URL + 'response'),
+    Uri.parse(NetworkConfig.API_BASE_URL + 'response'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

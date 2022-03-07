@@ -4,7 +4,7 @@ class Order {
   String id;
   String userId;
   List<CartItem> itemList;
-  String overallPrice;
+  double overallPrice;
   String date;
   String shippingAddress;
 
@@ -20,10 +20,19 @@ class Order {
     return Order(
       id: json['id'] as String,
       userId: json['userId'] as String,
-      itemList: CartItem.fromListJson(json['ItemList']),
-      overallPrice: json['OverallPrice'] as String,
+      itemList: CartItem.fromListJson(json['itemList']),
+      overallPrice: json['overallPrice'] as double,
       date: json['date'] as String,
       shippingAddress: json['shippingAddress'] as String,
     );
+  }
+
+  String printItems() {
+    String result = "";
+    this.itemList.forEach((element) {
+      result =
+          result + element.name + " x" + element.quantity.toString() + '\n';
+    });
+    return result;
   }
 }
