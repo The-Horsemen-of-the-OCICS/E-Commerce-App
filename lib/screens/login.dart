@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ecommerceapp/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -126,7 +128,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 width: MediaQuery.of(context).size.width / 2.5,
                 height: MediaQuery.of(context).size.height / 3,
                 constraints: const BoxConstraints(
-                    maxWidth: 500, maxHeight: 320, minHeight: 320),
+                    maxWidth: 500,
+                    maxHeight: 320,
+                    minHeight: 320,
+                    minWidth: 250),
                 child: Column(
                   children: <Widget>[
                     const Center(
