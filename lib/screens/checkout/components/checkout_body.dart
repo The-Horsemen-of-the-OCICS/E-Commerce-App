@@ -14,8 +14,6 @@ class CheckoutBody extends StatefulWidget {
 }
 
 class _CheckoutBodyState extends State<CheckoutBody> {
-  bool useDefaultShippingInfo = false;
-
   Color active = Colors.red;
   TextEditingController cardNumber = TextEditingController();
   TextEditingController year = TextEditingController();
@@ -30,6 +28,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   TextEditingController country = TextEditingController();
 
   ScrollController scrollController = ScrollController();
+  bool _useDefaultShippingInfo = true;
 
   @override
   void initState() {
@@ -46,19 +45,21 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     final userAuth = Provider.of<AuthModel>(context);
     User? user = userAuth.getCurrentUser();
 
-    if (user != null && useDefaultShippingInfo) {
+    if (user != null && _useDefaultShippingInfo) {
       phone.text = user.defaultShippingInfo.phone;
       street.text = user.defaultShippingInfo.street;
       city.text = user.defaultShippingInfo.city;
       state.text = user.defaultShippingInfo.state;
       country.text = user.defaultShippingInfo.country;
-    } else {
-      phone.text = '';
-      street.text = '';
-      city.text = '';
-      state.text = '';
-      country.text = '';
     }
+    final useDefaultShippingInfoToggle = Switch(
+      value: _useDefaultShippingInfo,
+      onChanged: (value) {
+        setState(() {
+          _useDefaultShippingInfo = value;
+        });
+      },
+    );
 
     Widget submitOrderBtn = InkWell(
       onTap: () => {
@@ -450,14 +451,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Switch(
-                          value: useDefaultShippingInfo,
-                          onChanged: (value) {
-                            setState(() {
-                              useDefaultShippingInfo = value;
-                            });
-                          },
-                        ),
+                        useDefaultShippingInfoToggle
                       ],
                     ),
                     shippingInfoCard,

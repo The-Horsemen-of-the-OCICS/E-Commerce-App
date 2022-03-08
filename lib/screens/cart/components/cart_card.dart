@@ -88,13 +88,13 @@ class _ShopItemListState extends State<CartCard> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 5),
               Container(
                 padding: EdgeInsets.all(8),
                 child: Row(
                   children: [
                     Text(
-                        'Sub: ${widget.cart.item.price * widget.cart.numOfItem}',
+                        'Sub: \$${widget.cart.item.price * widget.cart.numOfItem}',
                         style: Theme.of(context).textTheme.subtitle2)
                   ],
                 ),
