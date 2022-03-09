@@ -1,7 +1,8 @@
 import 'dart:ui';
 
+import 'package:ecommerceapp/models/cartItem.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerceapp/models/cart.dart';
+import 'package:ecommerceapp/models/cartList.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../../size_config.dart';
 import 'package:ecommerceapp/utils/application_properties.dart';
@@ -14,7 +15,7 @@ class CartCard extends StatefulWidget {
     required this.cartList,
   }) : super(key: key);
 
-  final Cart cartItem;
+  final CartItem cartItem;
   final CartList cartList;
   @override
   _ShopItemListState createState() => _ShopItemListState();
@@ -50,7 +51,7 @@ class _ShopItemListState extends State<CartCard> {
                     ]),
                 child: FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: widget.cartItem.item.image,
+                  image: widget.cartItem.image,
                 ),
               ),
             ),
@@ -64,7 +65,7 @@ class _ShopItemListState extends State<CartCard> {
                   margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
                   padding: EdgeInsets.all(8),
                   child: CustomText(
-                    text: widget.cartItem.item.name,
+                    text: widget.cartItem.name,
                     size: getProportionateScreenWidth(14),
                     weight: FontWeight.bold,
                   )),
@@ -76,7 +77,7 @@ class _ShopItemListState extends State<CartCard> {
                     SizedBox(
                       width: 40,
                       child: Text(
-                        '\$${widget.cartItem.item.price}',
+                        '\$${widget.cartItem.itemPrice}',
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Color(0xFFFF7643),
@@ -95,7 +96,7 @@ class _ShopItemListState extends State<CartCard> {
                 child: Row(
                   children: [
                     Text(
-                        'Sub: \$${widget.cartItem.item.price * widget.cartItem.numOfItem}',
+                        'Sub: \$${widget.cartItem.itemPrice * widget.cartItem.quantity}',
                         style: Theme.of(context).textTheme.subtitle2)
                   ],
                 ),
@@ -121,7 +122,7 @@ class _ShopItemListState extends State<CartCard> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomText(
-                      text: widget.cartItem.numOfItem.toString(),
+                      text: widget.cartItem.quantity.toString(),
                     ),
                   ),
                   InkWell(
