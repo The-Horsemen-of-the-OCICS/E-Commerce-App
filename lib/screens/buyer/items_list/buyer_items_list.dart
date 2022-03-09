@@ -1,6 +1,7 @@
-import 'package:ecommerceapp/models/cart.dart';
-import 'package:ecommerceapp/models/category.dart';
+import 'package:ecommerceapp/models/cartList.dart';
+import 'package:ecommerceapp/models/cartItem.dart';
 import 'package:ecommerceapp/models/item.dart';
+import 'package:ecommerceapp/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -179,8 +180,14 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                     const Spacer(),
                                     IconButton(
                                         onPressed: () => {
-                                              cartList.add(Cart(
-                                                  item: item, numOfItem: 1))
+                                              cartList.add(CartItem(
+                                                id: item.id.toString(),
+                                                name: item.name,
+                                                itemPrice:
+                                                    item.price.toDouble(),
+                                                image: item.image,
+                                                quantity: 1,
+                                              ))
                                             },
                                         icon:
                                             const Icon(Icons.add_shopping_cart))
@@ -232,8 +239,14 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                     const Spacer(),
                                     IconButton(
                                         onPressed: () => {
-                                              cartList.add(Cart(
-                                                  item: item, numOfItem: 1))
+                                              cartList.add(CartItem(
+                                                id: item.id.toString(),
+                                                name: item.name,
+                                                itemPrice:
+                                                    item.price.toDouble(),
+                                                image: item.image,
+                                                quantity: 1,
+                                              ))
                                             },
                                         icon:
                                             const Icon(Icons.add_shopping_cart))
