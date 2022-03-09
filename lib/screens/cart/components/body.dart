@@ -45,7 +45,10 @@ class _BodyState extends State<Body> {
                 ],
               ),
             ),
-            child: CartCard(cart: widget.cartList.cartItems[index]),
+            child: CartCard(
+              cartItem: widget.cartList.cartItems[index],
+              cartList: widget.cartList,
+            ),
           ),
         ),
       ),

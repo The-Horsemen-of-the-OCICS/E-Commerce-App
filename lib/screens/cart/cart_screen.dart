@@ -4,6 +4,10 @@ import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:provider/provider.dart';
 import 'components/body.dart';
 import 'components/check_out_card.dart';
+import 'package:ecommerceapp/routes/app_routes.dart';
+import '../../../models/auth.dart';
+import 'package:ecommerceapp/models/user.dart';
+import 'package:ecommerceapp/screens/login.dart';
 
 class CartScreen extends StatelessWidget {
   static String routeName = "/cart";
@@ -18,11 +22,24 @@ class CartScreen extends StatelessWidget {
           : cartList.cartItems
               .map((cart) => cart.item.price * cart.numOfItem)
               .reduce((value, element) => value + element);
-      return Scaffold(
+
+      if (cartList.cartItems.isEmpty) {
+        return Scaffold(
           appBar: buildAppBar(context),
+          drawer: const NavigationDrawer(),
+          body: const Center(
+            child: Text("No items in cart..."),
+          ),
+          bottomNavigationBar: CheckoutCard(overallPrice: overallPrice),
+        );
+      } else {
+        return Scaffold(
+          appBar: buildAppBar(context),
+          drawer: const NavigationDrawer(),
           body: Body(cartList: cartList),
           bottomNavigationBar: CheckoutCard(overallPrice: overallPrice),
-          drawer: const NavigationDrawer());
+        );
+      }
     });
   }
 
@@ -39,6 +56,14 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
+      actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.home);
+            },
+            icon: const Icon(Icons.home),
+            padding: const EdgeInsets.only(right: 15)),
+      ],
     );
   }
 }

@@ -29,6 +29,19 @@ class CartList extends ChangeNotifier {
     notifyListeners();
   }
 
+  void reduce(Cart cartItem) {
+    var matchedCartIndex =
+        _cartItems.indexWhere((element) => element.item.id == cartItem.item.id);
+    if (_cartItems[matchedCartIndex].numOfItem > 1) {
+      _cartItems[matchedCartIndex] = Cart(
+          item: _cartItems[matchedCartIndex].item,
+          numOfItem: _cartItems[matchedCartIndex].numOfItem - 1);
+    } else {
+      _cartItems.removeAt(matchedCartIndex);
+    }
+    notifyListeners();
+  }
+
   void remove(Cart cartItem) {
     _cartItems.removeWhere((element) => element.item.id == cartItem.item.id);
   }
