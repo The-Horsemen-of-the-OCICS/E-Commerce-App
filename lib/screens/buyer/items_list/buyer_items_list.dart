@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:ecommerceapp/models/cart.dart';
 import 'package:ecommerceapp/models/category.dart';
 import 'package:ecommerceapp/models/item.dart';
+import 'package:ecommerceapp/utils/network_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:http/http.dart' as http;
 
 class BuyerItemsList extends StatefulWidget {
   const BuyerItemsList({Key? key}) : super(key: key);
@@ -17,66 +22,60 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
   int currentPage = 0;
   bool isLoading = false;
 
-  final List<Category> categories = [
-    Category('Men',
+  final List<ItemCategory> categories = [
+    ItemCategory('Men',
         'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
-    Category('Women',
+    ItemCategory('Women',
         'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
-    Category('Kids',
+    ItemCategory('Kids',
         'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
-    Category('Home',
+    ItemCategory('Home',
         'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
-    Category('Men',
+    ItemCategory('Men',
         'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
-    Category('Women',
+    ItemCategory('Women',
         'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
-    Category('Kids',
+    ItemCategory('Kids',
         'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
-    Category('Home',
+    ItemCategory('Home',
         'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
   ];
   final PagingController<int, Item> _pagingController =
       PagingController(firstPageKey: 0);
+
+  Future<List<Item>> fetchItems(http.Client client) async {
+    final response =
+        await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'item/'));
+
+    print(response.body);
+
+    return compute(parseItems, response.body);
+  }
+
+  Future<List<Item>> parseItems(String responseBody) async {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    List<Item> items = parsed.map<Item>((json) => Item.fromJson(json)).toList();
+
+    print(items);
+
+    return items;
+  }
 
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       _loadData(pageKey);
     });
+    // fetchItems(http.Client());
     super.initState();
   }
 
   Future _loadData(int pageKey) async {
-    final newItems = [
-      Item(1, 'Men Cloth', 'Men cloth desc', 100,
-          'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'),
-      Item(2, 'Women Cloth', 'Women cloth desc', 50,
-          'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
-      Item(3, 'Kids Cloth', 'Kids cloth desc', 80,
-          'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'),
-      Item(4, 'Home products', 'Home products desc', 120,
-          'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
-      Item(5, 'Men Cloth', 'Men cloth desc', 100,
-          'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'),
-      Item(6, 'Women Cloth', 'Women cloth desc', 50,
-          'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
-      Item(7, 'Kids Cloth', 'Kids cloth desc', 80,
-          'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'),
-      Item(8, 'Home products', 'Home products desc', 120,
-          'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
-      Item(9, 'Men Cloth', 'Men cloth desc', 100,
-          'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'),
-      Item(10, 'Women Cloth', 'Women cloth desc', 50,
-          'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
-      Item(11, 'Kids Cloth', 'Kids cloth desc', 80,
-          'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'),
-      Item(12, 'Home products', 'Home products desc', 120,
-          'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
-    ];
+    final newItems = [];
     await Future.delayed(const Duration(seconds: 2));
 
     final nextPageKey = pageKey + newItems.length;
-    _pagingController.appendPage(newItems, nextPageKey.toInt());
+    _pagingController.appendPage([], nextPageKey.toInt());
   }
 
   @override

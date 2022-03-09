@@ -1,6 +1,6 @@
-class Category {
+class ItemCategory {
   String name;
   String icon;
 
-  Category(this.name, this.icon);
+  ItemCategory(this.name, this.icon);
 }

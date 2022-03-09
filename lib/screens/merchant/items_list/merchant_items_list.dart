@@ -12,14 +12,34 @@ class MerchantItemsList extends StatefulWidget {
 
 class _MerchantItemsListState extends State<MerchantItemsList> {
   final List<Item> _merchantItems = [
-    Item(1, 'Men Cloth', 'Men cloth desc', 100,
-        'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'),
-    Item(2, 'Women Cloth', 'Women cloth desc', 50,
-        'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
-    Item(3, 'Kids Cloth', 'Kids cloth desc', 80,
-        'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'),
-    Item(4, 'Home products', 'Home products desc', 120,
-        'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
+    Item(
+        id: 1,
+        name: 'Men Cloth',
+        desc: 'Men cloth desc',
+        price: 100,
+        image:
+            'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'),
+    Item(
+        id: 2,
+        name: 'Women Cloth',
+        desc: 'Women cloth desc',
+        price: 50,
+        image:
+            'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
+    Item(
+        id: 3,
+        name: 'Kids Cloth',
+        desc: 'Kids cloth desc',
+        price: 80,
+        image:
+            'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'),
+    Item(
+        id: 4,
+        name: 'Home products',
+        desc: 'Home products desc',
+        price: 120,
+        image:
+            'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
   ];
 
   TextEditingController _name = TextEditingController(text: "");
@@ -120,8 +140,12 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
             )),
         onPressed: () {
           setState(() {
-            _merchantItems.add(Item(_merchantItems.length, _name.text,
-                _desc.text, int.parse(_price.text), _image.text));
+            _merchantItems.add(Item(
+                id: _merchantItems.length,
+                name: _name.text,
+                desc: _desc.text,
+                price: double.parse(_price.text),
+                image: _image.text));
           });
         },
         child: const Text('Submit',

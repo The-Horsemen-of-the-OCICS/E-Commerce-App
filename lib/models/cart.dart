@@ -46,10 +46,3 @@ class CartList extends ChangeNotifier {
     _cartItems.removeWhere((element) => element.item.id == cartItem.item.id);
   }
 }
-
-// Demo data for our cart
-List<Cart> demoCarts = [
-  Cart(item: demoProducts[0], numOfItem: 2),
-  Cart(item: demoProducts[1], numOfItem: 1),
-  Cart(item: demoProducts[3], numOfItem: 1),
-];
