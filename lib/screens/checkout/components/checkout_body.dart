@@ -134,7 +134,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                 Text("\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}"),
           ),
           ListTile(
-            title: Text('Promocode'),
+            title: Text('Discount'),
             trailing: Text("-\$${widget.promoDiscount.toStringAsFixed(2)}"),
           ),
           Divider(),

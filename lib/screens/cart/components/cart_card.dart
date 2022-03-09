@@ -10,10 +10,12 @@ import 'package:ecommerceapp/widgets/custom_text.dart';
 class CartCard extends StatefulWidget {
   const CartCard({
     Key? key,
-    required this.cart,
+    required this.cartItem,
+    required this.cartList,
   }) : super(key: key);
 
-  final Cart cart;
+  final Cart cartItem;
+  final CartList cartList;
   @override
   _ShopItemListState createState() => _ShopItemListState();
 }
@@ -48,7 +50,7 @@ class _ShopItemListState extends State<CartCard> {
                     ]),
                 child: FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: widget.cart.item.image,
+                  image: widget.cartItem.item.image,
                 ),
               ),
             ),
@@ -62,7 +64,7 @@ class _ShopItemListState extends State<CartCard> {
                   margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
                   padding: EdgeInsets.all(8),
                   child: CustomText(
-                    text: widget.cart.item.name,
+                    text: widget.cartItem.item.name,
                     size: getProportionateScreenWidth(14),
                     weight: FontWeight.bold,
                   )),
@@ -74,7 +76,7 @@ class _ShopItemListState extends State<CartCard> {
                     SizedBox(
                       width: 40,
                       child: Text(
-                        '\$${widget.cart.item.price}',
+                        '\$${widget.cartItem.item.price}',
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Color(0xFFFF7643),
@@ -93,7 +95,7 @@ class _ShopItemListState extends State<CartCard> {
                 child: Row(
                   children: [
                     Text(
-                        'Sub: \$${widget.cart.item.price * widget.cart.numOfItem}',
+                        'Sub: \$${widget.cartItem.item.price * widget.cartItem.numOfItem}',
                         style: Theme.of(context).textTheme.subtitle2)
                   ],
                 ),
@@ -114,12 +116,12 @@ class _ShopItemListState extends State<CartCard> {
                         ),
                       ),
                       onTap: () {
-                        // cartController.decreaseQuantity(cartItem);
+                        widget.cartList.reduce(widget.cartItem);
                       }),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomText(
-                      text: widget.cart.numOfItem.toString(),
+                      text: widget.cartItem.numOfItem.toString(),
                     ),
                   ),
                   InkWell(
@@ -130,7 +132,7 @@ class _ShopItemListState extends State<CartCard> {
                         ),
                       ),
                       onTap: () {
-                        //cartController.increaseQuantity(cartItem);
+                        widget.cartList.add(widget.cartItem);
                       }),
                 ],
               ),

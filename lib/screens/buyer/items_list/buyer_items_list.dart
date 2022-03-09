@@ -1,7 +1,9 @@
+import 'package:ecommerceapp/models/cart.dart';
 import 'package:ecommerceapp/models/category.dart';
 import 'package:ecommerceapp/models/item.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class BuyerItemsList extends StatefulWidget {
@@ -79,145 +81,179 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-              delegate: SliverChildListDelegate([
-            SizedBox(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 15, top: 30),
-                        child: Text('Categories',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left),
-                      ),
-                      SizedBox(
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.only(
-                              left: 25, top: 25, right: 25),
-                          itemCount: categories.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: index == categories.length - 1
-                                  ? EdgeInsets.zero
-                                  : const EdgeInsets.only(right: 40),
-                              child: Column(children: [
-                                Image.network(categories[index].icon,
-                                    width: 30, height: 30),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Text(categories[index].name,
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center),
-                                )
-                              ]),
-                            );
-                          },
+    return Consumer<CartList>(builder: (context, cartList, _) {
+      return Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverList(
+                delegate: SliverChildListDelegate([
+              SizedBox(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 15, top: 30),
+                          child: Text('Categories',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left),
                         ),
-                        height: 90,
-                      )
-                    ]),
-                height: 180)
-          ])),
-          PagedSliverGrid(
-              pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate<Item>(
-                itemBuilder: (context, item, index) {
-                  if (index % 2 == 0) {
-                    return Card(
-                      margin: const EdgeInsets.only(left: 15, right: 7.5),
-                      color: Colors.white,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: item.image,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 10),
-                              child: Text(item.name,
-                                  style: const TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 5),
-                              child: Text(item.desc,
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 10),
-                              child: Text("\$${item.price}",
-                                  style: const TextStyle(
-                                      color: Color.fromARGB(255, 239, 83, 80),
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold)),
-                            )
-                          ]),
-                    );
-                  } else {
-                    return Card(
-                      margin: const EdgeInsets.only(left: 7.5, right: 15),
-                      color: Colors.white,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: item.image,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 10),
-                              child: Text(item.name,
-                                  style: const TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 5),
-                              child: Text(item.desc,
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 10),
-                              child: Text("\$${item.price}",
-                                  style: const TextStyle(
-                                      color: Color.fromARGB(255, 239, 83, 80),
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold)),
-                            )
-                          ]),
-                    );
-                  }
-                },
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 15,
-                  childAspectRatio: 0.63))
-        ],
-      ),
-    );
+                        SizedBox(
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.only(
+                                left: 25, top: 25, right: 25),
+                            itemCount: categories.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: index == categories.length - 1
+                                    ? EdgeInsets.zero
+                                    : const EdgeInsets.only(right: 40),
+                                child: Column(children: [
+                                  Image.network(categories[index].icon,
+                                      width: 30, height: 30),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(categories[index].name,
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                        textAlign: TextAlign.center),
+                                  )
+                                ]),
+                              );
+                            },
+                          ),
+                          height: 90,
+                        )
+                      ]),
+                  height: 180)
+            ])),
+            PagedSliverGrid(
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate<Item>(
+                  itemBuilder: (context, item, index) {
+                    if (index % 2 == 0) {
+                      return Card(
+                        margin: const EdgeInsets.only(left: 15, right: 7.5),
+                        color: Colors.white,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FadeInImage.memoryNetwork(
+                                placeholder: kTransparentImage,
+                                image: item.image,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 15, top: 10),
+                                child: Text(item.name,
+                                    style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 15, top: 5),
+                                child: Text(item.desc,
+                                    style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15, top: 10, right: 15),
+                                child: Row(
+                                  children: [
+                                    Text("\$${item.price}",
+                                        style: const TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 239, 83, 80),
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold)),
+                                    const Spacer(),
+                                    IconButton(
+                                        onPressed: () => {
+                                              cartList.add(Cart(
+                                                  item: item, numOfItem: 1))
+                                            },
+                                        icon:
+                                            const Icon(Icons.add_shopping_cart))
+                                  ],
+                                ),
+                              )
+                            ]),
+                      );
+                    } else {
+                      return Card(
+                        margin: const EdgeInsets.only(left: 7.5, right: 15),
+                        color: Colors.white,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FadeInImage.memoryNetwork(
+                                placeholder: kTransparentImage,
+                                image: item.image,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 15, top: 10),
+                                child: Text(item.name,
+                                    style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 15, top: 5),
+                                child: Text(item.desc,
+                                    style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15, top: 10, right: 15),
+                                child: Row(
+                                  children: [
+                                    Text("\$${item.price}",
+                                        style: const TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 239, 83, 80),
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold)),
+                                    const Spacer(),
+                                    IconButton(
+                                        onPressed: () => {
+                                              cartList.add(Cart(
+                                                  item: item, numOfItem: 1))
+                                            },
+                                        icon:
+                                            const Icon(Icons.add_shopping_cart))
+                                  ],
+                                ),
+                              )
+                            ]),
+                      );
+                    }
+                  },
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 0.63))
+          ],
+        ),
+      );
+    });
   }
 
   @override
