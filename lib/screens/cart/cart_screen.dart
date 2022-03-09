@@ -9,13 +9,54 @@ import '../../../models/auth.dart';
 import 'package:ecommerceapp/models/user.dart';
 import 'package:ecommerceapp/screens/login.dart';
 
-class CartScreen extends StatelessWidget {
-  static String routeName = "/cart";
-
+class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
 
+class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
+    User? user = Provider.of<AuthModel>(context).getCurrentUser();
+    if (user == null) {
+      return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Cart',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
+          ),
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Please login to view your cart",
+                  style: TextStyle(fontSize: 18),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10.0),
+                  child: ElevatedButton(
+                    child: const Text("Login"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyLoginPage()),
+                      ).then((value) {
+                        setState(() {});
+                      });
+                      //Navigator.of(context).pushNamed(AppRoutes.login);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ));
+    }
     return Consumer<CartList>(builder: (context, cartList, _) {
       var overallPrice = cartList.cartItems.isEmpty
           ? 0
