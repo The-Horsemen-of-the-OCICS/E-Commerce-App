@@ -21,6 +21,7 @@ class BuyerItemsList extends StatefulWidget {
 class _BuyerItemsListState extends State<BuyerItemsList> {
   int currentPage = 0;
   bool isLoading = false;
+  bool _isFetchingMore = false;
 
   final List<ItemCategory> categories = [
     ItemCategory('Men',
@@ -47,16 +48,12 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
     final response =
         await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'item/'));
 
-    print(response.body);
-
     return compute(parseItems, response.body);
   }
 
   Future<List<Item>> parseItems(String responseBody) async {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     List<Item> items = parsed.map<Item>((json) => Item.fromJson(json)).toList();
-
-    print(items);
 
     return items;
   }
@@ -66,16 +63,23 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
     _pagingController.addPageRequestListener((pageKey) {
       _loadData(pageKey);
     });
-    // fetchItems(http.Client());
+    fetchItems(http.Client())
+        .then((items) => _pagingController.appendPage(items, 0));
     super.initState();
   }
 
   Future _loadData(int pageKey) async {
-    final newItems = [];
-    await Future.delayed(const Duration(seconds: 2));
-
-    final nextPageKey = pageKey + newItems.length;
-    _pagingController.appendPage([], nextPageKey.toInt());
+    if (!_isFetchingMore) {
+      if (kDebugMode) {
+        print("_loadData");
+      }
+      _isFetchingMore = true;
+      fetchItems(http.Client()).then((itmes) {
+        final nextPageKey = pageKey + itmes.length;
+        _pagingController.appendPage(itmes, nextPageKey.toInt());
+        _isFetchingMore = false;
+      });
+    }
   }
 
   @override
