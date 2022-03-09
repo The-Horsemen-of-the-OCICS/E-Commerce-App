@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ecommerceapp/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -76,9 +78,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState!.validate()) {
-            if (userAuth.login(_email.text, _password.text)) {
+            if (await userAuth.login(_email.text, _password.text)) {
               Navigator.pop(context);
             } else {
               final snackBar = SnackBar(
@@ -126,7 +128,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 width: MediaQuery.of(context).size.width / 2.5,
                 height: MediaQuery.of(context).size.height / 3,
                 constraints: const BoxConstraints(
-                    maxWidth: 500, maxHeight: 320, minHeight: 320),
+                    maxWidth: 500,
+                    maxHeight: 320,
+                    minHeight: 320,
+                    minWidth: 250),
                 child: Column(
                   children: <Widget>[
                     const Center(

@@ -5,6 +5,7 @@ import 'package:ecommerceapp/models/cart.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../../size_config.dart';
 import 'package:ecommerceapp/utils/application_properties.dart';
+import 'package:ecommerceapp/widgets/custom_text.dart';
 
 class CartCard extends StatefulWidget {
   const CartCard({
@@ -27,6 +28,7 @@ class _ShopItemListState extends State<CartCard> {
           boxShadow: shadow,
           borderRadius: BorderRadius.circular(15)),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           SizedBox(
             width: 98,
@@ -51,20 +53,19 @@ class _ShopItemListState extends State<CartCard> {
               ),
             ),
           ),
-          SizedBox(width: 15),
-          Column(
+          SizedBox(width: 12),
+          Expanded(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
-                padding: EdgeInsets.all(8),
-                child: Text(
-                  widget.cart.item.name,
-                  style: TextStyle(
-                      fontSize: getProportionateScreenWidth(14),
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
+                  margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
+                  padding: EdgeInsets.all(8),
+                  child: CustomText(
+                    text: widget.cart.item.name,
+                    size: getProportionateScreenWidth(14),
+                    weight: FontWeight.bold,
+                  )),
               SizedBox(height: 10),
               Container(
                 padding: EdgeInsets.all(8),
@@ -83,21 +84,55 @@ class _ShopItemListState extends State<CartCard> {
                         ),
                       ),
                     ),
-                    Text('x${widget.cart.numOfItem}',
-                        style: Theme.of(context).textTheme.bodyText1)
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 5),
               Container(
                 padding: EdgeInsets.all(8),
                 child: Row(
                   children: [
                     Text(
-                        'Sub: ${widget.cart.item.price * widget.cart.numOfItem}',
+                        'Sub: \$${widget.cart.item.price * widget.cart.numOfItem}',
                         style: Theme.of(context).textTheme.subtitle2)
                   ],
                 ),
+              ),
+            ],
+          )),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  InkWell(
+                      child: Container(
+                        child: const Icon(
+                          Icons.chevron_left,
+                          size: 35.0,
+                        ),
+                      ),
+                      onTap: () {
+                        // cartController.decreaseQuantity(cartItem);
+                      }),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomText(
+                      text: widget.cart.numOfItem.toString(),
+                    ),
+                  ),
+                  InkWell(
+                      child: Container(
+                        child: const Icon(
+                          Icons.chevron_right,
+                          size: 35.0,
+                        ),
+                      ),
+                      onTap: () {
+                        //cartController.increaseQuantity(cartItem);
+                      }),
+                ],
               ),
             ],
           )

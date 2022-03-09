@@ -1,9 +1,9 @@
-import 'package:ecommerceapp/screens/home/home.dart';
 import 'package:ecommerceapp/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../models/auth.dart';
+import 'package:ecommerceapp/models/user.dart';
 
 class CheckoutBody extends StatefulWidget {
   const CheckoutBody({Key? key, required this.overallPrice}) : super(key: key);
@@ -21,13 +21,14 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   TextEditingController cvc = TextEditingController();
   TextEditingController cardHolder = TextEditingController();
 
-  TextEditingController phoneNumber = TextEditingController();
-  TextEditingController streetAddress = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController street = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController country = TextEditingController();
 
   ScrollController scrollController = ScrollController();
+  bool _useDefaultShippingInfo = true;
 
   @override
   void initState() {
@@ -42,6 +43,24 @@ class _CheckoutBodyState extends State<CheckoutBody> {
   @override
   Widget build(BuildContext context) {
     final userAuth = Provider.of<AuthModel>(context);
+    User? user = userAuth.getCurrentUser();
+
+    if (user != null && _useDefaultShippingInfo) {
+      phone.text = user.defaultShippingInfo.phone;
+      street.text = user.defaultShippingInfo.street;
+      city.text = user.defaultShippingInfo.city;
+      state.text = user.defaultShippingInfo.state;
+      country.text = user.defaultShippingInfo.country;
+    }
+    final useDefaultShippingInfoToggle = Switch(
+      value: _useDefaultShippingInfo,
+      onChanged: (value) {
+        setState(() {
+          _useDefaultShippingInfo = value;
+        });
+      },
+    );
+
     Widget submitOrderBtn = InkWell(
       onTap: () => {
         if (userAuth.getCurrentUser() != null)
@@ -280,7 +299,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             child: TextField(
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               keyboardType: TextInputType.number,
-              controller: phoneNumber,
+              controller: phone,
               onChanged: (val) {
                 setState(() {});
               },
@@ -296,7 +315,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
             ),
             child: TextField(
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
-              controller: streetAddress,
+              controller: street,
               onChanged: (val) {
                 setState(() {});
               },
@@ -432,9 +451,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          height: 35,
-                        )
+                        useDefaultShippingInfoToggle
                       ],
                     ),
                     shippingInfoCard,
