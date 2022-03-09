@@ -1,7 +1,6 @@
 import 'package:ecommerceapp/models/item.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:ecommerceapp/widgets/merchant_item_cell.dart';
-import 'package:ecommerceapp/widgets/merchant_item_form.dart';
 import 'package:flutter/material.dart';
 
 class MerchantItemsList extends StatefulWidget {
@@ -23,12 +22,93 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
         'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
   ];
 
+  TextEditingController _name = TextEditingController(text: "");
+  TextEditingController _desc = TextEditingController(text: "");
+  TextEditingController _price = TextEditingController(text: "");
+  TextEditingController _image = TextEditingController(text: "");
+
   @override
   Widget build(BuildContext context) {
     final merchantItems = Column(
         children: _merchantItems
             .map((merchantItem) => MerchantItemCell(item: merchantItem))
             .toList());
+
+    final nameInputBox = Container(
+      width: 630,
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+          maxLength: 30,
+          maxLines: 1,
+          controller: _name,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Item Name',
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter item name';
+            }
+            return null;
+          }),
+    );
+
+    final descInputBox = Container(
+      width: 630,
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+          maxLength: 30,
+          maxLines: 1,
+          controller: _desc,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Item Description',
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter item description';
+            }
+            return null;
+          }),
+    );
+
+    final priceInputBox = Container(
+      width: 630,
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+          maxLength: 30,
+          maxLines: 1,
+          controller: _price,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Item Price',
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter item price';
+            }
+            return null;
+          }),
+    );
+
+    final imageUrlImageBox = Container(
+      width: 630,
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+          // maxLength: 30,
+          maxLines: 1,
+          controller: _image,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Item Image Url',
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter item image url';
+            }
+            return null;
+          }),
+    );
 
     final submitItemButton = ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -40,7 +120,8 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
             )),
         onPressed: () {
           setState(() {
-            _merchantItems.add(Item(0, '', '', 10, ''));
+            _merchantItems.add(Item(_merchantItems.length, _name.text,
+                _desc.text, int.parse(_price.text), _image.text));
           });
         },
         child: const Text('Submit',
@@ -77,7 +158,10 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
                     ),
                   ),
                 ),
-                const MerchantItemForm(),
+                nameInputBox,
+                descInputBox,
+                priceInputBox,
+                imageUrlImageBox,
                 submitItemButton
               ],
             ),
