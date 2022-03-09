@@ -31,12 +31,12 @@ void createNewOrder(
   final postBody = jsonEncode(<String, dynamic>{
     'id': UniqueKey().toString(),
     'userId': user.id,
-    'cartList': jsonEncode(cartList.cartItems),
+    'cartList': cartList.cartItems,
     'overallPrice': overallPrice,
     'orderDate': orderDate,
     'shippingAddress': shippingAddress,
   });
-  print(postBody);
+
   final response = await http.post(
     Uri.parse(NetworkConfig.API_BASE_URL + 'order'),
     headers: <String, String>{
