@@ -58,7 +58,7 @@ class _CartScreenState extends State<CartScreen> {
           ));
     }
     return Consumer<CartList>(builder: (context, cartList, _) {
-      var overallPrice = cartList.cartItems.isEmpty
+      var cartListPrice = cartList.cartItems.isEmpty
           ? 0
           : cartList.cartItems
               .map((cart) => cart.item.price * cart.numOfItem)
@@ -71,14 +71,14 @@ class _CartScreenState extends State<CartScreen> {
           body: const Center(
             child: Text("No items in cart..."),
           ),
-          bottomNavigationBar: CheckoutCard(overallPrice: overallPrice),
         );
       } else {
         return Scaffold(
           appBar: buildAppBar(context),
           drawer: const NavigationDrawer(),
           body: Body(cartList: cartList),
-          bottomNavigationBar: CheckoutCard(overallPrice: overallPrice),
+          bottomNavigationBar: CheckoutCard(
+              cartListPrice: cartListPrice.toDouble(), cartList: cartList),
         );
       }
     });

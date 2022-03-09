@@ -87,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     final futureOrders = FutureBuilder<List<Order>>(
-      future: fetchOrders(http.Client(), user!.id),
+      future: fetchOrders(http.Client(), user.id),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Center(
