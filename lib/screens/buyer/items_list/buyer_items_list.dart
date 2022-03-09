@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:ecommerceapp/models/cart.dart';
 import 'package:ecommerceapp/models/category.dart';
 import 'package:ecommerceapp/models/item.dart';
+import 'package:ecommerceapp/screens/buyer/items_list/item_detail.dart';
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:http/http.dart' as http;
 
@@ -80,6 +82,56 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
         _isFetchingMore = false;
       });
     }
+  }
+
+  void showItemDetail(BuildContext context, Item item) {
+    var alertStyle = const AlertStyle(
+      animationType: AnimationType.grow,
+      isCloseButton: false,
+    );
+    Alert(
+            context: context,
+            content:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: item.image,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, top: 10),
+                child: Text(item.name,
+                    style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, top: 5),
+                child: Text(item.desc,
+                    style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, top: 10, right: 15),
+                child: Row(
+                  children: [
+                    Text("\$${item.price}",
+                        style: const TextStyle(
+                            color: Color.fromARGB(255, 239, 83, 80),
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold)),
+                    const Spacer(),
+                    IconButton(
+                        onPressed: () => {print("object")},
+                        icon: const Icon(Icons.add_shopping_cart))
+                  ],
+                ),
+              )
+            ]),
+            style: alertStyle)
+        .show();
   }
 
   @override
@@ -193,58 +245,62 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                             ]),
                       );
                     } else {
-                      return Card(
-                        margin: const EdgeInsets.only(left: 7.5, right: 15),
-                        color: Colors.white,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: item.image,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, top: 10),
-                                child: Text(item.name,
-                                    style: const TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, top: 5),
-                                child: Text(item.desc,
-                                    style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal)),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15, top: 10, right: 15),
-                                child: Row(
-                                  children: [
-                                    Text("\$${item.price}",
+                      return GestureDetector(
+                          onTap: (() {
+                            showItemDetail(context, item);
+                          }),
+                          child: Card(
+                            margin: const EdgeInsets.only(left: 7.5, right: 15),
+                            color: Colors.white,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FadeInImage.memoryNetwork(
+                                    placeholder: kTransparentImage,
+                                    image: item.image,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, top: 10),
+                                    child: Text(item.name,
                                         style: const TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 239, 83, 80),
-                                            fontSize: 17,
+                                            color: Colors.black87,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold)),
-                                    const Spacer(),
-                                    IconButton(
-                                        onPressed: () => {
-                                              cartList.add(Cart(
-                                                  item: item, numOfItem: 1))
-                                            },
-                                        icon:
-                                            const Icon(Icons.add_shopping_cart))
-                                  ],
-                                ),
-                              )
-                            ]),
-                      );
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(left: 15, top: 5),
+                                    child: Text(item.desc,
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal)),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, top: 10, right: 15),
+                                    child: Row(
+                                      children: [
+                                        Text("\$${item.price}",
+                                            style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 239, 83, 80),
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold)),
+                                        const Spacer(),
+                                        IconButton(
+                                            onPressed: () => {
+                                                  cartList.add(Cart(
+                                                      item: item, numOfItem: 1))
+                                                },
+                                            icon: const Icon(
+                                                Icons.add_shopping_cart))
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                          ));
                     }
                   },
                 ),

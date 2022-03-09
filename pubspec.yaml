@@ -40,6 +40,7 @@ dependencies:
   provider: ^6.0.2
   http: ^0.13.4
   numberpicker: ^2.1.1
+  rflutter_alert: ^2.0.4
 
 dev_dependencies:
   flutter_test:
