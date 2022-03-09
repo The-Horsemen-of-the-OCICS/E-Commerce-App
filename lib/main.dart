@@ -37,8 +37,9 @@ class ECommerceApp extends StatelessWidget {
                 AppRoutes.profile: (context) => ProfilePage(),
                 AppRoutes.forum: (context) => ForumPage(),
                 AppRoutes.cart: (context) => const CartScreen(),
-                AppRoutes.checkout: (context) => const CheckoutScreen(
-                      overallPrice: 120,
+                AppRoutes.checkout: (context) => CheckoutScreen(
+                      cartListPrice: 120,
+                      cartList: CartList(),
                     ),
                 AppRoutes.merchant: (context) => const MerchantItemsList(),
               }),

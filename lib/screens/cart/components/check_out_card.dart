@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/models/cart.dart';
 import 'package:ecommerceapp/screens/checkout/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,23 +9,25 @@ import '../../../size_config.dart';
 class CheckoutCard extends StatelessWidget {
   const CheckoutCard({
     Key? key,
-    required this.overallPrice,
+    required this.cartListPrice,
+    required this.cartList,
   }) : super(key: key);
-  final int overallPrice;
+  final double cartListPrice;
+  final CartList cartList;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: getProportionateScreenWidth(15),
-        horizontal: getProportionateScreenWidth(30),
+        horizontal: getProportionateScreenWidth(20),
       ),
       // height: 174,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
         boxShadow: [
           BoxShadow(
@@ -47,7 +50,7 @@ class CheckoutCard extends StatelessWidget {
                     text: "Total:\n",
                     children: [
                       TextSpan(
-                        text: "\$${this.overallPrice}",
+                        text: "\$${this.cartListPrice}",
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ],
@@ -61,8 +64,8 @@ class CheckoutCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              CheckoutScreen(overallPrice: overallPrice),
+                          builder: (context) => CheckoutScreen(
+                              cartListPrice: cartListPrice, cartList: cartList),
                         ),
                       );
                     },
