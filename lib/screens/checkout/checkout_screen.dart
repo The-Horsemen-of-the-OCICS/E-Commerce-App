@@ -3,9 +3,12 @@ import 'package:ecommerceapp/models/cart.dart';
 import 'components/checkout_body.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({Key? key, required this.overallPrice})
+  const CheckoutScreen(
+      {Key? key, required this.cartListPrice, required this.cartList})
       : super(key: key);
-  final int overallPrice;
+
+  final double cartListPrice;
+  final CartList cartList;
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
 }
@@ -16,7 +19,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: buildAppBar(context),
-      body: CheckoutBody(overallPrice: widget.overallPrice),
+      body: CheckoutBody(
+          cartListPrice: widget.cartListPrice, cartList: widget.cartList),
     );
   }
 

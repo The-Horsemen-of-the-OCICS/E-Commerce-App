@@ -1,16 +1,54 @@
+import 'dart:convert';
+import 'package:ecommerceapp/models/cart.dart';
 import 'package:ecommerceapp/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../models/auth.dart';
 import 'package:ecommerceapp/models/user.dart';
+import 'package:http/http.dart' as http;
+import '../../../utils/network_config.dart';
 
 class CheckoutBody extends StatefulWidget {
-  const CheckoutBody({Key? key, required this.overallPrice}) : super(key: key);
-  final int overallPrice;
-  final int promoDiscount = 0;
+  const CheckoutBody(
+      {Key? key, required this.cartListPrice, required this.cartList})
+      : super(key: key);
+  final double cartListPrice;
+  final CartList cartList;
+  final double promoDiscount = 0;
   @override
   _CheckoutBodyState createState() => _CheckoutBodyState();
+}
+
+// POST
+void createNewOrder(
+  User user,
+  CartList cartList,
+  double overallPrice,
+  String orderDate,
+  String shippingAddress,
+) async {
+  final response = await http.post(
+    Uri.parse(NetworkConfig.API_BASE_URL + 'order/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'userId': user.id,
+      'cartList': cartList,
+      'overallPrice': overallPrice,
+      'orderDate': orderDate,
+      'shippingAddress': shippingAddress,
+    }),
+  );
+  debugPrint("LOL");
+  debugPrint(response.body);
+
+  if (response.statusCode == 204) {
+    debugPrint("Order created");
+  } else {
+    throw Exception('Failed to create order.');
+  }
 }
 
 class _CheckoutBodyState extends State<CheckoutBody> {
@@ -29,6 +67,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
   ScrollController scrollController = ScrollController();
   bool _useDefaultShippingInfo = true;
+  bool _useDefaultPaymentInfo = true;
 
   @override
   void initState() {
@@ -42,6 +81,8 @@ class _CheckoutBodyState extends State<CheckoutBody> {
 
   @override
   Widget build(BuildContext context) {
+    final double overallPrice =
+        widget.cartListPrice * 1.13 - widget.promoDiscount;
     final userAuth = Provider.of<AuthModel>(context);
     User? user = userAuth.getCurrentUser();
 
@@ -52,6 +93,13 @@ class _CheckoutBodyState extends State<CheckoutBody> {
       state.text = user.defaultShippingInfo.state;
       country.text = user.defaultShippingInfo.country;
     }
+    if (user != null && _useDefaultPaymentInfo) {
+      cardNumber.text = '3904567890123456';
+      month.text = '09';
+      year.text = '25';
+      cvc.text = '234';
+      cardHolder.text = 'Tom Cruise';
+    }
     final useDefaultShippingInfoToggle = Switch(
       value: _useDefaultShippingInfo,
       onChanged: (value) {
@@ -60,18 +108,28 @@ class _CheckoutBodyState extends State<CheckoutBody> {
         });
       },
     );
+    final useDefaultPaymentInfoToggle = Switch(
+      value: _useDefaultPaymentInfo,
+      onChanged: (value) {
+        setState(() {
+          _useDefaultPaymentInfo = value;
+        });
+      },
+    );
 
     Widget submitOrderBtn = InkWell(
       onTap: () => {
-        if (userAuth.getCurrentUser() != null)
-          {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: const Text('Thank you for your order!'),
-            )),
-            Navigator.pushNamed(context, AppRoutes.home)
-          }
-        else
-          {Navigator.pushNamed(context, AppRoutes.login)}
+        createNewOrder(
+          user!,
+          widget.cartList,
+          widget.cartListPrice,
+          DateTime.now().toString(),
+          '${street.text}, ${city.text}, ${state.text}, ${country.text}',
+        ),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Thank you for your order!'),
+        )),
+        Navigator.pushNamed(context, AppRoutes.home)
       },
       child: Container(
         height: 50,
@@ -121,17 +179,17 @@ class _CheckoutBodyState extends State<CheckoutBody> {
         children: <Widget>[
           ListTile(
             title: Text('Cart value'),
-            trailing: Text("\$${widget.overallPrice.toStringAsFixed(2)}"),
+            trailing: Text("\$${widget.cartListPrice.toStringAsFixed(2)}"),
           ),
           ListTile(
             title: Text('Tax'),
             trailing:
-                Text("\$${(widget.overallPrice * 0.13).toStringAsFixed(2)}"),
+                Text("\$${(widget.cartListPrice * 0.13).toStringAsFixed(2)}"),
           ),
           ListTile(
             title: Text('Subtotal'),
             trailing:
-                Text("\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}"),
+                Text("\$${(widget.cartListPrice * 1.13).toStringAsFixed(2)}"),
           ),
           ListTile(
             title: Text('Discount'),
@@ -144,7 +202,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             trailing: Text(
-              "\$${(widget.overallPrice * 1.13).toStringAsFixed(2)}",
+              "\$${overallPrice.toStringAsFixed(2)}",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           )
@@ -434,9 +492,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          height: 35,
-                        )
+                        useDefaultPaymentInfoToggle
                       ],
                     ),
                     paymentCard,
