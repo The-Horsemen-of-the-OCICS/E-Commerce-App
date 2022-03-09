@@ -44,6 +44,10 @@ class CartList extends ChangeNotifier {
     _cartItems.removeWhere((element) => element.id == cartItem.id);
   }
 
+  void removeAll() {
+    _cartItems.clear();
+  }
+
   double getCartListPrice() {
     double total = 0.0;
     for (var item in _cartItems) {
