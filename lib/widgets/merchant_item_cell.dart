@@ -19,7 +19,6 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 130,
       decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: shadow,
