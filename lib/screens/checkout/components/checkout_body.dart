@@ -47,8 +47,11 @@ void createNewOrder(
   debugPrint("LOL");
   debugPrint(response.body);
 
-  if (response.statusCode == 204) {
+  if (response.statusCode == 204 ||
+      response.statusCode == 200 ||
+      response.statusCode == 201) {
     debugPrint("Order created");
+    cartList.cartItems.clear();
   } else {
     throw Exception('Failed to create order.');
   }
