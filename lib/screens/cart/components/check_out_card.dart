@@ -17,14 +17,14 @@ class CheckoutCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: getProportionateScreenWidth(15),
-        horizontal: getProportionateScreenWidth(30),
+        horizontal: getProportionateScreenWidth(20),
       ),
       // height: 174,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
         boxShadow: [
           BoxShadow(
