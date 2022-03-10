@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class CartItem {
   String id;
   String name;
@@ -16,7 +18,7 @@ class CartItem {
     return CartItem(
       id: json['id'] as String,
       name: json['name'] as String,
-      itemPrice: json['price'] as double,
+      itemPrice: json['itemPrice'] as double,
       image: json['image'] as String,
       quantity: json['quantity'] as int,
     );

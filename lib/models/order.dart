@@ -3,33 +3,33 @@ import 'package:ecommerceapp/models/cartItem.dart';
 class Order {
   String id;
   String userId;
-  List<CartItem> itemList;
+  List<CartItem> cartList;
   double overallPrice;
-  String date;
+  String orderDate;
   String shippingAddress;
 
   Order(
       {required this.id,
       required this.userId,
-      required this.itemList,
+      required this.cartList,
       required this.overallPrice,
-      required this.date,
+      required this.orderDate,
       required this.shippingAddress});
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
       id: json['id'] as String,
       userId: json['userId'] as String,
-      itemList: CartItem.fromListJson(json['itemList']),
+      cartList: CartItem.fromListJson(json['cartList']),
       overallPrice: json['overallPrice'] as double,
-      date: json['date'] as String,
+      orderDate: json['orderDate'] as String,
       shippingAddress: json['shippingAddress'] as String,
     );
   }
 
   String printItems() {
     String result = "";
-    this.itemList.forEach((element) {
+    this.cartList.forEach((element) {
       result =
           result + element.name + " x" + element.quantity.toString() + '\n';
     });
