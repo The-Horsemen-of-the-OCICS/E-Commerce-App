@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../../models/auth.dart';
 import '../../models/order.dart';
 import '../../models/user.dart';
-import '../../routes/app_routes.dart';
 import 'package:http/http.dart' as http;
 
 import '../../utils/network_config.dart';
@@ -27,6 +26,7 @@ Future<List<Order>> fetchOrders(http.Client client, String userId) async {
 
 Future<List<Order>> parseOrders(String responseBody) async {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
   return parsed.map<Order>((json) => Order.fromJson(json)).toList();
 }
 
@@ -46,7 +46,6 @@ void updateShipInfo(String userId, String phone, String street, String city,
       'country': country
     }),
   );
-  debugPrint("LOL");
   debugPrint(response.body);
 
   if (response.statusCode == 204) {
@@ -90,6 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
       future: fetchOrders(http.Client(), user.id),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+          debugPrint(snapshot.error.toString());
           return const Center(
             child: Text('Failed to load order history from the server!'),
           );

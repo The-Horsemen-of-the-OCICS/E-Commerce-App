@@ -57,7 +57,7 @@ class _OrderHistroyItemState extends State<OrderHistroyItem> {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    "${widget.order.date}",
+                                    "${widget.order.orderDate}",
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                 ],

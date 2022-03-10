@@ -45,10 +45,14 @@ void createNewOrder(
     body: postBody,
   );
   debugPrint("LOL");
+  debugPrint(response.statusCode.toString());
   debugPrint(response.body);
 
-  if (response.statusCode == 204) {
+  if (response.statusCode == 204 ||
+      response.statusCode == 200 ||
+      response.statusCode == 201) {
     debugPrint("Order created");
+    cartList.removeAll();
   } else {
     throw Exception('Failed to create order.');
   }

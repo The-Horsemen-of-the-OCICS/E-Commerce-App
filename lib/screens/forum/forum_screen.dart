@@ -25,6 +25,7 @@ Future<List<Question>> fetchQuestions(http.Client client) async {
 }
 
 Future<List<Question>> parseQuestions(String responseBody) async {
+  debugPrint(responseBody);
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
   List<Question> q =
       parsed.map<Question>((json) => Question.fromJson(json)).toList();
