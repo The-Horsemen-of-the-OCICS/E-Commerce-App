@@ -2,6 +2,7 @@ import 'package:ecommerceapp/models/cartList.dart';
 import 'package:ecommerceapp/models/cartItem.dart';
 import 'package:ecommerceapp/models/item.dart';
 import 'package:ecommerceapp/models/category.dart';
+import 'package:ecommerceapp/routes/app_routes.dart';
 import 'dart:convert';
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'package:flutter/foundation.dart';
@@ -143,6 +144,9 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
 
   @override
   Widget build(BuildContext context) {
+    final category =
+        ModalRoute.of(context)!.settings.arguments as ItemCategory?;
+
     return Consumer<CartList>(builder: (context, cartList, _) {
       return Scaffold(
         body: CustomScrollView(
@@ -153,46 +157,75 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 15, top: 30),
-                          child: Text('Categories',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left),
-                        ),
-                        SizedBox(
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.only(
-                                left: 25, top: 25, right: 25),
-                            itemCount: categories.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: index == categories.length - 1
-                                    ? EdgeInsets.zero
-                                    : const EdgeInsets.only(right: 40),
-                                child: Column(children: [
-                                  Image.network(categories[index].icon,
-                                      width: 30, height: 30),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: Text(categories[index].name,
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                        textAlign: TextAlign.center),
-                                  )
-                                ]),
-                              );
-                            },
-                          ),
-                          height: 90,
-                        )
+                        category != null
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 15, top: 30),
+                                child: Text(category.name,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.left),
+                              )
+                            : const Padding(
+                                padding: EdgeInsets.only(left: 15, top: 30),
+                                child: Text('Categories',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.left),
+                              ),
+                        category != null
+                            ? const SizedBox(height: 0)
+                            : SizedBox(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  padding: const EdgeInsets.only(
+                                      left: 25, top: 25, right: 25),
+                                  itemCount: categories.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: (() {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const BuyerItemsList(),
+                                            settings: RouteSettings(
+                                              arguments: categories[index],
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                      child: Padding(
+                                        padding: index == categories.length - 1
+                                            ? EdgeInsets.zero
+                                            : const EdgeInsets.only(right: 40),
+                                        child: Column(children: [
+                                          Image.network(categories[index].icon,
+                                              width: 30, height: 30),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 10),
+                                            child: Text(categories[index].name,
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                textAlign: TextAlign.center),
+                                          )
+                                        ]),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                height: 90,
+                              )
                       ]),
-                  height: 180)
+                  height: category != null ? 90 : 180)
             ])),
             PagedSliverGrid(
                 pagingController: _pagingController,
