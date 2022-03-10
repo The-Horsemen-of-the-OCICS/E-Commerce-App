@@ -1,22 +1,22 @@
 class CartItem {
   String id;
   String name;
-  double totalPrice;
+  double itemPrice;
   String image;
   int quantity;
 
   CartItem(
       {required this.id,
       required this.name,
-      required this.totalPrice,
+      required this.itemPrice,
       required this.image,
       required this.quantity});
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
-      id: json['itemId'] as String,
+      id: json['id'] as String,
       name: json['name'] as String,
-      totalPrice: json['totalPrice'] as double,
+      itemPrice: json['price'] as double,
       image: json['image'] as String,
       quantity: json['quantity'] as int,
     );
@@ -28,5 +28,15 @@ class CartItem {
       result.add(CartItem.fromJson(j));
     }
     return result;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'itemPrice': itemPrice,
+      'image': image,
+      'quantity': quantity,
+    };
   }
 }

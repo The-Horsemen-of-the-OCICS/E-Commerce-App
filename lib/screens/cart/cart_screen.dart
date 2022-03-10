@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ecommerceapp/models/cart.dart';
+import 'package:ecommerceapp/models/cartList.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:provider/provider.dart';
 import 'components/body.dart';
@@ -34,7 +34,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
+                const Text(
                   "Please login to view your cart",
                   style: TextStyle(fontSize: 18),
                 ),
@@ -45,7 +45,8 @@ class _CartScreenState extends State<CartScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MyLoginPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const MyLoginPage()),
                       ).then((value) {
                         setState(() {});
                       });
@@ -58,11 +59,7 @@ class _CartScreenState extends State<CartScreen> {
           ));
     }
     return Consumer<CartList>(builder: (context, cartList, _) {
-      var cartListPrice = cartList.cartItems.isEmpty
-          ? 0
-          : cartList.cartItems
-              .map((cart) => cart.item.price * cart.numOfItem)
-              .reduce((value, element) => value + element);
+      var cartListPrice = cartList.getCartListPrice();
 
       if (cartList.cartItems.isEmpty) {
         return Scaffold(

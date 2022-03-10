@@ -1,5 +1,5 @@
 import 'package:ecommerceapp/models/auth.dart';
-import 'package:ecommerceapp/models/cart.dart';
+import 'package:ecommerceapp/models/cartList.dart';
 import 'package:ecommerceapp/routes/app_routes.dart';
 import 'package:ecommerceapp/screens/forum/forum_screen.dart';
 import 'package:ecommerceapp/screens/home/home.dart';

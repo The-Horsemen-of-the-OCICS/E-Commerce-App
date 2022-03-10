@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ecommerceapp/models/cart.dart';
+import 'package:ecommerceapp/models/cartList.dart';
 import 'cart_card.dart';
 import '../../../size_config.dart';
 
@@ -24,7 +24,7 @@ class _BodyState extends State<Body> {
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Dismissible(
-            key: Key(widget.cartList.cartItems[index].item.id.toString()),
+            key: Key(widget.cartList.cartItems[index].id.toString()),
             direction: DismissDirection.endToStart,
             onDismissed: (direction) {
               setState(() {

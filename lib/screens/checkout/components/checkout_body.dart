@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:ecommerceapp/models/cart.dart';
+import 'package:ecommerceapp/models/cartList.dart';
 import 'package:ecommerceapp/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -28,24 +28,31 @@ void createNewOrder(
   String orderDate,
   String shippingAddress,
 ) async {
+  final postBody = jsonEncode(<String, dynamic>{
+    'id': UniqueKey().toString(),
+    'userId': user.id,
+    'cartList': cartList.cartItems,
+    'overallPrice': overallPrice,
+    'orderDate': orderDate,
+    'shippingAddress': shippingAddress,
+  });
+
   final response = await http.post(
-    Uri.parse(NetworkConfig.API_BASE_URL + 'order/'),
+    Uri.parse(NetworkConfig.API_BASE_URL + 'order'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, dynamic>{
-      'userId': user.id,
-      'cartList': cartList,
-      'overallPrice': overallPrice,
-      'orderDate': orderDate,
-      'shippingAddress': shippingAddress,
-    }),
+    body: postBody,
   );
   debugPrint("LOL");
+  debugPrint(response.statusCode.toString());
   debugPrint(response.body);
 
-  if (response.statusCode == 204) {
+  if (response.statusCode == 204 ||
+      response.statusCode == 200 ||
+      response.statusCode == 201) {
     debugPrint("Order created");
+    cartList.removeAll();
   } else {
     throw Exception('Failed to create order.');
   }
