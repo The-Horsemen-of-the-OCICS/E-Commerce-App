@@ -47,11 +47,22 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
   TextEditingController _price = TextEditingController(text: "");
   TextEditingController _image = TextEditingController(text: "");
 
+  void removeItem(Item item) {
+    var index = _merchantItems.indexWhere((element) => element.id == item.id);
+
+    setState(() {
+      _merchantItems.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final merchantItems = Column(
         children: _merchantItems
-            .map((merchantItem) => MerchantItemCell(item: merchantItem))
+            .map((merchantItem) => MerchantItemCell(
+                  item: merchantItem,
+                  removeItem: removeItem,
+                ))
             .toList());
 
     final nameInputBox = Container(

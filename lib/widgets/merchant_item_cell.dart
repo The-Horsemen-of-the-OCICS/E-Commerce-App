@@ -7,9 +7,12 @@ import 'package:ecommerceapp/utils/application_properties.dart';
 import 'package:ecommerceapp/widgets/custom_text.dart';
 
 class MerchantItemCell extends StatefulWidget {
-  const MerchantItemCell({Key? key, required this.item}) : super(key: key);
+  const MerchantItemCell(
+      {Key? key, required this.item, required this.removeItem})
+      : super(key: key);
 
   final Item item;
+  final Function removeItem;
 
   @override
   _MerchantItemCellState createState() => _MerchantItemCellState();
@@ -18,6 +21,22 @@ class MerchantItemCell extends StatefulWidget {
 class _MerchantItemCellState extends State<MerchantItemCell> {
   @override
   Widget build(BuildContext context) {
+    final deleteItemButton = ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            onPrimary: Colors.red,
+            primary: Colors.red,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(2)),
+            )),
+        onPressed: () {
+          widget.removeItem(widget.item);
+        },
+        child: const Text('Delete',
+            style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)));
+
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -95,6 +114,13 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
               ),
             ],
           )),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(children: [submitItemButton]),
+            ],
+          )
         ],
       ),
     );
