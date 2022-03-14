@@ -4,7 +4,8 @@ class AppRoutes {
   static const String forum = '/forum';
   static const String cart = '/cart';
   static const String checkout = '/checkout';
-  static const String merchant = "/merchant";
+  static const String merchantItems = "/merchant/items";
+  static const String merchantCategories = '/merchant/categories';
   static const String payment = "/payment";
   static const String profile = "/profile";
 }
