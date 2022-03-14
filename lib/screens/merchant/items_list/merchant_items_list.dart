@@ -122,11 +122,10 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
           }),
     );
 
-    final imageUrlImageBox = Container(
+    final imageUrlInputBox = Container(
       width: 630,
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
-          // maxLength: 30,
           maxLines: 1,
           controller: _image,
           decoration: const InputDecoration(
@@ -196,7 +195,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
                 nameInputBox,
                 descInputBox,
                 priceInputBox,
-                imageUrlImageBox,
+                imageUrlInputBox,
                 submitItemButton
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:ecommerceapp/routes/app_routes.dart';
 import 'package:ecommerceapp/screens/forum/forum_screen.dart';
 import 'package:ecommerceapp/screens/home/home.dart';
 import 'package:ecommerceapp/screens/login.dart';
+import 'package:ecommerceapp/screens/merchant/merchant_category_list.dart';
 import 'package:ecommerceapp/screens/profile/profile_screen.dart';
 import 'package:ecommerceapp/screens/cart/cart_screen.dart';
 import 'package:ecommerceapp/screens/checkout/checkout_screen.dart';
@@ -41,7 +42,9 @@ class ECommerceApp extends StatelessWidget {
                       cartListPrice: 120,
                       cartList: CartList(),
                     ),
-                AppRoutes.merchant: (context) => const MerchantItemsList(),
+                AppRoutes.merchantItems: (context) => const MerchantItemsList(),
+                AppRoutes.merchantCategories: (context) =>
+                    const MerchantCategoryList(),
               }),
         ));
   }
