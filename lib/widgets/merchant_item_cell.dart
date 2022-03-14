@@ -118,7 +118,7 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(children: [submitItemButton]),
+              Row(children: [deleteItemButton]),
             ],
           )
         ],
