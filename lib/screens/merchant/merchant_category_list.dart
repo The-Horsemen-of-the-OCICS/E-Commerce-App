@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/models/category.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
@@ -22,6 +23,9 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
         'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
   ];
 
+  TextEditingController _name = TextEditingController(text: "");
+  TextEditingController _icon = TextEditingController(text: "");
+
   void removeItemCategory(ItemCategory itemCategory) {
     var index = _merchantCategories.indexWhere((element) =>
         element.name == itemCategory.name && element.icon == itemCategory.icon);
@@ -39,6 +43,62 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
                 itemCategory: merchantCategory,
                 removeItemCategory: removeItemCategory))
             .toList());
+
+    final nameInputBox = Container(
+      width: 630,
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+          maxLength: 30,
+          maxLines: 1,
+          controller: _name,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Category Name',
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter category name';
+            }
+            return null;
+          }),
+    );
+
+    final submitCategoryButton = ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            onPrimary: Colors.black,
+            primary: Colors.black,
+            minimumSize: const Size(200, 60),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(2)),
+            )),
+        onPressed: () {
+          setState(() {
+            _merchantCategories.add(ItemCategory(_name.text, _icon.text));
+          });
+        },
+        child: const Text('Submit',
+            style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)));
+
+    final iconUrlInputBox = Container(
+      width: 630,
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+          maxLines: 1,
+          controller: _icon,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Category Icon Url',
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter icon url';
+            }
+            return null;
+          }),
+    );
 
     return Scaffold(
         appBar: AppBar(
@@ -68,11 +128,9 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
                     ),
                   ),
                 ),
-                // nameInputBox,
-                // descInputBox,
-                // priceInputBox,
-                // imageUrlImageBox,
-                // submitItemButton
+                nameInputBox,
+                iconUrlInputBox,
+                submitCategoryButton
               ],
             ),
           ],
