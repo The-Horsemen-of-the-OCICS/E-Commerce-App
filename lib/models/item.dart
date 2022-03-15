@@ -4,13 +4,15 @@ class Item {
   String desc;
   double price;
   String image;
+  int categoryId;
 
   Item(
       {required this.id,
       required this.name,
       required this.desc,
       required this.price,
-      required this.image});
+      required this.image,
+      required this.categoryId});
 
   factory Item.fromJson(Map<String, dynamic> json) {
     var image =
@@ -31,6 +33,7 @@ class Item {
       desc: json['description'] as String,
       price: json['price'] as double,
       image: image, //json['image'] as String,
+      categoryId: int.parse(json['categoryId'] as String),
     );
   }
 }
