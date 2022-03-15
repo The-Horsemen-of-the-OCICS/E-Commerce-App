@@ -41,6 +41,7 @@ class _CartScreenState extends State<CartScreen> {
                 Container(
                   margin: const EdgeInsets.only(top: 10.0),
                   child: ElevatedButton(
+                    key: const Key("cart_login_button"),
                     child: const Text("Login"),
                     onPressed: () {
                       Navigator.push(
@@ -96,6 +97,7 @@ class _CartScreenState extends State<CartScreen> {
       ),
       actions: [
         IconButton(
+            key: const Key("cart_to_home_button"),
             onPressed: () {
               Navigator.of(context).pushNamed(AppRoutes.home);
             },

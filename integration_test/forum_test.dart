@@ -40,6 +40,7 @@ void main() {
 
       // try submit and get redirect to login page
       await tester.ensureVisible(submitButtonFind);
+      await tester.pumpAndSettle();
       await tester.tap(submitButtonFind);
       await tester.pumpAndSettle();
 
@@ -62,6 +63,7 @@ void main() {
 
       // back to forum page and try submit
       await tester.ensureVisible(submitButtonFind);
+      await tester.pumpAndSettle();
       await tester.tap(submitButtonFind);
       await tester.pumpAndSettle();
 
