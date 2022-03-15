@@ -13,13 +13,13 @@ class MerchantCategoryList extends StatefulWidget {
 
 class _MerchantCategoryListState extends State<MerchantCategoryList> {
   final List<ItemCategory> _merchantCategories = [
-    ItemCategory('Men',
+    ItemCategory(1, 'Men',
         'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
-    ItemCategory('Women',
+    ItemCategory(2, 'Women',
         'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory('Kids',
+    ItemCategory(3, 'Kids',
         'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory('Home',
+    ItemCategory(4, 'Home',
         'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
   ];
 
@@ -73,7 +73,8 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
             )),
         onPressed: () {
           setState(() {
-            _merchantCategories.add(ItemCategory(_name.text, _icon.text));
+            _merchantCategories.add(ItemCategory(
+                _merchantCategories.length, _name.text, _icon.text));
           });
         },
         child: const Text('Submit',
