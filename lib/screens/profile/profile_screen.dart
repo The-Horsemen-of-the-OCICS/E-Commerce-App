@@ -82,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundColor: Colors.white,
           ),
           backgroundColor: Colors.white,
-          body: Center(child: Text('Please login to access this page!')));
+          body: const Center(child: Text('Please login to access this page!')));
     }
 
     final futureOrders = FutureBuilder<List<Order>>(
@@ -134,6 +134,11 @@ class _ProfilePageState extends State<ProfilePage> {
             )),
         onPressed: () {
           setState(() {
+            user.defaultShippingInfo.phone = phoneNumber.text;
+            user.defaultShippingInfo.street = streetAddress.text;
+            user.defaultShippingInfo.city = city.text;
+            user.defaultShippingInfo.state = state.text;
+            user.defaultShippingInfo.country = country.text;
             updateShipInfo(user.id, phoneNumber.text, streetAddress.text,
                 city.text, state.text, country.text);
           });
@@ -186,6 +191,7 @@ class _ProfilePageState extends State<ProfilePage> {
               color: Colors.grey[200],
             ),
             child: TextField(
+              key: const Key('default_street_field'),
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               controller: streetAddress,
               enabled: _isEditEnabled,
