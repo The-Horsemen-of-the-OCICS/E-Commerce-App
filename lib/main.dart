@@ -8,7 +8,7 @@ import 'package:ecommerceapp/screens/merchant/merchant_category_list.dart';
 import 'package:ecommerceapp/screens/profile/profile_screen.dart';
 import 'package:ecommerceapp/screens/cart/cart_screen.dart';
 import 'package:ecommerceapp/screens/checkout/checkout_screen.dart';
-import 'package:ecommerceapp/screens/merchant/items_list/merchant_items_list.dart';
+import 'package:ecommerceapp/screens/merchant/merchant_items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
