@@ -84,6 +84,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               Navigator.pop(context);
             } else {
               final snackBar = SnackBar(
+                key: const Key("login_error_snackbar"),
                 content: const Text('Invalid Account Credentials!'),
                 action: SnackBarAction(
                   label: 'Ok',

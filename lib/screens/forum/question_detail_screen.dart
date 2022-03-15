@@ -129,6 +129,7 @@ class _PostScreenState extends State<PostScreen> {
     );
 
     final submitButton = ElevatedButton(
+      key: const Key("submit_response_button"),
       style: ElevatedButton.styleFrom(
           onPrimary: Colors.black,
           primary: Colors.black,
