@@ -93,6 +93,7 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
       animationType: AnimationType.grow,
       isCloseButton: false,
     );
+
     Alert(
             context: context,
             content:
@@ -128,6 +129,7 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                             fontWeight: FontWeight.bold)),
                     const Spacer(),
                     IconButton(
+                        key: Key("item_detail_add_to_cart_button_${item.id}"),
                         onPressed: () {
                           cartList.add(CartItem(
                             id: item.id.toString(),
@@ -281,6 +283,8 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                               fontWeight: FontWeight.bold)),
                                       const Spacer(),
                                       IconButton(
+                                          key: Key(
+                                              "home_add_to_cart_button_${item.id}"),
                                           onPressed: () => {
                                                 cartList.add(CartItem(
                                                   id: item.id.toString(),
