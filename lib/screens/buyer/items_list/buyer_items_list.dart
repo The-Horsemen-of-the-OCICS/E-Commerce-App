@@ -52,6 +52,14 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
     return compute(parseItems, response.body);
   }
 
+  Future<List<Item>> fetchItemsByCategory(
+      http.Client client, int categoryId) async {
+    final response = await client.get(Uri.parse(
+        NetworkConfig.API_BASE_URL + 'item/category/' + categoryId.toString()));
+
+    return compute(parseItems, response.body);
+  }
+
   Future<List<Item>> parseItems(String responseBody) async {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     List<Item> items = parsed.map<Item>((json) => Item.fromJson(json)).toList();
@@ -61,16 +69,6 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
 
   @override
   void initState() {
-    fetchCategories(http.Client()).then((categories) {
-      setState(() {
-        _categories = categories;
-      });
-    });
-    _pagingController.addPageRequestListener((pageKey) {
-      _loadData(pageKey);
-    });
-    fetchItems(http.Client())
-        .then((items) => _pagingController.appendPage(items, 0));
     super.initState();
   }
 
@@ -152,6 +150,25 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
   Widget build(BuildContext context) {
     final category =
         ModalRoute.of(context)!.settings.arguments as ItemCategory?;
+
+    if (category != null) {
+      // category page
+      fetchItemsByCategory(http.Client(), category.id)
+          .then((items) => _pagingController.appendLastPage(items));
+    } else {
+      if (_categories.isEmpty) {
+        fetchCategories(http.Client()).then((categories) {
+          setState(() {
+            _categories = categories;
+          });
+        });
+        _pagingController.addPageRequestListener((pageKey) {
+          _loadData(pageKey);
+        });
+        fetchItems(http.Client())
+            .then((items) => _pagingController.appendPage(items, 0));
+      }
+    }
 
     return Consumer<CartList>(builder: (context, cartList, _) {
       return Scaffold(
