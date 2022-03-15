@@ -20,6 +20,7 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.white,
         actions: [
           IconButton(
+              tooltip: 'Enter the cart page',
               key: const Key("home_cart_button"),
               onPressed: () {
                 Navigator.of(context).pushNamed(AppRoutes.cart);
@@ -27,6 +28,7 @@ class Home extends StatelessWidget {
               icon: const Icon(Icons.shopping_cart),
               padding: const EdgeInsets.only(right: 15)),
           IconButton(
+              tooltip: 'Enter the Login page',
               key: const Key("home_login_button"),
               onPressed: () {
                 Navigator.of(context).pushNamed(AppRoutes.login);
@@ -34,6 +36,7 @@ class Home extends StatelessWidget {
               icon: const Icon(Icons.login),
               padding: const EdgeInsets.only(right: 15)),
           IconButton(
+              tooltip: 'Enter the Forum page',
               key: const Key("home_forum_button"),
               onPressed: () {
                 Navigator.of(context).pushNamed(AppRoutes.forum);
