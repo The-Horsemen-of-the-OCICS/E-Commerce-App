@@ -40,6 +40,7 @@ void main() {
 
       // try submit and get redirect to login page
       await tester.ensureVisible(submitButtonFind);
+      await tester.pumpAndSettle();
       await tester.tap(submitButtonFind);
       await tester.pumpAndSettle();
 
@@ -62,6 +63,7 @@ void main() {
 
       // back to forum page and try submit
       await tester.ensureVisible(submitButtonFind);
+      await tester.pumpAndSettle();
       await tester.tap(submitButtonFind);
       await tester.pumpAndSettle();
 
@@ -100,6 +102,7 @@ void main() {
 
       // try submit and get redirect to login page
       await tester.ensureVisible(submitButtonFind);
+      await tester.pumpAndSettle();
       await tester.tap(submitButtonFind);
       await tester.pumpAndSettle();
 
@@ -112,9 +115,9 @@ void main() {
 
       // enter a valid credential to the form fields
       await tester.enterText(emailFormFind, 'user1@gmail.com');
-      await tester.pumpAndSettle();
       await tester.enterText(passwordFormFind, '123456');
-      await tester.pumpAndSettle();
+
+      await tester.pump(new Duration(seconds: 1));
 
       // try login
       await tester.tap(find.byType(ElevatedButton).last);
@@ -124,8 +127,6 @@ void main() {
       await tester.ensureVisible(submitButtonFind);
       await tester.tap(submitButtonFind);
       await tester.pumpAndSettle();
-
-      await tester.pump(new Duration(milliseconds: 5000));
     });
   });
 }
