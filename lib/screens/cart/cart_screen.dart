@@ -74,7 +74,7 @@ class _CartScreenState extends State<CartScreen> {
         return Scaffold(
           appBar: buildAppBar(context),
           drawer: const NavigationDrawer(),
-          body: Body(cartList: cartList),
+          body: Center(child: Body(cartList: cartList)),
           bottomNavigationBar: CheckoutCard(
               cartListPrice: cartListPrice.toDouble(), cartList: cartList),
         );

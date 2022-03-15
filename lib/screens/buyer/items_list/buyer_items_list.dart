@@ -2,7 +2,6 @@ import 'package:ecommerceapp/models/cartList.dart';
 import 'package:ecommerceapp/models/cartItem.dart';
 import 'package:ecommerceapp/models/item.dart';
 import 'package:ecommerceapp/models/category.dart';
-import 'package:ecommerceapp/routes/app_routes.dart';
 import 'dart:convert';
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'package:flutter/foundation.dart';
@@ -25,22 +24,38 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
   bool isLoading = false;
   bool _isFetchingMore = false;
 
-  final List<ItemCategory> categories = [
-    ItemCategory(1, 'Men',
-        'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
-    ItemCategory(2, 'Women',
-        'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory(3, 'Kids',
-        'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory(4, 'Home',
-        'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
-  ];
+  List<ItemCategory> _categories = [];
+
   final PagingController<int, Item> _pagingController =
       PagingController(firstPageKey: 0);
+
+  Future<List<ItemCategory>> fetchCategories(http.Client client) async {
+    final response =
+        await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'category/'));
+
+    return compute(parseCategories, response.body);
+  }
+
+  Future<List<ItemCategory>> parseCategories(String responseBody) async {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    List<ItemCategory> items = parsed
+        .map<ItemCategory>((json) => ItemCategory.fromJson(json))
+        .toList();
+
+    return items;
+  }
 
   Future<List<Item>> fetchItems(http.Client client) async {
     final response =
         await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'item/'));
+
+    return compute(parseItems, response.body);
+  }
+
+  Future<List<Item>> fetchItemsByCategory(
+      http.Client client, int categoryId) async {
+    final response = await client.get(Uri.parse(
+        NetworkConfig.API_BASE_URL + 'item/category/' + categoryId.toString()));
 
     return compute(parseItems, response.body);
   }
@@ -54,11 +69,6 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
 
   @override
   void initState() {
-    _pagingController.addPageRequestListener((pageKey) {
-      _loadData(pageKey);
-    });
-    fetchItems(http.Client())
-        .then((items) => _pagingController.appendPage(items, 0));
     super.initState();
   }
 
@@ -141,6 +151,25 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
     final category =
         ModalRoute.of(context)!.settings.arguments as ItemCategory?;
 
+    if (category != null) {
+      // category page
+      fetchItemsByCategory(http.Client(), category.id)
+          .then((items) => _pagingController.appendLastPage(items));
+    } else {
+      if (_categories.isEmpty) {
+        fetchCategories(http.Client()).then((categories) {
+          setState(() {
+            _categories = categories;
+          });
+        });
+        _pagingController.addPageRequestListener((pageKey) {
+          _loadData(pageKey);
+        });
+        fetchItems(http.Client())
+            .then((items) => _pagingController.appendPage(items, 0));
+      }
+    }
+
     return Consumer<CartList>(builder: (context, cartList, _) {
       return Scaffold(
         body: CustomScrollView(
@@ -178,7 +207,7 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                   scrollDirection: Axis.horizontal,
                                   padding: const EdgeInsets.only(
                                       left: 25, top: 25, right: 25),
-                                  itemCount: categories.length,
+                                  itemCount: _categories.length,
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: (() {
@@ -188,22 +217,22 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                             builder: (context) =>
                                                 const BuyerItemsList(),
                                             settings: RouteSettings(
-                                              arguments: categories[index],
+                                              arguments: _categories[index],
                                             ),
                                           ),
                                         );
                                       }),
                                       child: Padding(
-                                        padding: index == categories.length - 1
+                                        padding: index == _categories.length - 1
                                             ? EdgeInsets.zero
                                             : const EdgeInsets.only(right: 40),
                                         child: Column(children: [
-                                          Image.network(categories[index].icon,
+                                          Image.network(_categories[index].icon,
                                               width: 30, height: 30),
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 10),
-                                            child: Text(categories[index].name,
+                                            child: Text(_categories[index].name,
                                                 style: const TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 15,

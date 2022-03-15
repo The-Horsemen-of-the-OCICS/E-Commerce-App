@@ -48,14 +48,26 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
   ];
 
   final List<ItemCategory> _merchantCategories = [
-    ItemCategory(1, 'Men',
-        'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
-    ItemCategory(2, 'Women',
-        'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory(3, 'Kids',
-        'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory(4, 'Home',
-        'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
+    ItemCategory(
+        id: 1,
+        name: 'Men',
+        icon:
+            'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
+    ItemCategory(
+        id: 2,
+        name: 'Women',
+        icon:
+            'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
+    ItemCategory(
+        id: 3,
+        name: 'Kids',
+        icon:
+            'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
+    ItemCategory(
+        id: 4,
+        name: 'Home',
+        icon:
+            'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
   ];
 
   final TextEditingController _name = TextEditingController(text: "");

@@ -58,10 +58,13 @@ class CheckoutCard extends StatelessWidget {
                 ),
                 SizedBox(
                   width: getProportionateScreenWidth(190),
-                  child: DefaultButton(
+                  child: ElevatedButton(
                     key: const Key("cart_checkout_button"),
-                    text: "Check Out",
-                    press: () {
+                    child: const Text(
+                      'Check Out',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
