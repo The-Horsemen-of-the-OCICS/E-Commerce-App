@@ -135,6 +135,7 @@ class _ForumPageState extends State<ForumPage> {
     );
 
     final submitQuestionButton = ElevatedButton(
+        key: const Key("submit_question_button"),
         style: ElevatedButton.styleFrom(
             onPrimary: Colors.black,
             primary: Colors.black,

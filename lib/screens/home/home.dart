@@ -20,18 +20,21 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.white,
         actions: [
           IconButton(
+              key: const Key("home_cart_button"),
               onPressed: () {
                 Navigator.of(context).pushNamed(AppRoutes.cart);
               },
               icon: const Icon(Icons.shopping_cart),
               padding: const EdgeInsets.only(right: 15)),
           IconButton(
+              key: const Key("home_login_button"),
               onPressed: () {
                 Navigator.of(context).pushNamed(AppRoutes.login);
               },
               icon: const Icon(Icons.login),
               padding: const EdgeInsets.only(right: 15)),
           IconButton(
+              key: const Key("home_forum_button"),
               onPressed: () {
                 Navigator.of(context).pushNamed(AppRoutes.forum);
               },
