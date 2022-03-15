@@ -18,28 +18,32 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
         desc: 'Men cloth desc',
         price: 100,
         image:
-            'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg'),
+            'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg',
+        categoryId: 1),
     Item(
         id: 2,
         name: 'Women Cloth',
         desc: 'Women cloth desc',
         price: 50,
         image:
-            'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg'),
+            'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg',
+        categoryId: 2),
     Item(
         id: 3,
         name: 'Kids Cloth',
         desc: 'Kids cloth desc',
         price: 80,
         image:
-            'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg'),
+            'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg',
+        categoryId: 3),
     Item(
         id: 4,
         name: 'Home products',
         desc: 'Home products desc',
         price: 120,
         image:
-            'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg'),
+            'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg',
+        categoryId: 4),
   ];
 
   TextEditingController _name = TextEditingController(text: "");
@@ -155,7 +159,8 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
                 name: _name.text,
                 desc: _desc.text,
                 price: double.parse(_price.text),
-                image: _image.text));
+                image: _image.text,
+                categoryId: 1));
           });
         },
         child: const Text('Submit',
