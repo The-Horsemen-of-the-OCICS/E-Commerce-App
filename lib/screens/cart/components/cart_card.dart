@@ -25,7 +25,7 @@ class _ShopItemListState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 130,
+      height: 140,
       decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: shadow,
@@ -38,7 +38,7 @@ class _ShopItemListState extends State<CartCard> {
             child: AspectRatio(
               aspectRatio: 0.7,
               child: Container(
-                padding: EdgeInsets.all(getProportionateScreenWidth(5)),
+                padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     color: Color(0xFFF5F6F9),
                     borderRadius: BorderRadius.circular(5),
@@ -66,7 +66,7 @@ class _ShopItemListState extends State<CartCard> {
                   padding: EdgeInsets.all(8),
                   child: CustomText(
                     text: widget.cartItem.name,
-                    size: getProportionateScreenWidth(14),
+                    size: 20,
                     weight: FontWeight.bold,
                   )),
               SizedBox(height: 10),
@@ -81,9 +81,6 @@ class _ShopItemListState extends State<CartCard> {
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Color(0xFFFF7643),
-                          fontFeatures: [
-                            FontFeature.tabularFigures(),
-                          ],
                         ),
                       ),
                     ),
@@ -110,6 +107,7 @@ class _ShopItemListState extends State<CartCard> {
               Row(
                 children: [
                   InkWell(
+                      key: Key("cart_decrease_quantity_${widget.cartItem.id}"),
                       child: Container(
                         child: const Icon(
                           Icons.chevron_left,
@@ -122,10 +120,12 @@ class _ShopItemListState extends State<CartCard> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomText(
+                      key: Key("cart_quantity_${widget.cartItem.id}"),
                       text: widget.cartItem.quantity.toString(),
                     ),
                   ),
                   InkWell(
+                      key: Key("cart_increase_quantity_${widget.cartItem.id}"),
                       child: Container(
                         child: const Icon(
                           Icons.chevron_right,
