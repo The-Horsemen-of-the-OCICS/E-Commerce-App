@@ -3,6 +3,10 @@ import 'package:ecommerceapp/models/item.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:ecommerceapp/widgets/merchant_item_cell.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:ecommerceapp/utils/network_config.dart';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 class MerchantItemsList extends StatefulWidget {
   const MerchantItemsList({Key? key}) : super(key: key);
@@ -12,63 +16,9 @@ class MerchantItemsList extends StatefulWidget {
 }
 
 class _MerchantItemsListState extends State<MerchantItemsList> {
-  final List<Item> _merchantItems = [
-    Item(
-        id: 1,
-        name: 'Men Cloth',
-        desc: 'Men cloth desc',
-        price: 100,
-        image:
-            'https://i.postimg.cc/Pr0ZZSxG/1641969100f69da7264d8688d9c11e7ce8cd3597b0-thumbnail-900x.jpg',
-        categoryId: 1),
-    Item(
-        id: 2,
-        name: 'Women Cloth',
-        desc: 'Women cloth desc',
-        price: 50,
-        image:
-            'https://i.postimg.cc/2yMqQ5Cd/1624937261e1565ed7bb7611d917ff2e6a9ffe580a-thumbnail-900x.jpg',
-        categoryId: 2),
-    Item(
-        id: 3,
-        name: 'Kids Cloth',
-        desc: 'Kids cloth desc',
-        price: 80,
-        image:
-            'https://i.postimg.cc/d10DgC1m/16172552205a1794e7dc17db68856850f0c26eeb53-thumbnail-900x.jpg',
-        categoryId: 3),
-    Item(
-        id: 4,
-        name: 'Home products',
-        desc: 'Home products desc',
-        price: 120,
-        image:
-            'https://i.postimg.cc/j5kCTjnV/16340030929e7b3bd5c75857d1c040c639acc70476-thumbnail-900x.jpg',
-        categoryId: 4),
-  ];
+  List<Item> _merchantItems = [];
 
-  final List<ItemCategory> _merchantCategories = [
-    ItemCategory(
-        id: 1,
-        name: 'Men',
-        icon:
-            'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
-    ItemCategory(
-        id: 2,
-        name: 'Women',
-        icon:
-            'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory(
-        id: 3,
-        name: 'Kids',
-        icon:
-            'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory(
-        id: 4,
-        name: 'Home',
-        icon:
-            'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
-  ];
+  List<ItemCategory> _merchantCategories = [];
 
   final TextEditingController _name = TextEditingController(text: "");
   final TextEditingController _desc = TextEditingController(text: "");
@@ -84,8 +34,54 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
     });
   }
 
+  Future<List<Item>> fetchItems(http.Client client) async {
+    final response =
+        await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'item/'));
+
+    return compute(parseItems, response.body);
+  }
+
+  Future<List<Item>> parseItems(String responseBody) async {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    List<Item> items = parsed.map<Item>((json) => Item.fromJson(json)).toList();
+
+    return items;
+  }
+
+  Future<List<ItemCategory>> fetchCategories(http.Client client) async {
+    final response =
+        await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'category/'));
+
+    return compute(parseCategories, response.body);
+  }
+
+  Future<List<ItemCategory>> parseCategories(String responseBody) async {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    List<ItemCategory> items = parsed
+        .map<ItemCategory>((json) => ItemCategory.fromJson(json))
+        .toList();
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_merchantCategories.isEmpty) {
+      fetchCategories(http.Client()).then((categories) {
+        setState(() {
+          _merchantCategories = categories;
+        });
+      });
+    }
+
+    if (_merchantItems.isEmpty) {
+      fetchItems(http.Client()).then((items) {
+        setState(() {
+          _merchantItems = items;
+        });
+      });
+    }
+
     final merchantItems = Column(
         children: _merchantItems
             .map((merchantItem) => MerchantItemCell(
