@@ -55,6 +55,20 @@ void main() {
       await tester.tap(cartToHomeButton);
       await tester.pumpAndSettle();
 
+      // enter profile page
+      NavigatorState navigator = tester.state(find.byType(Navigator));
+      navigator.pushNamed(AppRoutes.profile);
+      await tester.pumpAndSettle();
+
+      // get the previous order count
+      final orderHistoryCounts =
+          tester.widgetList(find.byKey(const Key("order_history_item"))).length;
+      print('xxx .>>> ${orderHistoryCounts}');
+
+      // back to home page
+      navigator.pushNamed(AppRoutes.home);
+      await tester.pumpAndSettle();
+
       // add a new item to cart
       final addItemButton = find.byKey(const Key("home_add_to_cart_button_1"));
       await tester.ensureVisible(addItemButton);
@@ -86,23 +100,18 @@ void main() {
       await tester.tap(confirmButton);
       await tester.pumpAndSettle();
 
-      // tap drawer button
-      final drawerButton = find.byKey(const Key("navigation_drawer"));
-      await tester.ensureVisible(drawerButton);
-      await tester.pumpAndSettle();
-      await tester.tap(drawerButton);
-      await tester.pumpAndSettle();
-
-      // tap profile item
-      await tester.tap(find.byKey(const Key("navigation_drawer_Profile")));
-      await tester.ensureVisible(drawerButton);
+      // enter profile page
+      navigator = tester.state(find.byType(Navigator));
+      navigator.pushNamed(AppRoutes.profile);
       await tester.pumpAndSettle();
 
       // order history has one item
-      final orderHistory = find.byKey(const Key("profile_order_history"));
-      await tester.ensureVisible(confirmButton);
+
+      final orderHistory =
+          tester.widgetList(find.byKey(const Key("order_history_item")));
+
       await tester.pumpAndSettle();
-      expect(orderHistory, findsOneWidget);
+      expect(orderHistory.length, orderHistoryCounts + 1);
       // 2s delay to next test
       await tester.pump(new Duration(seconds: 2));
     });
