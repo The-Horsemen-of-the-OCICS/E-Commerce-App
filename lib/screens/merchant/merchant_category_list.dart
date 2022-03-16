@@ -33,12 +33,19 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
     return items;
   }
 
+  Future<void> deleteCategoryById(http.Client client, int id) async {
+    await client.delete(
+        Uri.parse(NetworkConfig.API_BASE_URL + 'category/' + id.toString()));
+  }
+
   TextEditingController _name = TextEditingController(text: "");
   TextEditingController _icon = TextEditingController(text: "");
 
   void removeItemCategory(ItemCategory itemCategory) {
     var index = _categories.indexWhere((element) =>
         element.name == itemCategory.name && element.icon == itemCategory.icon);
+
+    deleteCategoryById(http.Client(), itemCategory.id);
 
     setState(() {
       _categories.removeAt(index);
@@ -70,7 +77,6 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
           maxLines: 1,
           controller: _name,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
             hintText: 'Category Name',
           ),
           validator: (value) {
@@ -108,7 +114,6 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
           maxLines: 1,
           controller: _icon,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
             hintText: 'Category Icon Url',
           ),
           validator: (value) {
