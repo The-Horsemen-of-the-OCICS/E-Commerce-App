@@ -8,6 +8,7 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      key: const Key('navigation_drawer'),
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[

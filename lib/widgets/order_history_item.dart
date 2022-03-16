@@ -16,6 +16,7 @@ class _OrderHistroyItemState extends State<OrderHistroyItem> {
   Widget build(BuildContext context) {
     return Column(children: [
       GestureDetector(
+          key: const Key('order_history_item'),
           onTap: () {},
           child: Container(
             constraints: const BoxConstraints(

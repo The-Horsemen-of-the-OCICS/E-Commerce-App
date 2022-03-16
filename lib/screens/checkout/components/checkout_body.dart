@@ -125,19 +125,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
     );
 
     Widget submitOrderBtn = InkWell(
-      onTap: () => {
-        createNewOrder(
-          user!,
-          widget.cartList,
-          widget.cartListPrice,
-          DateTime.now().toString(),
-          '${street.text}, ${city.text}, ${state.text}, ${country.text}',
-        ),
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Thank you for your order!'),
-        )),
-        Navigator.pushNamed(context, AppRoutes.home)
-      },
+      key: const Key('checkout_confirm_button'),
       child: Container(
         height: 50,
         width: MediaQuery.of(context).size.width / 1.5,
@@ -167,6 +155,19 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                   fontSize: 20.0)),
         ),
       ),
+      onTap: () => {
+        createNewOrder(
+          user!,
+          widget.cartList,
+          widget.cartListPrice,
+          DateTime.now().toString(),
+          '${street.text}, ${city.text}, ${state.text}, ${country.text}',
+        ),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Thank you for your order!'),
+        )),
+        Navigator.pushNamed(context, AppRoutes.home)
+      },
     );
 
     Widget invoiceCard = Container(
