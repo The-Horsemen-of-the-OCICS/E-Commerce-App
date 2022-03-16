@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:ecommerceapp/models/category.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:ecommerceapp/widgets/merchant_category_cell.dart';
+import 'package:http/http.dart' as http;
+import 'package:ecommerceapp/utils/network_config.dart';
+import 'dart:convert';
 
 class MerchantCategoryList extends StatefulWidget {
   const MerchantCategoryList({Key? key}) : super(key: key);
@@ -12,45 +15,48 @@ class MerchantCategoryList extends StatefulWidget {
 }
 
 class _MerchantCategoryListState extends State<MerchantCategoryList> {
-  final List<ItemCategory> _merchantCategories = [
-    ItemCategory(
-        id: 1,
-        name: 'Men',
-        icon:
-            'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
-    ItemCategory(
-        id: 2,
-        name: 'Women',
-        icon:
-            'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory(
-        id: 3,
-        name: 'Kids',
-        icon:
-            'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
-    ItemCategory(
-        id: 4,
-        name: 'Home',
-        icon:
-            'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
-  ];
+  List<ItemCategory> _categories = [];
+
+  Future<List<ItemCategory>> fetchCategories(http.Client client) async {
+    final response =
+        await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'category/'));
+
+    return compute(parseCategories, response.body);
+  }
+
+  Future<List<ItemCategory>> parseCategories(String responseBody) async {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    List<ItemCategory> items = parsed
+        .map<ItemCategory>((json) => ItemCategory.fromJson(json))
+        .toList();
+
+    return items;
+  }
 
   TextEditingController _name = TextEditingController(text: "");
   TextEditingController _icon = TextEditingController(text: "");
 
   void removeItemCategory(ItemCategory itemCategory) {
-    var index = _merchantCategories.indexWhere((element) =>
+    var index = _categories.indexWhere((element) =>
         element.name == itemCategory.name && element.icon == itemCategory.icon);
 
     setState(() {
-      _merchantCategories.removeAt(index);
+      _categories.removeAt(index);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_categories.isEmpty) {
+      fetchCategories(http.Client()).then((categories) {
+        setState(() {
+          _categories = categories;
+        });
+      });
+    }
+
     final merchantCategories = Column(
-        children: _merchantCategories
+        children: _categories
             .map((merchantCategory) => MerchantCategoryCell(
                 itemCategory: merchantCategory,
                 removeItemCategory: removeItemCategory))
@@ -85,10 +91,8 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
             )),
         onPressed: () {
           setState(() {
-            _merchantCategories.add(ItemCategory(
-                id: _merchantCategories.length,
-                name: _name.text,
-                icon: _icon.text));
+            _categories.add(ItemCategory(
+                id: _categories.length, name: _name.text, icon: _icon.text));
           });
         },
         child: const Text('Submit',
