@@ -74,7 +74,7 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
       return Scaffold(
           appBar: AppBar(
             title: const Text(
-              'Merchant Item List',
+              'Merchant Category List',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             foregroundColor: Colors.black,
@@ -86,7 +86,7 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Text(
-                  "Please login as an admin to view items",
+                  "Please login as an admin to view categories",
                   style: TextStyle(fontSize: 18),
                 ),
                 Container(
@@ -187,7 +187,7 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Merchant Item List',
+            'Merchant Category List',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           foregroundColor: Colors.black,

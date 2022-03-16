@@ -102,7 +102,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Text(
-                  "Please login as an admin to view categories",
+                  "Please login as an admin to view items",
                   style: TextStyle(fontSize: 18),
                 ),
                 Container(
