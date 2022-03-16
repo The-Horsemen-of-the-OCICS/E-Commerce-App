@@ -85,8 +85,10 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
             )),
         onPressed: () {
           setState(() {
-            _merchantCategories
-                .add(ItemCategory(id: 1, name: _name.text, icon: _icon.text));
+            _merchantCategories.add(ItemCategory(
+                id: _merchantCategories.length,
+                name: _name.text,
+                icon: _icon.text));
           });
         },
         child: const Text('Submit',

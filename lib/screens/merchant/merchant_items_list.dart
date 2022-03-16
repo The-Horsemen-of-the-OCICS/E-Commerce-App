@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/models/category.dart';
 import 'package:ecommerceapp/models/item.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:ecommerceapp/widgets/merchant_item_cell.dart';
@@ -46,10 +47,34 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
         categoryId: 4),
   ];
 
-  TextEditingController _name = TextEditingController(text: "");
-  TextEditingController _desc = TextEditingController(text: "");
-  TextEditingController _price = TextEditingController(text: "");
-  TextEditingController _image = TextEditingController(text: "");
+  final List<ItemCategory> _merchantCategories = [
+    ItemCategory(
+        id: 1,
+        name: 'Men',
+        icon:
+            'https://i.postimg.cc/NfRGJDDv/7534386-cardigan-knitwear-women-fashion-clothing-icon.png'),
+    ItemCategory(
+        id: 2,
+        name: 'Women',
+        icon:
+            'https://i.postimg.cc/cLsWDS6f/7534390-women-shirt-tops-fashion-clothing-icon.png'),
+    ItemCategory(
+        id: 3,
+        name: 'Kids',
+        icon:
+            'https://i.postimg.cc/zvbZgzt1/7534391-women-shirt-tops-fashion-clothing-icon.png'),
+    ItemCategory(
+        id: 4,
+        name: 'Home',
+        icon:
+            'https://i.postimg.cc/NjpcSzrS/7534405-makeup-beauty-women-fashion-female-icon.png'),
+  ];
+
+  final TextEditingController _name = TextEditingController(text: "");
+  final TextEditingController _desc = TextEditingController(text: "");
+  final TextEditingController _price = TextEditingController(text: "");
+  final TextEditingController _image = TextEditingController(text: "");
+  String _categoryId = '1';
 
   void removeItem(Item item) {
     var index = _merchantItems.indexWhere((element) => element.id == item.id);
@@ -71,13 +96,12 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
 
     final nameInputBox = Container(
       width: 630,
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
           maxLength: 30,
           maxLines: 1,
           controller: _name,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
             hintText: 'Item Name',
           ),
           validator: (value) {
@@ -90,13 +114,12 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
 
     final descInputBox = Container(
       width: 630,
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
           maxLength: 30,
           maxLines: 1,
           controller: _desc,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
             hintText: 'Item Description',
           ),
           validator: (value) {
@@ -109,13 +132,12 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
 
     final priceInputBox = Container(
       width: 630,
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
           maxLength: 30,
           maxLines: 1,
           controller: _price,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
             hintText: 'Item Price',
           ),
           validator: (value) {
@@ -128,12 +150,11 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
 
     final imageUrlInputBox = Container(
       width: 630,
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
           maxLines: 1,
           controller: _image,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
             hintText: 'Item Image Url',
           ),
           validator: (value) {
@@ -142,6 +163,33 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
             }
             return null;
           }),
+    );
+
+    final categorySelectionBox = Container(
+      width: 630,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: DropdownButtonFormField<String>(
+        decoration:
+            const InputDecoration(labelText: 'Please select a category'),
+        value: _categoryId,
+        items: _merchantCategories.map<DropdownMenuItem<String>>(
+          (ItemCategory itemCategory) {
+            return DropdownMenuItem(
+              child: Text(itemCategory.name),
+              value: itemCategory.id.toString(),
+            );
+          },
+        ).toList(),
+        onChanged: (String? value) {
+          setState(() => _categoryId = value!);
+        },
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please select category';
+          }
+          return null;
+        },
+      ),
     );
 
     final submitItemButton = ElevatedButton(
@@ -160,7 +208,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
                 desc: _desc.text,
                 price: double.parse(_price.text),
                 image: _image.text,
-                categoryId: 1));
+                categoryId: int.parse(_categoryId)));
           });
         },
         child: const Text('Submit',
@@ -201,6 +249,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
                 descInputBox,
                 priceInputBox,
                 imageUrlInputBox,
+                categorySelectionBox,
                 submitItemButton
               ],
             ),
