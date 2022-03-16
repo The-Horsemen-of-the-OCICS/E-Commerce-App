@@ -8,6 +8,10 @@ import 'package:ecommerceapp/utils/network_config.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'dart:math';
+import 'package:ecommerceapp/models/user.dart';
+import 'package:ecommerceapp/screens/login.dart';
+import 'package:provider/provider.dart';
+import '../../../models/auth.dart';
 
 class MerchantItemsList extends StatefulWidget {
   const MerchantItemsList({Key? key}) : super(key: key);
@@ -81,6 +85,46 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = Provider.of<AuthModel>(context).getCurrentUser();
+    if (user == null || user.email != 'admin@gmail.com') {
+      return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Merchant Item List',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
+          ),
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  "Please login as an admin to view categories",
+                  style: TextStyle(fontSize: 18),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10.0),
+                  child: ElevatedButton(
+                    child: const Text("Login"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyLoginPage()),
+                      ).then((value) {
+                        setState(() {});
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+          ));
+    }
+
     if (_merchantCategories.isEmpty) {
       fetchCategories(http.Client()).then((categories) {
         setState(() {

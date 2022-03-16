@@ -7,6 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'dart:convert';
 import 'dart:math';
+import 'package:ecommerceapp/models/user.dart';
+import 'package:ecommerceapp/screens/login.dart';
+import 'package:provider/provider.dart';
+import '../../../models/auth.dart';
 
 class MerchantCategoryList extends StatefulWidget {
   const MerchantCategoryList({Key? key}) : super(key: key);
@@ -65,6 +69,46 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = Provider.of<AuthModel>(context).getCurrentUser();
+    if (user == null || user.email != 'admin@gmail.com') {
+      return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Merchant Item List',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
+          ),
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  "Please login as an admin to view items",
+                  style: TextStyle(fontSize: 18),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10.0),
+                  child: ElevatedButton(
+                    child: const Text("Login"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyLoginPage()),
+                      ).then((value) {
+                        setState(() {});
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+          ));
+    }
+
     if (_categories.isEmpty) {
       fetchCategories(http.Client()).then((categories) {
         setState(() {
