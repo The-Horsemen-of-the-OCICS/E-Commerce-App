@@ -29,6 +29,8 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
   void removeItem(Item item) {
     var index = _merchantItems.indexWhere((element) => element.id == item.id);
 
+    deleteItemById(http.Client(), item.id);
+
     setState(() {
       _merchantItems.removeAt(index);
     });
@@ -62,6 +64,11 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
         .toList();
 
     return items;
+  }
+
+  Future<void> deleteItemById(http.Client client, int id) async {
+    await client.delete(
+        Uri.parse(NetworkConfig.API_BASE_URL + 'item/' + id.toString()));
   }
 
   @override
