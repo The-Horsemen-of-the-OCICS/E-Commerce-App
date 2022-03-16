@@ -22,16 +22,9 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
     final response =
         await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'category/'));
 
-    return compute(parseCategories, response.body);
-  }
-
-  Future<List<ItemCategory>> parseCategories(String responseBody) async {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    List<ItemCategory> items = parsed
+    return jsonDecode(response.body)
         .map<ItemCategory>((json) => ItemCategory.fromJson(json))
         .toList();
-
-    return items;
   }
 
   Future<void> deleteCategoryById(http.Client client, int id) async {

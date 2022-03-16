@@ -25,7 +25,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
   final TextEditingController _desc = TextEditingController(text: "");
   final TextEditingController _price = TextEditingController(text: "");
   final TextEditingController _image = TextEditingController(text: "");
-  String _categoryId = '1';
+  String _categoryId = "1";
 
   void removeItem(Item item) {
     var index = _merchantItems.indexWhere((element) => element.id == item.id);
@@ -60,30 +60,18 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
     final response =
         await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'item/'));
 
-    return compute(parseItems, response.body);
-  }
-
-  Future<List<Item>> parseItems(String responseBody) async {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    List<Item> items = parsed.map<Item>((json) => Item.fromJson(json)).toList();
-
-    return items;
+    return jsonDecode(response.body)
+        .map<Item>((json) => Item.fromJson(json))
+        .toList();
   }
 
   Future<List<ItemCategory>> fetchCategories(http.Client client) async {
     final response =
         await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'category/'));
 
-    return compute(parseCategories, response.body);
-  }
-
-  Future<List<ItemCategory>> parseCategories(String responseBody) async {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    List<ItemCategory> items = parsed
+    return jsonDecode(response.body)
         .map<ItemCategory>((json) => ItemCategory.fromJson(json))
         .toList();
-
-    return items;
   }
 
   Future<void> deleteItemById(http.Client client, int id) async {
