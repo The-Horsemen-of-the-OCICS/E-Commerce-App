@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'dart:math';
 
 class MerchantItemsList extends StatefulWidget {
   const MerchantItemsList({Key? key}) : super(key: key);
@@ -24,44 +25,58 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
   final TextEditingController _desc = TextEditingController(text: "");
   final TextEditingController _price = TextEditingController(text: "");
   final TextEditingController _image = TextEditingController(text: "");
-  String _categoryId = '1';
+  String _categoryId = "1";
 
   void removeItem(Item item) {
     var index = _merchantItems.indexWhere((element) => element.id == item.id);
+
+    deleteItemById(http.Client(), item.id);
 
     setState(() {
       _merchantItems.removeAt(index);
     });
   }
 
+  Future<Item> createItem(http.Client client, Item item) async {
+    final response =
+        await client.post(Uri.parse(NetworkConfig.API_BASE_URL + 'item/'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{
+              'id': item.id.toString(),
+              'name': item.name,
+              'description': item.desc,
+              'price': item.price,
+              'image': item.image,
+              'categoryId': item.categoryId.toString(),
+              'date': DateTime.now().toString()
+            }));
+
+    return Item.fromJson(jsonDecode(response.body));
+  }
+
   Future<List<Item>> fetchItems(http.Client client) async {
     final response =
         await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'item/'));
 
-    return compute(parseItems, response.body);
-  }
-
-  Future<List<Item>> parseItems(String responseBody) async {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    List<Item> items = parsed.map<Item>((json) => Item.fromJson(json)).toList();
-
-    return items;
+    return jsonDecode(response.body)
+        .map<Item>((json) => Item.fromJson(json))
+        .toList();
   }
 
   Future<List<ItemCategory>> fetchCategories(http.Client client) async {
     final response =
         await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'category/'));
 
-    return compute(parseCategories, response.body);
-  }
-
-  Future<List<ItemCategory>> parseCategories(String responseBody) async {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    List<ItemCategory> items = parsed
+    return jsonDecode(response.body)
         .map<ItemCategory>((json) => ItemCategory.fromJson(json))
         .toList();
+  }
 
-    return items;
+  Future<void> deleteItemById(http.Client client, int id) async {
+    await client.delete(
+        Uri.parse(NetworkConfig.API_BASE_URL + 'item/' + id.toString()));
   }
 
   @override
@@ -197,14 +212,18 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
         onPressed: () {
-          setState(() {
-            _merchantItems.add(Item(
-                id: _merchantItems.length,
-                name: _name.text,
-                desc: _desc.text,
-                price: double.parse(_price.text),
-                image: _image.text,
-                categoryId: int.parse(_categoryId)));
+          Item item = Item(
+              id: Random().nextInt(999999),
+              name: _name.text,
+              desc: _desc.text,
+              price: double.parse(_price.text),
+              image: _image.text,
+              categoryId: int.parse(_categoryId));
+
+          createItem(http.Client(), item).then((createdItem) {
+            setState(() {
+              _merchantItems.add(item);
+            });
           });
         },
         child: const Text('Submit',

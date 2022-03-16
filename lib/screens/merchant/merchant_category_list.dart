@@ -6,6 +6,7 @@ import 'package:ecommerceapp/widgets/merchant_category_cell.dart';
 import 'package:http/http.dart' as http;
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'dart:convert';
+import 'dart:math';
 
 class MerchantCategoryList extends StatefulWidget {
   const MerchantCategoryList({Key? key}) : super(key: key);
@@ -21,16 +22,31 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
     final response =
         await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'category/'));
 
-    return compute(parseCategories, response.body);
-  }
-
-  Future<List<ItemCategory>> parseCategories(String responseBody) async {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    List<ItemCategory> items = parsed
+    return jsonDecode(response.body)
         .map<ItemCategory>((json) => ItemCategory.fromJson(json))
         .toList();
+  }
 
-    return items;
+  Future<void> deleteCategoryById(http.Client client, int id) async {
+    await client.delete(
+        Uri.parse(NetworkConfig.API_BASE_URL + 'category/' + id.toString()));
+  }
+
+  Future<ItemCategory> createItemCategory(
+      http.Client client, ItemCategory itemCategory) async {
+    final response = await client.post(
+      Uri.parse(NetworkConfig.API_BASE_URL + 'category/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id': itemCategory.id.toString(),
+        'name': itemCategory.name,
+        'icon': itemCategory.icon
+      }),
+    );
+
+    return ItemCategory.fromJson(jsonDecode(response.body));
   }
 
   TextEditingController _name = TextEditingController(text: "");
@@ -39,6 +55,8 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
   void removeItemCategory(ItemCategory itemCategory) {
     var index = _categories.indexWhere((element) =>
         element.name == itemCategory.name && element.icon == itemCategory.icon);
+
+    deleteCategoryById(http.Client(), itemCategory.id);
 
     setState(() {
       _categories.removeAt(index);
@@ -70,7 +88,6 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
           maxLines: 1,
           controller: _name,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
             hintText: 'Category Name',
           ),
           validator: (value) {
@@ -90,9 +107,14 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
         onPressed: () {
-          setState(() {
-            _categories.add(ItemCategory(
-                id: _categories.length, name: _name.text, icon: _icon.text));
+          ItemCategory itemCategory = ItemCategory(
+              id: Random().nextInt(999999), name: _name.text, icon: _icon.text);
+
+          createItemCategory(http.Client(), itemCategory)
+              .then((createdItemCategory) {
+            setState(() {
+              _categories.add(createdItemCategory);
+            });
           });
         },
         child: const Text('Submit',
@@ -108,7 +130,6 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
           maxLines: 1,
           controller: _icon,
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
             hintText: 'Category Icon Url',
           ),
           validator: (value) {

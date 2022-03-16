@@ -87,7 +87,6 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 40,
                       child: Text(
                         '\$${widget.item.price}',
                         style: const TextStyle(
