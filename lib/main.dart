@@ -5,6 +5,7 @@ import 'package:ecommerceapp/screens/forum/forum_screen.dart';
 import 'package:ecommerceapp/screens/home/home.dart';
 import 'package:ecommerceapp/screens/login.dart';
 import 'package:ecommerceapp/screens/merchant/merchant_category_list.dart';
+import 'package:ecommerceapp/screens/merchant/merchant_edit_category.dart';
 import 'package:ecommerceapp/screens/profile/profile_screen.dart';
 import 'package:ecommerceapp/screens/cart/cart_screen.dart';
 import 'package:ecommerceapp/screens/checkout/checkout_screen.dart';
@@ -45,6 +46,8 @@ class ECommerceApp extends StatelessWidget {
                 AppRoutes.merchantItems: (context) => const MerchantItemsList(),
                 AppRoutes.merchantCategories: (context) =>
                     const MerchantCategoryList(),
+                AppRoutes.merchantEditCategory: (context) =>
+                    const MerchantEditCategory(),
               }),
         ));
   }
