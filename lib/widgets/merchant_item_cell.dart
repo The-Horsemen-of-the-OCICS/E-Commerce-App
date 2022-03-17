@@ -13,12 +13,14 @@ class MerchantItemCell extends StatefulWidget {
       {Key? key,
       required this.item,
       required this.removeItem,
+      required this.editItem,
       required this.categorise})
       : super(key: key);
 
   final Item item;
   final List<ItemCategory> categorise;
   final Function removeItem;
+  final Function editItem;
 
   @override
   _MerchantItemCellState createState() => _MerchantItemCellState();
@@ -62,7 +64,8 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
                 widget.item.price,
                 widget.item.image,
                 widget.item.categoryId,
-                widget.categorise),
+                widget.categorise,
+                widget.editItem),
           );
         },
         child: const Text('Edit',
@@ -168,7 +171,8 @@ class EditItemArguments {
   final String image;
   final int categoryId;
   final List<ItemCategory> categories;
+  final Function editItem;
 
   EditItemArguments(this.id, this.name, this.desc, this.price, this.image,
-      this.categoryId, this.categories);
+      this.categoryId, this.categories, this.editItem);
 }

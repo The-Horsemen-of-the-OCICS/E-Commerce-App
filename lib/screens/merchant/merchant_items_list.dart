@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'dart:math';
 import 'package:ecommerceapp/models/user.dart';
 import 'package:ecommerceapp/screens/login.dart';
@@ -38,6 +37,14 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
 
     setState(() {
       _merchantItems.removeAt(index);
+    });
+  }
+
+  void editItem(Item item) {
+    var index = _merchantItems.indexWhere((element) => element.id == item.id);
+
+    setState(() {
+      _merchantItems[index] = item;
     });
   }
 
@@ -146,6 +153,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
             .map((merchantItem) => MerchantItemCell(
                   item: merchantItem,
                   removeItem: removeItem,
+                  editItem: editItem,
                   categorise: _merchantCategories,
                 ))
             .toList());
