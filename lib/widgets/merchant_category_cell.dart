@@ -54,7 +54,7 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
                 widget.itemCategory.name, widget.itemCategory.icon),
           );
         },
-        child: const Text('Update',
+        child: const Text('Edit',
             style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
