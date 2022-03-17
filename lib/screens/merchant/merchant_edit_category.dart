@@ -1,16 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerceapp/models/category.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:ecommerceapp/widgets/merchant_category_cell.dart';
 import 'package:http/http.dart' as http;
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'dart:convert';
-import 'dart:math';
-import 'package:ecommerceapp/models/user.dart';
-import 'package:ecommerceapp/screens/login.dart';
-import 'package:provider/provider.dart';
-import '../../../models/auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MerchantEditCategory extends StatelessWidget {
   const MerchantEditCategory({Key? key}) : super(key: key);
@@ -30,7 +24,10 @@ class MerchantEditCategory extends StatelessWidget {
         'icon': newIcon
       }),
     );
-    // response.statusCode should be 204
+
+    if (response.statusCode == 204) {
+      Fluttertoast.showToast(msg: 'Update successfully!');
+    }
   }
 
   @override

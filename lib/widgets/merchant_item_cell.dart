@@ -1,5 +1,7 @@
 import 'dart:ui';
+import 'package:ecommerceapp/models/category.dart';
 import 'package:ecommerceapp/models/item.dart';
+import 'package:ecommerceapp/screens/merchant/merchant_edit_item.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../../size_config.dart';
@@ -8,10 +10,14 @@ import 'package:ecommerceapp/widgets/custom_text.dart';
 
 class MerchantItemCell extends StatefulWidget {
   const MerchantItemCell(
-      {Key? key, required this.item, required this.removeItem})
+      {Key? key,
+      required this.item,
+      required this.removeItem,
+      required this.categorise})
       : super(key: key);
 
   final Item item;
+  final List<ItemCategory> categorise;
   final Function removeItem;
 
   @override
@@ -32,6 +38,34 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
           widget.removeItem(widget.item);
         },
         child: const Text('Delete',
+            style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)));
+
+    final editItemButton = ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(10),
+            onPrimary: Colors.blue,
+            primary: Colors.blue,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(2)),
+            )),
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            MerchantEditItem.routeName,
+            arguments: EditItemArguments(
+                widget.item.id,
+                widget.item.name,
+                widget.item.desc,
+                widget.item.price,
+                widget.item.image,
+                widget.item.categoryId,
+                widget.categorise),
+          );
+        },
+        child: const Text('Edit',
             style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -117,11 +151,24 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(children: [deleteItemButton]),
+              Column(children: [deleteItemButton, editItemButton]),
             ],
           )
         ],
       ),
     );
   }
+}
+
+class EditItemArguments {
+  final int id;
+  final String name;
+  final String desc;
+  final double price;
+  final String image;
+  final int categoryId;
+  final List<ItemCategory> categories;
+
+  EditItemArguments(this.id, this.name, this.desc, this.price, this.image,
+      this.categoryId, this.categories);
 }

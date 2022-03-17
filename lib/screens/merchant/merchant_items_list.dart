@@ -146,6 +146,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
             .map((merchantItem) => MerchantItemCell(
                   item: merchantItem,
                   removeItem: removeItem,
+                  categorise: _merchantCategories,
                 ))
             .toList());
 
