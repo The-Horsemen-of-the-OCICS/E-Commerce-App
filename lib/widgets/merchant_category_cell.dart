@@ -1,4 +1,5 @@
 import 'package:ecommerceapp/models/category.dart';
+import 'package:ecommerceapp/screens/merchant/merchant_edit_category.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../../size_config.dart';
@@ -22,6 +23,7 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
   Widget build(BuildContext context) {
     final deleteItemCategoryButton = ElevatedButton(
         style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(10),
             onPrimary: Colors.red,
             primary: Colors.red,
             shape: const RoundedRectangleBorder(
@@ -31,6 +33,28 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
           widget.removeItemCategory(widget.itemCategory);
         },
         child: const Text('Delete',
+            style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)));
+
+    final editItemCategoryButton = ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(10),
+            onPrimary: Colors.blue,
+            primary: Colors.blue,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(2)),
+            )),
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            MerchantEditCategory.routeName,
+            arguments: EditCategoryArguments(widget.itemCategory.id,
+                widget.itemCategory.name, widget.itemCategory.icon),
+          );
+        },
+        child: const Text('Update',
             style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -86,11 +110,20 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(children: [deleteItemCategoryButton]),
+              Column(
+                  children: [deleteItemCategoryButton, editItemCategoryButton]),
             ],
           )
         ],
       ),
     );
   }
+}
+
+class EditCategoryArguments {
+  final int id;
+  final String name;
+  final String icon;
+
+  EditCategoryArguments(this.id, this.name, this.icon);
 }
