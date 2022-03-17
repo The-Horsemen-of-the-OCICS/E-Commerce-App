@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/models/item.dart';
 import 'package:ecommerceapp/widgets/merchant_item_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/models/category.dart';
@@ -174,14 +175,23 @@ class MerchantEditItem extends StatelessWidget {
             )),
         onPressed: () {
           editItemById(
-              http.Client(),
-              args.id,
-              _name.text,
-              _desc.text,
-              double.parse(_price.text),
-              _image.text,
-              DateTime.now().toString(),
-              _categoryId);
+                  http.Client(),
+                  args.id,
+                  _name.text,
+                  _desc.text,
+                  double.parse(_price.text),
+                  _image.text,
+                  DateTime.now().toString(),
+                  _categoryId)
+              .then((value) {
+            args.editItem(Item(
+                id: args.id,
+                name: _name.text,
+                desc: _desc.text,
+                price: double.parse(_price.text),
+                image: _image.text,
+                categoryId: int.parse(_categoryId)));
+          });
         },
         child: const Text('Submit',
             style: TextStyle(

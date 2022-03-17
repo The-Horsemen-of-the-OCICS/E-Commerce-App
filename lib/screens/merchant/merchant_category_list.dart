@@ -66,6 +66,15 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
     });
   }
 
+  void editItemCategory(ItemCategory itemCategory) {
+    var index =
+        _categories.indexWhere((element) => element.id == itemCategory.id);
+
+    setState(() {
+      _categories[index] = itemCategory;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     User? user = Provider.of<AuthModel>(context).getCurrentUser();
@@ -120,7 +129,8 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
         children: _categories
             .map((merchantCategory) => MerchantCategoryCell(
                 itemCategory: merchantCategory,
-                removeItemCategory: removeItemCategory))
+                removeItemCategory: removeItemCategory,
+                editItemCategory: editItemCategory))
             .toList());
 
     final nameInputBox = Container(

@@ -8,11 +8,15 @@ import 'package:ecommerceapp/widgets/custom_text.dart';
 
 class MerchantCategoryCell extends StatefulWidget {
   const MerchantCategoryCell(
-      {Key? key, required this.itemCategory, required this.removeItemCategory})
+      {Key? key,
+      required this.itemCategory,
+      required this.removeItemCategory,
+      required this.editItemCategory})
       : super(key: key);
 
   final ItemCategory itemCategory;
   final Function removeItemCategory;
+  final Function editItemCategory;
 
   @override
   _MerchantItemCellState createState() => _MerchantItemCellState();
@@ -50,8 +54,11 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
           Navigator.pushNamed(
             context,
             MerchantEditCategory.routeName,
-            arguments: EditCategoryArguments(widget.itemCategory.id,
-                widget.itemCategory.name, widget.itemCategory.icon),
+            arguments: EditCategoryArguments(
+                widget.itemCategory.id,
+                widget.itemCategory.name,
+                widget.itemCategory.icon,
+                widget.editItemCategory),
           );
         },
         child: const Text('Edit',
@@ -124,6 +131,7 @@ class EditCategoryArguments {
   final int id;
   final String name;
   final String icon;
+  final Function editItemCategory;
 
-  EditCategoryArguments(this.id, this.name, this.icon);
+  EditCategoryArguments(this.id, this.name, this.icon, this.editItemCategory);
 }

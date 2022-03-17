@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:ecommerceapp/widgets/merchant_category_cell.dart';
@@ -82,7 +83,11 @@ class MerchantEditCategory extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
         onPressed: () {
-          editCategoryById(http.Client(), args.id, _name.text, _icon.text);
+          editCategoryById(http.Client(), args.id, _name.text, _icon.text)
+              .then((value) {
+            args.editItemCategory(
+                ItemCategory(id: args.id, name: _name.text, icon: _icon.text));
+          });
         },
         child: const Text('Edit',
             style: TextStyle(
