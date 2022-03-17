@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:ecommerceapp/utils/network_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -136,6 +137,8 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                             image: item.image,
                             quantity: 1,
                           ));
+                          Fluttertoast.showToast(
+                              msg: 'Added to cart successfully');
                         },
                         icon: const Icon(Icons.add_shopping_cart))
                   ],
@@ -169,87 +172,95 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
             .then((items) => _pagingController.appendPage(items, 0));
       }
     }
+    var screenSize = MediaQuery.of(context).size;
 
     return Consumer<CartList>(builder: (context, cartList, _) {
       return Scaffold(
         body: CustomScrollView(
           slivers: <Widget>[
             SliverList(
+                key: const Key('buyer_items_list'),
                 delegate: SliverChildListDelegate([
-              SizedBox(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        category != null
-                            ? Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 15, top: 30),
-                                child: Text(category.name,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.left),
-                              )
-                            : const Padding(
-                                padding: EdgeInsets.only(left: 15, top: 30),
-                                child: Text('Categories',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.left),
-                              ),
-                        category != null
-                            ? const SizedBox(height: 0)
-                            : SizedBox(
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: const EdgeInsets.only(
-                                      left: 25, top: 25, right: 25),
-                                  itemCount: _categories.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: (() {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const BuyerItemsList(),
-                                            settings: RouteSettings(
-                                              arguments: _categories[index],
-                                            ),
+                  SizedBox(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            category != null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, top: 30),
+                                    child: Text(category.name,
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.left),
+                                  )
+                                : const Padding(
+                                    padding: EdgeInsets.only(left: 15, top: 30),
+                                    child: Text('Categories',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.left),
+                                  ),
+                            category != null
+                                ? const SizedBox(height: 0)
+                                : SizedBox(
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      padding: const EdgeInsets.only(
+                                          left: 25, top: 25, right: 25),
+                                      itemCount: _categories.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: (() {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const BuyerItemsList(),
+                                                settings: RouteSettings(
+                                                  arguments: _categories[index],
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                          child: Padding(
+                                            padding:
+                                                index == _categories.length - 1
+                                                    ? EdgeInsets.zero
+                                                    : const EdgeInsets.only(
+                                                        right: 40),
+                                            child: Column(children: [
+                                              Image.network(
+                                                  _categories[index].icon,
+                                                  width: 30,
+                                                  height: 30),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Text(
+                                                    _categories[index].name,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                    textAlign:
+                                                        TextAlign.center),
+                                              )
+                                            ]),
                                           ),
                                         );
-                                      }),
-                                      child: Padding(
-                                        padding: index == _categories.length - 1
-                                            ? EdgeInsets.zero
-                                            : const EdgeInsets.only(right: 40),
-                                        child: Column(children: [
-                                          Image.network(_categories[index].icon,
-                                              width: 30, height: 30),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 10),
-                                            child: Text(_categories[index].name,
-                                                style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                                textAlign: TextAlign.center),
-                                          )
-                                        ]),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                height: 90,
-                              )
-                      ]),
-                  height: category != null ? 90 : 180)
-            ])),
+                                      },
+                                    ),
+                                    height: 90,
+                                  )
+                          ]),
+                      height: category != null ? 90 : 180)
+                ])),
             PagedSliverGrid(
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate<Item>(
@@ -268,6 +279,8 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                 FadeInImage.memoryNetwork(
                                   placeholder: kTransparentImage,
                                   image: item.image,
+                                  width: (screenSize.width - 45) / 2,
+                                  fit: BoxFit.cover,
                                 ),
                                 Padding(
                                   padding:
@@ -302,16 +315,28 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                       IconButton(
                                           key: Key(
                                               "home_add_to_cart_button_${item.id}"),
-                                          onPressed: () => {
-                                                cartList.add(CartItem(
-                                                  id: item.id.toString(),
-                                                  name: item.name,
-                                                  itemPrice:
-                                                      item.price.toDouble(),
-                                                  image: item.image,
-                                                  quantity: 1,
-                                                ))
-                                              },
+                                          onPressed: () {
+                                            cartList.add(CartItem(
+                                              id: item.id.toString(),
+                                              name: item.name,
+                                              itemPrice: item.price.toDouble(),
+                                              image: item.image,
+                                              quantity: 1,
+                                            ));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: const Text(
+                                                    'Added to cart successfully'),
+                                                action: SnackBarAction(
+                                                  label: '',
+                                                  onPressed: () {
+                                                    // Code to execute.
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          },
                                           icon: const Icon(
                                               Icons.add_shopping_cart))
                                     ],
@@ -334,6 +359,8 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                 FadeInImage.memoryNetwork(
                                   placeholder: kTransparentImage,
                                   image: item.image,
+                                  width: (screenSize.width - 45) / 2,
+                                  fit: BoxFit.cover,
                                 ),
                                 Padding(
                                   padding:
@@ -366,16 +393,28 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                                               fontWeight: FontWeight.bold)),
                                       const Spacer(),
                                       IconButton(
-                                          onPressed: () => {
-                                                cartList.add(CartItem(
-                                                  id: item.id.toString(),
-                                                  name: item.name,
-                                                  itemPrice:
-                                                      item.price.toDouble(),
-                                                  image: item.image,
-                                                  quantity: 1,
-                                                ))
-                                              },
+                                          onPressed: () {
+                                            cartList.add(CartItem(
+                                              id: item.id.toString(),
+                                              name: item.name,
+                                              itemPrice: item.price.toDouble(),
+                                              image: item.image,
+                                              quantity: 1,
+                                            ));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: const Text(
+                                                    'Added to cart successfully'),
+                                                action: SnackBarAction(
+                                                  label: '',
+                                                  onPressed: () {
+                                                    // Code to execute.
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          },
                                           icon: const Icon(
                                               Icons.add_shopping_cart))
                                     ],
