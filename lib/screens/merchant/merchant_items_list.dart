@@ -20,6 +20,7 @@ class MerchantItemsList extends StatefulWidget {
 }
 
 class _MerchantItemsListState extends State<MerchantItemsList> {
+  final _formKey = GlobalKey<FormState>();
   List<Item> _merchantItems = [];
 
   List<ItemCategory> _merchantCategories = [];
@@ -258,6 +259,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
     );
 
     final submitItemButton = ElevatedButton(
+        // key: const Key("submit_question_button"),
         style: ElevatedButton.styleFrom(
             onPrimary: Colors.black,
             primary: Colors.black,
@@ -266,19 +268,21 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
         onPressed: () {
-          Item item = Item(
-              id: Random().nextInt(999999),
-              name: _name.text,
-              desc: _desc.text,
-              price: double.parse(_price.text),
-              image: _image.text,
-              categoryId: int.parse(_categoryId));
+          if (_formKey.currentState!.validate()) {
+            Item item = Item(
+                id: Random().nextInt(999999),
+                name: _name.text,
+                desc: _desc.text,
+                price: double.parse(_price.text),
+                image: _image.text,
+                categoryId: int.parse(_categoryId));
 
-          createItem(http.Client(), item).then((createdItem) {
-            setState(() {
-              _merchantItems.add(item);
+            createItem(http.Client(), item).then((createdItem) {
+              setState(() {
+                _merchantItems.add(item);
+              });
             });
-          });
+          }
         },
         child: const Text('Submit',
             style: TextStyle(
@@ -286,44 +290,48 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
                 color: Colors.white,
                 fontWeight: FontWeight.bold)));
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Merchant Item List',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Merchant Item List',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
           ),
-          foregroundColor: Colors.black,
           backgroundColor: Colors.white,
-        ),
-        backgroundColor: Colors.white,
-        body: Center(
-            child: ListView(
-          children: [
-            Column(
-              children: <Widget>[
-                const SizedBox(height: 30),
-                merchantItems,
-                const Padding(
-                  padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                  child: Text(
-                    "Add an item",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+          body: Center(
+              child: ListView(
+            children: [
+              Column(
+                children: <Widget>[
+                  const SizedBox(height: 30),
+                  merchantItems,
+                  const Padding(
+                    padding:
+                        EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+                    child: Text(
+                      "Add an item",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                ),
-                nameInputBox,
-                descInputBox,
-                priceInputBox,
-                imageUrlInputBox,
-                categorySelectionBox,
-                submitItemButton
-              ],
-            ),
-          ],
-        )),
-        drawer: const NavigationDrawer());
+                  nameInputBox,
+                  descInputBox,
+                  priceInputBox,
+                  imageUrlInputBox,
+                  categorySelectionBox,
+                  submitItemButton
+                ],
+              ),
+            ],
+          )),
+          drawer: const NavigationDrawer()),
+    );
   }
 }

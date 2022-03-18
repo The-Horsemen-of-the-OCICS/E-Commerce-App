@@ -19,6 +19,7 @@ class MerchantCategoryList extends StatefulWidget {
 }
 
 class _MerchantCategoryListState extends State<MerchantCategoryList> {
+  final _formKey = GlobalKey<FormState>();
   List<ItemCategory> _categories = [];
 
   Future<List<ItemCategory>> fetchCategories(http.Client client) async {
@@ -160,15 +161,19 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
         onPressed: () {
-          ItemCategory itemCategory = ItemCategory(
-              id: Random().nextInt(999999), name: _name.text, icon: _icon.text);
+          if (_formKey.currentState!.validate()) {
+            ItemCategory itemCategory = ItemCategory(
+                id: Random().nextInt(999999),
+                name: _name.text,
+                icon: _icon.text);
 
-          createItemCategory(http.Client(), itemCategory)
-              .then((createdItemCategory) {
-            setState(() {
-              _categories.add(createdItemCategory);
+            createItemCategory(http.Client(), itemCategory)
+                .then((createdItemCategory) {
+              setState(() {
+                _categories.add(createdItemCategory);
+              });
             });
-          });
+          }
         },
         child: const Text('Submit',
             style: TextStyle(
@@ -193,41 +198,44 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
           }),
     );
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Merchant Category List',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.white,
-        ),
-        backgroundColor: Colors.white,
-        body: Center(
-            child: ListView(
-          children: [
-            Column(
-              children: <Widget>[
-                const SizedBox(height: 30),
-                merchantCategories,
-                const Padding(
-                  padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                  child: Text(
-                    "Add a category",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                nameInputBox,
-                iconUrlInputBox,
-                submitCategoryButton
-              ],
+    return Form(
+        key: _formKey,
+        child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'Merchant Category List',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
             ),
-          ],
-        )),
-        drawer: const NavigationDrawer());
+            backgroundColor: Colors.white,
+            body: Center(
+                child: ListView(
+              children: [
+                Column(
+                  children: <Widget>[
+                    const SizedBox(height: 30),
+                    merchantCategories,
+                    const Padding(
+                      padding:
+                          EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+                      child: Text(
+                        "Add a category",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    nameInputBox,
+                    iconUrlInputBox,
+                    submitCategoryButton
+                  ],
+                ),
+              ],
+            )),
+            drawer: const NavigationDrawer()));
   }
 }
