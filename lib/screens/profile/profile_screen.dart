@@ -56,6 +56,8 @@ void updateShipInfo(String userId, String phone, String street, String city,
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final _formKey = GlobalKey<FormState>();
+
   List<Order> _orders = [];
 
   TextEditingController phoneNumber = TextEditingController();
@@ -133,15 +135,17 @@ class _ProfilePageState extends State<ProfilePage> {
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
         onPressed: () {
-          setState(() {
-            user.defaultShippingInfo.phone = phoneNumber.text;
-            user.defaultShippingInfo.street = streetAddress.text;
-            user.defaultShippingInfo.city = city.text;
-            user.defaultShippingInfo.state = state.text;
-            user.defaultShippingInfo.country = country.text;
-            updateShipInfo(user.id, phoneNumber.text, streetAddress.text,
-                city.text, state.text, country.text);
-          });
+          if (_formKey.currentState!.validate()) {
+            setState(() {
+              user.defaultShippingInfo.phone = phoneNumber.text;
+              user.defaultShippingInfo.street = streetAddress.text;
+              user.defaultShippingInfo.city = city.text;
+              user.defaultShippingInfo.state = state.text;
+              user.defaultShippingInfo.country = country.text;
+              updateShipInfo(user.id, phoneNumber.text, streetAddress.text,
+                  city.text, state.text, country.text);
+            });
+          }
         },
         child: const Text('Submit',
             style: TextStyle(
@@ -175,7 +179,13 @@ class _ProfilePageState extends State<ProfilePage> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.grey[200],
             ),
-            child: TextField(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter something';
+                }
+                return null;
+              },
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               keyboardType: TextInputType.number,
               controller: phoneNumber,
@@ -190,7 +200,13 @@ class _ProfilePageState extends State<ProfilePage> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.grey[200],
             ),
-            child: TextField(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter something';
+                }
+                return null;
+              },
               key: const Key('default_street_field'),
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               controller: streetAddress,
@@ -208,7 +224,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.grey[200],
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
                     inputFormatters: [LengthLimitingTextInputFormatter(16)],
                     controller: city,
                     enabled: _isEditEnabled,
@@ -227,7 +249,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.grey[200],
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
                     inputFormatters: [LengthLimitingTextInputFormatter(16)],
                     controller: state,
                     enabled: _isEditEnabled,
@@ -246,7 +274,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.grey[200],
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
                     controller: country,
                     enabled: _isEditEnabled,
                     decoration: InputDecoration(
@@ -260,76 +294,79 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'User Profile',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.white,
-        ),
-        backgroundColor: Colors.white,
-        body: Center(
-            child: ListView(
-          children: [
-            Column(
-              children: <Widget>[
-                Padding(
-                    padding:
-                        EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Your Default Shipping Info",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Container(
-                          width: 150,
-                        ),
-                        Text(
-                          "Edit",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        editToggle,
-                      ],
-                    )),
-                shippingInfoCard,
-                Padding(
-                    padding: const EdgeInsets.only(
-                        left: 400.0, top: 20.0, bottom: 10.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[submitButton])),
-                Padding(
-                    padding:
-                        EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Your Order History",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    )),
-                futureOrders
-              ],
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'User Profile',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-          ],
-        )));
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
+          ),
+          backgroundColor: Colors.white,
+          body: Center(
+              child: ListView(
+            children: [
+              Column(
+                children: <Widget>[
+                  Padding(
+                      padding:
+                          EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Your Default Shipping Info",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Container(
+                            width: 150,
+                          ),
+                          Text(
+                            "Edit",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          editToggle,
+                        ],
+                      )),
+                  shippingInfoCard,
+                  Padding(
+                      padding: const EdgeInsets.only(
+                          left: 400.0, top: 20.0, bottom: 10.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[submitButton])),
+                  Padding(
+                      padding:
+                          EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Your Order History",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      )),
+                  futureOrders
+                ],
+              ),
+            ],
+          ))),
+    );
   }
 }
