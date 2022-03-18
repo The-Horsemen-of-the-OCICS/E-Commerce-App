@@ -59,6 +59,8 @@ void createNewOrder(
 }
 
 class _CheckoutBodyState extends State<CheckoutBody> {
+  final _formKey = GlobalKey<FormState>();
+
   Color active = Colors.red;
   TextEditingController cardNumber = TextEditingController();
   TextEditingController year = TextEditingController();
@@ -156,17 +158,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
         ),
       ),
       onTap: () => {
-        createNewOrder(
-          user!,
-          widget.cartList,
-          widget.cartListPrice,
-          DateTime.now().toString(),
-          '${street.text}, ${city.text}, ${state.text}, ${country.text}',
-        ),
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Thank you for your order!'),
-        )),
-        Navigator.pushNamed(context, AppRoutes.home)
+        if (_formKey.currentState!.validate())
+          {
+            createNewOrder(
+              user!,
+              widget.cartList,
+              widget.cartListPrice,
+              DateTime.now().toString(),
+              '${street.text}, ${city.text}, ${state.text}, ${country.text}',
+            ),
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Thank you for your order!'),
+            )),
+            Navigator.pushNamed(context, AppRoutes.home)
+          }
       },
     );
 
@@ -241,13 +246,22 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.grey[200],
             ),
-            child: TextField(
-              inputFormatters: [LengthLimitingTextInputFormatter(16)],
+            child: TextFormField(
               keyboardType: TextInputType.number,
               controller: cardNumber,
               onChanged: (val) {
                 setState(() {});
               },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter something';
+                }
+                return null;
+              },
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(16)
+              ], // Only numbers can be entered
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Card Number',
@@ -263,8 +277,17 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.grey[200],
                   ),
-                  child: TextField(
-                    inputFormatters: [LengthLimitingTextInputFormatter(2)],
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(16)
+                    ], // Only numbers can be entered
                     keyboardType: TextInputType.number,
                     controller: month,
                     decoration: InputDecoration(
@@ -285,8 +308,17 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.grey[200],
                   ),
-                  child: TextField(
-                    inputFormatters: [LengthLimitingTextInputFormatter(2)],
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(16)
+                    ], // Only numbers can be entered
                     keyboardType: TextInputType.number,
                     controller: year,
                     decoration: InputDecoration(
@@ -307,7 +339,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.grey[200],
                   ),
-                  child: TextField(
+                  child: TextFormField(
                     controller: cvc,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -315,6 +347,13 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     onChanged: (val) {
                       setState(() {});
                     },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
+                    // Only numbers can be entered
                   ),
                 ),
               )
@@ -326,12 +365,18 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.grey[200],
             ),
-            child: TextField(
+            child: TextFormField(
               controller: cardHolder,
               decoration: InputDecoration(
                   border: InputBorder.none, hintText: 'Name on card'),
               onChanged: (val) {
                 setState(() {});
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter something';
+                }
+                return null;
               },
             ),
           ),
@@ -362,12 +407,20 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.grey[200],
             ),
-            child: TextField(
-              inputFormatters: [LengthLimitingTextInputFormatter(16)],
+            child: TextFormField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(16),
+              ],
               keyboardType: TextInputType.number,
               controller: phone,
               onChanged: (val) {
                 setState(() {});
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter something';
+                }
+                return null;
               },
               decoration: InputDecoration(
                   border: InputBorder.none, hintText: 'Phone Number'),
@@ -379,11 +432,19 @@ class _CheckoutBodyState extends State<CheckoutBody> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Colors.grey[200],
             ),
-            child: TextField(
-              inputFormatters: [LengthLimitingTextInputFormatter(16)],
+            child: TextFormField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(16),
+              ],
               controller: street,
               onChanged: (val) {
                 setState(() {});
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter something';
+                }
+                return null;
               },
               decoration: InputDecoration(
                   border: InputBorder.none, hintText: 'Street Address'),
@@ -398,7 +459,7 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.grey[200],
                   ),
-                  child: TextField(
+                  child: TextFormField(
                     inputFormatters: [LengthLimitingTextInputFormatter(16)],
                     controller: city,
                     decoration: InputDecoration(
@@ -406,26 +467,11 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     onChanged: (val) {
                       setState(() {});
                     },
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              Flexible(
-                child: Container(
-                  padding: EdgeInsets.only(left: 16.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    color: Colors.grey[200],
-                  ),
-                  child: TextField(
-                    inputFormatters: [LengthLimitingTextInputFormatter(16)],
-                    controller: state,
-                    decoration: InputDecoration(
-                        border: InputBorder.none, hintText: 'State'),
-                    onChanged: (val) {
-                      setState(() {});
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
                     },
                   ),
                 ),
@@ -440,12 +486,45 @@ class _CheckoutBodyState extends State<CheckoutBody> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: Colors.grey[200],
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    inputFormatters: [LengthLimitingTextInputFormatter(16)],
+                    controller: state,
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'State'),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 8.0,
+              ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.grey[200],
+                  ),
+                  child: TextFormField(
                     controller: country,
                     decoration: InputDecoration(
                         border: InputBorder.none, hintText: 'Country'),
                     onChanged: (val) {
                       setState(() {});
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
                     },
                   ),
                 ),
@@ -456,82 +535,84 @@ class _CheckoutBodyState extends State<CheckoutBody> {
       ),
     );
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: LayoutBuilder(
-        builder: (_, constraints) => GestureDetector(
-          onPanDown: (val) {},
-          behavior: HitTestBehavior.opaque,
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-              ),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Form(
+        key: _formKey,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: LayoutBuilder(
+            builder: (_, constraints) => GestureDetector(
+              onPanDown: (val) {},
+              behavior: HitTestBehavior.opaque,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
                       children: <Widget>[
-                        Text(
-                          'Invoice',
-                          style: TextStyle(
-                            color: Color(0xff202020),
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Invoice',
+                              style: TextStyle(
+                                color: Color(0xff202020),
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 35,
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          height: 35,
-                        )
+                        invoiceCard,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Payment',
+                              style: TextStyle(
+                                color: Color(0xff202020),
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            useDefaultPaymentInfoToggle
+                          ],
+                        ),
+                        paymentCard,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Shipping Info',
+                              style: TextStyle(
+                                color: Color(0xff202020),
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            useDefaultShippingInfoToggle
+                          ],
+                        ),
+                        shippingInfoCard,
+                        SizedBox(height: 24.0),
+                        Center(
+                            child: Padding(
+                          padding: EdgeInsets.only(bottom: 20),
+                          child: submitOrderBtn,
+                        ))
                       ],
                     ),
-                    invoiceCard,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          'Payment',
-                          style: TextStyle(
-                            color: Color(0xff202020),
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        useDefaultPaymentInfoToggle
-                      ],
-                    ),
-                    paymentCard,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          'Shipping Info',
-                          style: TextStyle(
-                            color: Color(0xff202020),
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        useDefaultShippingInfoToggle
-                      ],
-                    ),
-                    shippingInfoCard,
-                    SizedBox(height: 24.0),
-                    Center(
-                        child: Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: submitOrderBtn,
-                    ))
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
