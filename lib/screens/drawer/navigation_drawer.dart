@@ -18,16 +18,15 @@ class NavigationDrawer extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, AppRoutes.home)),
           drawerItem(
               text: 'Merchant Items',
-              onTap: () => Navigator.pushReplacementNamed(
-                  context, AppRoutes.merchantItems)),
+              onTap: () =>
+                  Navigator.pushNamed(context, AppRoutes.merchantItems)),
           drawerItem(
               text: 'Merchant Categories',
-              onTap: () => Navigator.pushReplacementNamed(
-                  context, AppRoutes.merchantCategories)),
+              onTap: () =>
+                  Navigator.pushNamed(context, AppRoutes.merchantCategories)),
           drawerItem(
               text: 'Cart',
-              onTap: () =>
-                  Navigator.pushReplacementNamed(context, AppRoutes.cart)),
+              onTap: () => Navigator.pushNamed(context, AppRoutes.cart)),
           drawerItem(
               text: 'Profile',
               onTap: () => Navigator.pushNamed(context, AppRoutes.profile)),
