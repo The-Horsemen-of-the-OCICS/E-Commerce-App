@@ -120,6 +120,14 @@ class _MyLoginPageState extends State<MyLoginPage> {
     return Form(
         key: _formKey,
         child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Login',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
+          ),
           backgroundColor: const Color(0xFF212332),
           body: Center(
             child: Card(

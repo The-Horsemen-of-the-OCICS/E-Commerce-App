@@ -11,6 +11,7 @@ import '../../models/user.dart';
 import 'package:http/http.dart' as http;
 
 import '../../utils/network_config.dart';
+import '../login.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -84,7 +85,34 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundColor: Colors.white,
           ),
           backgroundColor: Colors.white,
-          body: const Center(child: Text('Please login to access this page!')));
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  "Please login to access your profile!",
+                  style: TextStyle(fontSize: 18),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10.0),
+                  child: ElevatedButton(
+                    key: const Key("profile_login_button"),
+                    child: const Text("Login"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyLoginPage()),
+                      ).then((value) {
+                        setState(() {});
+                      });
+                      //Navigator.of(context).pushNamed(AppRoutes.login);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ));
     }
 
     final futureOrders = FutureBuilder<List<Order>>(
