@@ -4,6 +4,7 @@ import 'package:ecommerceapp/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../size_config.dart';
+import '../models/user.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({Key? key}) : super(key: key);

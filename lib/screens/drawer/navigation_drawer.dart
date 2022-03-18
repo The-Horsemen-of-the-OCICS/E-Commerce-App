@@ -28,9 +28,21 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           onTap: () => Navigator.pushNamed(context, AppRoutes.cart)),
       drawerItem(
           text: 'Profile',
-          onTap: () => Navigator.pushNamed(context, AppRoutes.profile))
+          onTap: () => Navigator.pushNamed(context, AppRoutes.profile)),
+      drawerItem(
+          text: (user == null) ? "Login" : "Logout",
+          onTap: () => (user == null)
+              ? Navigator.pushNamed(context, AppRoutes.login)
+                  .then((value) => setState(() {
+                        Navigator.pop(context);
+                      }))
+              : {
+                  setState(() {
+                    userAuth.logout();
+                    Navigator.pop(context);
+                  })
+                })
     ];
-
     List<Widget> adminItems = [
       drawerItem(
           text: 'Merchant Items',
