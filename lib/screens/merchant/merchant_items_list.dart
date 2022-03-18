@@ -28,7 +28,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
   final TextEditingController _desc = TextEditingController(text: "");
   final TextEditingController _price = TextEditingController(text: "");
   final TextEditingController _image = TextEditingController(text: "");
-  String _categoryId = "1";
+  String _categoryId = "-1";
 
   void removeItem(Item item) {
     var index = _merchantItems.indexWhere((element) => element.id == item.id);
@@ -135,6 +135,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
     if (_merchantCategories.isEmpty) {
       fetchCategories(http.Client()).then((categories) {
         setState(() {
+          categories.insert(0, ItemCategory(id: -1, name: "-", icon: ""));
           _merchantCategories = categories;
         });
       });
@@ -248,7 +249,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
           setState(() => _categoryId = value!);
         },
         validator: (value) {
-          if (value == null || value.isEmpty) {
+          if (value == null || value.isEmpty || value == "-1") {
             return 'Please select category';
           }
           return null;

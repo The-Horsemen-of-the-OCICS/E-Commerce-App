@@ -1,10 +1,14 @@
 import 'package:ecommerceapp/models/category.dart';
+import 'package:ecommerceapp/models/item.dart';
 import 'package:ecommerceapp/screens/merchant/merchant_edit_category.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../../size_config.dart';
 import 'package:ecommerceapp/utils/application_properties.dart';
 import 'package:ecommerceapp/widgets/custom_text.dart';
+import 'package:http/http.dart' as http;
+import 'package:ecommerceapp/utils/network_config.dart';
+import 'dart:convert';
 
 class MerchantCategoryCell extends StatefulWidget {
   const MerchantCategoryCell(
@@ -23,6 +27,42 @@ class MerchantCategoryCell extends StatefulWidget {
 }
 
 class _MerchantItemCellState extends State<MerchantCategoryCell> {
+  Future<List<Item>> fetchItemsByCategory(
+      http.Client client, int categoryId) async {
+    final response = await client.get(Uri.parse(
+        NetworkConfig.API_BASE_URL + 'item/category/' + categoryId.toString()));
+
+    return jsonDecode(response.body)
+        .map<Item>((json) => Item.fromJson(json))
+        .toList();
+  }
+
+  Future<void> editItemById(
+      http.Client client,
+      int id,
+      String newName,
+      String newDesc,
+      double newPrice,
+      String newImage,
+      String newDate,
+      String newCategoryId) async {
+    final response = await client.put(
+      Uri.parse(NetworkConfig.API_BASE_URL + 'item/' + id.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'id': id.toString(),
+        'name': newName,
+        'description': newDesc,
+        'price': newPrice,
+        'image': newImage,
+        'date': newDate,
+        'categoryId': newCategoryId
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final deleteItemCategoryButton = ElevatedButton(
@@ -35,6 +75,20 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
             )),
         onPressed: () {
           widget.removeItemCategory(widget.itemCategory);
+          fetchItemsByCategory(http.Client(), widget.itemCategory.id)
+              .then((categories) {
+            for (int i = 0; i < categories.length; ++i) {
+              editItemById(
+                  http.Client(),
+                  categories[i].id,
+                  categories[i].name,
+                  categories[i].desc,
+                  categories[i].price,
+                  categories[i].image,
+                  DateTime.now().toString(),
+                  "-1");
+            }
+          });
         },
         child: const Text('Delete',
             style: TextStyle(
