@@ -75,6 +75,8 @@ Future<Response> createResponse(
 }
 
 class _PostScreenState extends State<PostScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   Future<Response>? _futureResponse;
 
   List<Response> _responses = [];
@@ -138,20 +140,22 @@ class _PostScreenState extends State<PostScreen> {
             borderRadius: BorderRadius.all(Radius.circular(2)),
           )),
       onPressed: () {
-        if (userAuth.getCurrentUser() != null) {
-          final user = userAuth.getCurrentUser();
-          setState(() {
-            _futureResponse = createResponse(
-                _body.text,
-                user!,
-                widget.question.id,
-                widget.question.id.toString() +
-                    "_" +
-                    (widget.question.responseCount + 1).toString());
-            debugPrint(_responses.length.toString());
-          });
-        } else {
-          Navigator.of(context).pushNamed(AppRoutes.login);
+        if (_formKey.currentState!.validate()) {
+          if (userAuth.getCurrentUser() != null) {
+            final user = userAuth.getCurrentUser();
+            setState(() {
+              _futureResponse = createResponse(
+                  _body.text,
+                  user!,
+                  widget.question.id,
+                  widget.question.id.toString() +
+                      "_" +
+                      (widget.question.responseCount + 1).toString());
+              debugPrint(_responses.length.toString());
+            });
+          } else {
+            Navigator.of(context).pushNamed(AppRoutes.login);
+          }
         }
       },
       child: const Text('Submit',
@@ -159,44 +163,47 @@ class _PostScreenState extends State<PostScreen> {
               fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Question Detail',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Question Detail',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
         ),
-        foregroundColor: Colors.black,
         backgroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: Center(
-        child: ListView(
-          children: [
-            Column(
-              children: <Widget>[
-                QuestionPost(question: widget.question),
-                Text(
-                  "Replies [${widget.question.responseCount}]",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+        body: Center(
+          child: ListView(
+            children: [
+              Column(
+                children: <Widget>[
+                  QuestionPost(question: widget.question),
+                  Text(
+                    "Replies [${widget.question.responseCount}]",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                futureResponses,
-                Text(
-                  "Add a response",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  futureResponses,
+                  Text(
+                    "Add a response",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                responseTextBox,
-                submitButton
-              ],
-            ),
-          ],
+                  responseTextBox,
+                  submitButton
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

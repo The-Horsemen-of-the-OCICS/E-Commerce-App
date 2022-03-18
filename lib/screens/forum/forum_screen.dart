@@ -80,6 +80,8 @@ Future<Question> createQuestion(
 }
 
 class _ForumPageState extends State<ForumPage> {
+  final _formKey = GlobalKey<FormState>();
+
   Future<Question>? _futureQuestion;
 
   List<Question> _questions = [];
@@ -144,15 +146,17 @@ class _ForumPageState extends State<ForumPage> {
               borderRadius: BorderRadius.all(Radius.circular(2)),
             )),
         onPressed: () {
-          if (userAuth.getCurrentUser() != null) {
-            final user = userAuth.getCurrentUser();
-            setState(() {
-              _futureQuestion = createQuestion(
-                  _title.text, _body.text, user!, _questions.length + 1);
-              debugPrint(_questions.length.toString());
-            });
-          } else {
-            Navigator.of(context).pushNamed(AppRoutes.login);
+          if (_formKey.currentState!.validate()) {
+            if (userAuth.getCurrentUser() != null) {
+              final user = userAuth.getCurrentUser();
+              setState(() {
+                _futureQuestion = createQuestion(
+                    _title.text, _body.text, user!, _questions.length + 1);
+                debugPrint(_questions.length.toString());
+              });
+            } else {
+              Navigator.of(context).pushNamed(AppRoutes.login);
+            }
           }
         },
         child: const Text('Submit',
@@ -182,41 +186,44 @@ class _ForumPageState extends State<ForumPage> {
       },
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Forum',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Forum',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
         ),
-        foregroundColor: Colors.black,
         backgroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: Center(
-          child: ListView(
-        children: [
-          Column(
-            children: <Widget>[
-              const SizedBox(height: 30),
-              futureQuestions,
-              const Padding(
-                padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                child: Text(
-                  "Add a question",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+        body: Center(
+            child: ListView(
+          children: [
+            Column(
+              children: <Widget>[
+                const SizedBox(height: 30),
+                futureQuestions,
+                const Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
+                  child: Text(
+                    "Add a question",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              titleTextBox,
-              bodyTextBox,
-              submitQuestionButton
-            ],
-          ),
-        ],
-      )),
+                titleTextBox,
+                bodyTextBox,
+                submitQuestionButton
+              ],
+            ),
+          ],
+        )),
+      ),
     );
   }
 }
