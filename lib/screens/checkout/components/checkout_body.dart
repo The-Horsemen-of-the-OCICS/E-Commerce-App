@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:ecommerceapp/models/cartList.dart';
+import 'package:ecommerceapp/models/order.dart';
 import 'package:ecommerceapp/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import '../../../models/auth.dart';
 import 'package:ecommerceapp/models/user.dart';
 import 'package:http/http.dart' as http;
+import '../../../utils/invoice_generator.dart';
 import '../../../utils/network_config.dart';
 
 class CheckoutBody extends StatefulWidget {
@@ -28,14 +30,23 @@ void createNewOrder(
   String orderDate,
   String shippingAddress,
 ) async {
+  final newId = UniqueKey().toString();
   final postBody = jsonEncode(<String, dynamic>{
-    'id': UniqueKey().toString(),
+    'id': newId,
     'userId': user.id,
     'cartList': cartList.cartItems,
     'overallPrice': overallPrice,
     'orderDate': orderDate,
     'shippingAddress': shippingAddress,
   });
+
+  await InvoiceGenerator.generate(Order(
+      id: newId,
+      userId: user.id,
+      cartList: cartList.cartItems,
+      overallPrice: overallPrice,
+      orderDate: orderDate,
+      shippingAddress: shippingAddress));
 
   final response = await http.post(
     Uri.parse(NetworkConfig.API_BASE_URL + 'order'),
