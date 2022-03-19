@@ -1,5 +1,4 @@
 import 'package:ecommerceapp/utils/invoice_generator.dart';
-import 'package:ecommerceapp/utils/pdf_api.dart';
 import 'package:flutter/material.dart';
 import '../models/order.dart';
 
@@ -21,9 +20,7 @@ class _OrderHistroyItemState extends State<OrderHistroyItem> {
         child: IconButton(
             icon: Icon(Icons.download),
             onPressed: () async {
-              print('xxxx');
-              final pdfFile = await InvoiceGenerator.generate(widget.order);
-              PdfApi.openFile(pdfFile);
+              await InvoiceGenerator.generate(widget.order);
             }),
       ),
     );

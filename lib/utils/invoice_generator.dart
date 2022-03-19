@@ -1,12 +1,13 @@
 import 'dart:io';
-import './pdf_api.dart';
+import 'package:ecommerceapp/utils/save_to_file.dart';
+
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import '../models/order.dart';
 
 class InvoiceGenerator {
-  static Future<File> generate(Order order) async {
+  static Future<void> generate(Order order) async {
     final pdf = Document();
 
     pdf.addPage(MultiPage(
@@ -22,7 +23,7 @@ class InvoiceGenerator {
       footer: (context) => builderForFooter(),
     ));
 
-    return PdfApi.saveDocument(name: order.id.toString(), pdf: pdf);
+    FileSaveHelper.saveAndLaunchFile(name: 'invoice.pdf', pdf: pdf);
   }
 
   static Widget builderForHeader(Order order) => Column(
@@ -58,7 +59,7 @@ class InvoiceGenerator {
   static Widget buildCustomerAddress(Order order) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(order.userId),
+          Text('UserId: ${order.userId}'),
           Text(order.shippingAddress),
         ],
       );
