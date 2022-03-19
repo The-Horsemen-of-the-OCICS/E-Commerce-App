@@ -89,8 +89,8 @@ class MerchantEditItem extends StatelessWidget {
       width: 630,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
-          maxLength: 30,
-          maxLines: 1,
+          maxLength: 60,
+          maxLines: 2,
           controller: _desc,
           decoration: const InputDecoration(
             hintText: 'Item Description',
