@@ -19,7 +19,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // find warning text
-      final textFind = find.text('Please login to access this page!');
+      final textFind = find.text('Please login to access your profile!');
       expect(textFind, findsOneWidget);
 
       // 2s delay to next test
@@ -96,6 +96,14 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.pump(const Duration(seconds: 2));
+
+      // find first invoice download button
+      final invoiceDownloadFind = find.byType(IconButton);
+      expect(invoiceDownloadFind, findsWidgets);
+      await tester.tap(invoiceDownloadFind.first);
+      await tester.pumpAndSettle();
+
+      await tester.pump(const Duration(seconds: 10));
     });
   });
 }
