@@ -98,9 +98,10 @@ class _OrderHistroyItemState extends State<OrderHistroyItem> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 10),
                             child: Text(
-                              "Total Price: ${widget.order.overallPrice.toString()}",
+                              "Total Price: \$${widget.order.overallPrice.toString()}",
                               maxLines: 3,
                               textAlign: TextAlign.justify,
                               style: TextStyle(
@@ -112,7 +113,7 @@ class _OrderHistroyItemState extends State<OrderHistroyItem> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "Items: ${widget.order.printItems()}",
+                              "Items:\n${widget.order.printItems()}",
                               maxLines: 3,
                               textAlign: TextAlign.justify,
                               style: TextStyle(
