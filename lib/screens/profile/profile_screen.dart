@@ -25,6 +25,13 @@ Future<List<Order>> fetchOrders(http.Client client, String userId) async {
   return compute(parseOrders, response.body);
 }
 
+// GETALL
+Future<List<Order>> fetchAllOrders(http.Client client) async {
+  final response =
+      await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'order/'));
+  return compute(parseOrders, response.body);
+}
+
 Future<List<Order>> parseOrders(String responseBody) async {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
@@ -117,6 +124,28 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final futureOrders = FutureBuilder<List<Order>>(
       future: fetchOrders(http.Client(), user.id),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          debugPrint(snapshot.error.toString());
+          return const Center(
+            child: Text('Failed to load order history from the server!'),
+          );
+        } else if (snapshot.hasData) {
+          _orders = snapshot.data!;
+          return Column(
+              children: _orders
+                  .map((order) => OrderHistroyItem(order: order))
+                  .toList());
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+
+    final futureAllOrders = FutureBuilder<List<Order>>(
+      future: fetchAllOrders(http.Client()),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           debugPrint(snapshot.error.toString());
@@ -321,80 +350,121 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
-
-    return Form(
-      key: _formKey,
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              'User Profile',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            foregroundColor: Colors.black,
-            backgroundColor: Colors.white,
-          ),
-          backgroundColor: Colors.white,
-          body: Center(
-              child: ListView(
-            children: [
-              Column(
-                children: <Widget>[
-                  Padding(
-                      padding:
-                          EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Your Default Shipping Info",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Container(
-                            width: 150,
-                          ),
-                          Text(
-                            "Edit",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          editToggle,
-                        ],
-                      )),
-                  shippingInfoCard,
-                  Padding(
-                      padding: const EdgeInsets.only(
-                          left: 400.0, top: 20.0, bottom: 10.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[submitButton])),
-                  Padding(
-                      padding:
-                          EdgeInsets.only(left: 15.0, top: 20.0, bottom: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Your Order History",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      )),
-                  futureOrders
-                ],
+    if (user.email != 'admin@gmail.com') {
+      return Form(
+        key: _formKey,
+        child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'User Profile',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
-            ],
-          ))),
-    );
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+            ),
+            backgroundColor: Colors.white,
+            body: Center(
+                child: ListView(
+              children: [
+                Column(
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.only(
+                            left: 15.0, top: 20.0, bottom: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Your Default Shipping Info",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Container(
+                              width: 150,
+                            ),
+                            Text(
+                              "Edit",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            editToggle,
+                          ],
+                        )),
+                    shippingInfoCard,
+                    Padding(
+                        padding: const EdgeInsets.only(
+                            left: 400.0, top: 20.0, bottom: 10.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[submitButton])),
+                    Padding(
+                        padding: EdgeInsets.only(
+                            left: 15.0, top: 20.0, bottom: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Your Order History",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        )),
+                    futureOrders
+                  ],
+                ),
+              ],
+            ))),
+      );
+    } else {
+      return Form(
+        key: _formKey,
+        child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'All User Orders',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+            ),
+            backgroundColor: Colors.white,
+            body: Center(
+                child: ListView(
+              children: [
+                Column(
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.only(
+                            left: 15.0, top: 20.0, bottom: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Order History",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        )),
+                    futureAllOrders
+                  ],
+                ),
+              ],
+            ))),
+      );
+    }
   }
 }
