@@ -1,14 +1,49 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../screens/forum/question_detail_screen.dart';
 import '../models/question.dart';
+import 'package:http/http.dart' as http;
+
+import '../utils/network_config.dart';
 
 class QuestionPost extends StatefulWidget {
-  const QuestionPost({Key? key, required this.question}) : super(key: key);
+  const QuestionPost({Key? key, required this.question, required this.ifInner})
+      : super(key: key);
 
   final Question question;
 
+  final bool ifInner;
+
   @override
   _QuestionPostState createState() => _QuestionPostState();
+}
+
+// Put
+void updateQuestion(String title, String body, String userId, String questionId,
+    String date, int upvotes) async {
+  final response = await http.put(
+    Uri.parse(NetworkConfig.API_BASE_URL + 'question/' + questionId),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'id': questionId,
+      'userId': userId,
+      'title': title,
+      'body': body,
+      'date': date,
+      'upvotes': upvotes.toString()
+    }),
+  );
+
+  debugPrint(response.body);
+
+  if (response.statusCode == 204) {
+    return;
+  } else {
+    throw Exception('Failed to create Question.');
+  }
 }
 
 class _QuestionPostState extends State<QuestionPost> {
@@ -17,12 +52,23 @@ class _QuestionPostState extends State<QuestionPost> {
     return Column(children: [
       GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => PostScreen(
-                          question: widget.question,
-                        )));
+            !widget.ifInner
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => PostScreen(
+                              question: widget.question,
+                            ))).then((value) => setState(() {}))
+                : setState(() {
+                    widget.question.upvotes += 1;
+                    updateQuestion(
+                        widget.question.title,
+                        widget.question.body,
+                        widget.question.userId,
+                        widget.question.id,
+                        widget.question.createdDate,
+                        widget.question.upvotes);
+                  });
           },
           child: Container(
             constraints: const BoxConstraints(

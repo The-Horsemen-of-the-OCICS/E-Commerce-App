@@ -180,7 +180,7 @@ class _PostScreenState extends State<PostScreen> {
             children: [
               Column(
                 children: <Widget>[
-                  QuestionPost(question: widget.question),
+                  QuestionPost(question: widget.question, ifInner: true),
                   Text(
                     "Replies [${widget.question.responseCount}]",
                     style: TextStyle(
