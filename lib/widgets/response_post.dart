@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../models/response.dart';
+import 'package:http/http.dart' as http;
+
+import '../utils/network_config.dart';
 
 class ResponsePost extends StatefulWidget {
   const ResponsePost({Key? key, required this.response}) : super(key: key);
@@ -8,6 +13,33 @@ class ResponsePost extends StatefulWidget {
 
   @override
   _ResponsePostState createState() => _ResponsePostState();
+}
+
+// Put
+void updateResponse(String body, String userId, String questionId,
+    String responseId, String date, int upvotes) async {
+  final response = await http.put(
+    Uri.parse(NetworkConfig.API_BASE_URL + 'response/' + responseId),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'id': responseId,
+      'questionId': questionId,
+      'userId': userId,
+      'body': body,
+      'date': date,
+      'upvotes': upvotes.toString()
+    }),
+  );
+
+  debugPrint(response.body);
+
+  if (response.statusCode == 204) {
+    return;
+  } else {
+    throw Exception('Failed to update the response.');
+  }
 }
 
 class _ResponsePostState extends State<ResponsePost> {
@@ -97,10 +129,24 @@ class _ResponsePostState extends State<ResponsePost> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      const Icon(
-                        Icons.thumb_up,
-                        color: Colors.grey,
-                        size: 20,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            widget.response.upvotes += 1;
+                            updateResponse(
+                                widget.response.body,
+                                widget.response.userId,
+                                widget.response.questionId,
+                                widget.response.id,
+                                widget.response.createdDate,
+                                widget.response.upvotes);
+                          });
+                        },
+                        child: const Icon(
+                          Icons.thumb_up,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
                       ),
                       const SizedBox(width: 4.0),
                       Text(

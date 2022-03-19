@@ -176,7 +176,8 @@ class _ForumPageState extends State<ForumPage> {
           _questions = snapshot.data!;
           return Column(
               children: _questions
-                  .map((question) => QuestionPost(question: question))
+                  .map((question) =>
+                      QuestionPost(question: question, ifInner: false))
                   .toList());
         } else {
           return const Center(
