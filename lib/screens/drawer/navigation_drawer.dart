@@ -27,7 +27,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           text: 'Cart',
           onTap: () => Navigator.pushNamed(context, AppRoutes.cart)),
       drawerItem(
-          text: 'Profile',
+          text: 'Profile & Order',
           onTap: () => Navigator.pushNamed(context, AppRoutes.profile)),
       drawerItem(
           text: (user == null) ? "Login" : "Logout",
