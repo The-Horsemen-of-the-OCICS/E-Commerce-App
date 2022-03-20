@@ -97,8 +97,7 @@ void main() {
         const Offset(0, 50), // delta to move
       );
       await tester.pumpAndSettle();
-      await tester.enterText(
-          itemNameInputField, 'New Item' + DateTime.now().toIso8601String());
+      await tester.enterText(itemNameInputField, 'Integration Test Item');
       await tester.pumpAndSettle();
 
       // find the desc name input field
