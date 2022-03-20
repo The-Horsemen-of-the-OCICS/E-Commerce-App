@@ -46,11 +46,6 @@ void main() {
       NavigatorState navigator = tester.state(find.byType(Navigator));
       navigator.pushNamed(AppRoutes.merchantItems);
       await tester.pumpAndSettle();
-
-      // find the login button
-      final merchantItemsPage = find.byKey(const Key('merchant_items_page'));
-      await tester.pumpAndSettle();
-      expect(merchantItemsPage, findsOneWidget);
     });
   });
 }
