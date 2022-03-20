@@ -30,6 +30,7 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
   @override
   Widget build(BuildContext context) {
     final deleteItemButton = InkWell(
+        key: const Key('delete_item_key'),
         child: Container(
           child: const Icon(
             Icons.delete,
@@ -40,6 +41,7 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
           widget.removeItem(widget.item);
         });
     final editItemButton = InkWell(
+        key: const Key('edit_item_key'),
         child: Container(
           child: const Icon(
             Icons.edit,
