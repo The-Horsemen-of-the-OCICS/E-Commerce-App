@@ -97,6 +97,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
     if (user == null || user.email != 'admin@gmail.com') {
       return Scaffold(
           appBar: AppBar(
+            key: const Key('merchant_items_page'),
             title: const Text(
               'Merchant Item List',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -164,6 +165,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
       width: 630,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
+          // key: const Key('item_name_input_box'),
           maxLength: 30,
           maxLines: 1,
           controller: _name,
@@ -182,6 +184,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
       width: 630,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
+          // key: const Key('item_desc_input_box'),
           maxLength: 30,
           maxLines: 1,
           controller: _desc,
@@ -200,6 +203,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
       width: 630,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
+          // key: const Key('item_price_input_box'),
           maxLength: 30,
           maxLines: 1,
           controller: _price,
@@ -218,6 +222,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
       width: 630,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
+          // key: const Key('item_image_input_box'),
           maxLines: 1,
           controller: _image,
           decoration: const InputDecoration(
