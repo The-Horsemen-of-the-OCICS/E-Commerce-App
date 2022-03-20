@@ -57,7 +57,9 @@ void main() {
       await tester.pumpAndSettle();
       final firstDeleteBtn = categoryCellsDeleteBtns.first;
       await tester.pumpAndSettle();
-      await tester.tap(firstDeleteBtn);
+
+      // TODO delete category
+      //await tester.tap(firstDeleteBtn);
       await tester.pumpAndSettle();
 
       // should not found the deleted category
