@@ -66,6 +66,7 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
   @override
   Widget build(BuildContext context) {
     final deleteItemCategoryButton = InkWell(
+        key: Key('delete_category_button'),
         child: Container(
           child: const Icon(
             Icons.delete,
@@ -110,6 +111,7 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
         });
 
     return Container(
+      key: Key('category_cell'),
       constraints: const BoxConstraints(
         maxWidth: 800,
       ),
