@@ -75,7 +75,8 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController country = TextEditingController();
 
   bool _isEditEnabled = false;
-
+  Icon barActionIcon = const Icon(Icons.search);
+  Widget customeSearchBar = const Text("All User OrdersX");
   @override
   Widget build(BuildContext context) {
     final userAuth = Provider.of<AuthModel>(context);
@@ -121,6 +122,42 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ));
     }
+
+    final barActionIconButton = IconButton(
+        key: const Key("order_search_button"),
+        icon: barActionIcon,
+        onPressed: () {
+          setState(() {
+            if (barActionIcon.icon == Icons.search) {
+              barActionIcon = const Icon(Icons.cancel);
+              customeSearchBar = const ListTile(
+                leading: Icon(
+                  Icons.search,
+                  color: Colors.black,
+                  size: 28,
+                ),
+                title: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Type in an user email',
+                    hintStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              );
+            } else {
+              barActionIcon = const Icon(Icons.search);
+              customeSearchBar = const Text('All User Orders');
+            }
+          });
+        },
+        padding: const EdgeInsets.only(right: 15));
 
     final futureOrders = FutureBuilder<List<Order>>(
       future: fetchOrders(http.Client(), user.id),
@@ -430,10 +467,9 @@ class _ProfilePageState extends State<ProfilePage> {
         key: _formKey,
         child: Scaffold(
             appBar: AppBar(
-              title: const Text(
-                'All User Orders',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
+              title: customeSearchBar,
+              actions: [barActionIconButton],
+              centerTitle: true,
               foregroundColor: Colors.black,
               backgroundColor: Colors.white,
             ),
