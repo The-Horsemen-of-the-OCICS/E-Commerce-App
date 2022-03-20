@@ -82,9 +82,12 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController state = TextEditingController();
   TextEditingController country = TextEditingController();
 
+  TextEditingController searchText = TextEditingController();
+
   bool _isEditEnabled = false;
   Icon barActionIcon = const Icon(Icons.search);
-  Widget customeSearchBar = const Text("All User OrdersX");
+  Widget customSearchBar = const Text("All User OrdersX");
+
   @override
   Widget build(BuildContext context) {
     final userAuth = Provider.of<AuthModel>(context);
@@ -138,30 +141,43 @@ class _ProfilePageState extends State<ProfilePage> {
           setState(() {
             if (barActionIcon.icon == Icons.search) {
               barActionIcon = const Icon(Icons.cancel);
-              customeSearchBar = const ListTile(
-                leading: Icon(
-                  Icons.search,
-                  color: Colors.black,
-                  size: 28,
-                ),
-                title: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Type in an user email',
-                    hintStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontStyle: FontStyle.italic,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(
+              customSearchBar = ListTile(
+                  leading: const Icon(
+                    Icons.search,
                     color: Colors.black,
+                    size: 28,
                   ),
-                ),
-              );
+                  title: TextFormField(
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                    controller: searchText,
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Type in an user email',
+                      hintStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ));
             } else {
+              searchText.clear();
               barActionIcon = const Icon(Icons.search);
-              customeSearchBar = const Text('All User Orders');
+              customSearchBar = const Text('All User Orders');
             }
           });
         },
@@ -190,7 +206,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     final futureAllOrders = FutureBuilder<List<Order>>(
-      future: fetchAllOrders(http.Client()),
+      future: searchText.text.isNotEmpty
+          ? fetchOrdersByEmail(http.Client(), searchText.text)
+          : fetchAllOrders(http.Client()),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           debugPrint(snapshot.error.toString());
@@ -475,7 +493,7 @@ class _ProfilePageState extends State<ProfilePage> {
         key: _formKey,
         child: Scaffold(
             appBar: AppBar(
-              title: customeSearchBar,
+              title: customSearchBar,
               actions: [barActionIconButton],
               centerTitle: true,
               foregroundColor: Colors.black,
