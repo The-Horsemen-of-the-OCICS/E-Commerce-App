@@ -96,27 +96,23 @@ class MerchantEditCategory extends StatelessWidget {
                 fontWeight: FontWeight.bold)));
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Edit Merchant Category',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          'Edit Merchant Category',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
+        foregroundColor: Colors.black,
         backgroundColor: Colors.white,
-        body: Center(
-            child: ListView(
-          children: [
-            Column(
-              children: <Widget>[
-                nameEditBox,
-                iconUrlEditBox,
-                editCategoryButton
-              ],
-            ),
-          ],
-        )),
-        drawer: const NavigationDrawer());
+      ),
+      backgroundColor: Colors.white,
+      body: Center(
+          child: ListView(
+        children: [
+          Column(
+            children: <Widget>[nameEditBox, iconUrlEditBox, editCategoryButton],
+          ),
+        ],
+      )),
+    );
   }
 }

@@ -200,30 +200,30 @@ class MerchantEditItem extends StatelessWidget {
                 fontWeight: FontWeight.bold)));
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Edit Merchant Item',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          'Edit Merchant Item',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
+        foregroundColor: Colors.black,
         backgroundColor: Colors.white,
-        body: Center(
-            child: ListView(
-          children: [
-            Column(
-              children: <Widget>[
-                nameEditBox,
-                descEditBox,
-                priceInputBox,
-                imageUrlEditBox,
-                categorySelectionBox,
-                submitItemButton
-              ],
-            ),
-          ],
-        )),
-        drawer: const NavigationDrawer());
+      ),
+      backgroundColor: Colors.white,
+      body: Center(
+          child: ListView(
+        children: [
+          Column(
+            children: <Widget>[
+              nameEditBox,
+              descEditBox,
+              priceInputBox,
+              imageUrlEditBox,
+              categorySelectionBox,
+              submitItemButton
+            ],
+          ),
+        ],
+      )),
+    );
   }
 }
