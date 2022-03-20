@@ -65,15 +65,14 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
 
   @override
   Widget build(BuildContext context) {
-    final deleteItemCategoryButton = ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.all(10),
-            onPrimary: Colors.red,
-            primary: Colors.red,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(2)),
-            )),
-        onPressed: () {
+    final deleteItemCategoryButton = InkWell(
+        child: Container(
+          child: const Icon(
+            Icons.delete,
+            size: 25.0,
+          ),
+        ),
+        onTap: () {
           widget.removeItemCategory(widget.itemCategory);
           fetchItemsByCategory(http.Client(), widget.itemCategory.id)
               .then((categories) {
@@ -89,22 +88,16 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
                   "-1");
             }
           });
-        },
-        child: const Text('Delete',
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)));
+        });
 
-    final editItemCategoryButton = ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.all(10),
-            onPrimary: Colors.blue,
-            primary: Colors.blue,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(2)),
-            )),
-        onPressed: () {
+    final editItemCategoryButton = InkWell(
+        child: Container(
+          child: const Icon(
+            Icons.edit,
+            size: 25.0,
+          ),
+        ),
+        onTap: () {
           Navigator.pushNamed(
             context,
             MerchantEditCategory.routeName,
@@ -114,12 +107,7 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
                 widget.itemCategory.icon,
                 widget.editItemCategory),
           );
-        },
-        child: const Text('Edit',
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)));
+        });
 
     return Container(
       constraints: const BoxConstraints(
@@ -171,8 +159,16 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                  children: [deleteItemCategoryButton, editItemCategoryButton]),
+              Row(children: [
+                deleteItemCategoryButton,
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                ),
+                editItemCategoryButton,
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                ),
+              ]),
             ],
           )
         ],

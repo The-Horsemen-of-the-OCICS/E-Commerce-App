@@ -29,31 +29,24 @@ class MerchantItemCell extends StatefulWidget {
 class _MerchantItemCellState extends State<MerchantItemCell> {
   @override
   Widget build(BuildContext context) {
-    final deleteItemButton = ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            onPrimary: Colors.red,
-            primary: Colors.red,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(2)),
-            )),
-        onPressed: () {
+    final deleteItemButton = InkWell(
+        child: Container(
+          child: const Icon(
+            Icons.delete,
+            size: 25.0,
+          ),
+        ),
+        onTap: () {
           widget.removeItem(widget.item);
-        },
-        child: const Text('Delete',
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)));
-
-    final editItemButton = ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.all(10),
-            onPrimary: Colors.blue,
-            primary: Colors.blue,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(2)),
-            )),
-        onPressed: () {
+        });
+    final editItemButton = InkWell(
+        child: Container(
+          child: const Icon(
+            Icons.edit,
+            size: 25.0,
+          ),
+        ),
+        onTap: () {
           Navigator.pushNamed(
             context,
             MerchantEditItem.routeName,
@@ -67,12 +60,7 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
                 widget.categorise,
                 widget.editItem),
           );
-        },
-        child: const Text('Edit',
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)));
+        });
 
     return Container(
       constraints: const BoxConstraints(
@@ -154,7 +142,16 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(children: [deleteItemButton, editItemButton]),
+              Row(children: [
+                deleteItemButton,
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                ),
+                editItemButton,
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                ),
+              ]),
             ],
           )
         ],
