@@ -50,27 +50,28 @@ void main() {
       // find the category container in the list
       final categoryCells =
           tester.widgetList(find.byKey(const Key("category_cell")));
+      print('xxx .>>> ${categoryCells.length}');
       await tester.pumpAndSettle();
       // tap the delete button
       final categoryCellsDeleteBtns =
-          tester.widgetList(find.byKey(const Key("category_cell")));
-      await tester.pumpAndSettle();
-      final firstDeleteBtn = categoryCellsDeleteBtns.first;
+          tester.widgetList(find.byKey(const Key("delete_category_button")));
       await tester.pumpAndSettle();
 
-      // TODO delete category
-      //await tester.tap(firstDeleteBtn);
+      // delete category
+      final fistDeleteBtn = find.byWidget(categoryCellsDeleteBtns.first);
+      await tester.pumpAndSettle();
+      await tester.tap(fistDeleteBtn);
       await tester.pumpAndSettle();
 
       // should not found the deleted category
       final categoryCellsNew =
           tester.widgetList(find.byKey(const Key("category_cell")));
-
+      print('xxx .>>> ${categoryCellsNew.length}');
       await tester.pumpAndSettle();
       expect(categoryCellsNew.length, categoryCells.length - 1);
 
       // 2s delay to next test
-      await tester.pump(new Duration(seconds: 2));
+      await tester.pump(new Duration(seconds: 20));
     });
   });
 }
