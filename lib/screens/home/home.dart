@@ -46,7 +46,14 @@ class Home extends StatelessWidget {
         ],
       ),
       drawer: const NavigationDrawer(),
-      body: const BuyerItemsList(),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(
+            maxWidth: 1000,
+          ),
+          child: const BuyerItemsList(),
+        ),
+      ),
     );
   }
 }

@@ -30,6 +30,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           text: 'Profile & Order',
           onTap: () => Navigator.pushNamed(context, AppRoutes.profile)),
       drawerItem(
+          text: 'Forum',
+          onTap: () => Navigator.pushNamed(context, AppRoutes.forum)),
+      drawerItem(
           text: (user == null) ? "Login" : "Logout",
           onTap: () => (user == null)
               ? Navigator.pushNamed(context, AppRoutes.login)
@@ -41,7 +44,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                     userAuth.logout();
                     Navigator.pop(context);
                   })
-                })
+                }),
     ];
     List<Widget> adminItems = [
       drawerItem(

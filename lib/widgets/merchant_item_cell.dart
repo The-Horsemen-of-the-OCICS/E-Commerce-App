@@ -75,6 +75,9 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
                 fontWeight: FontWeight.bold)));
 
     return Container(
+      constraints: const BoxConstraints(
+        maxWidth: 800,
+      ),
       decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: shadow,
@@ -113,11 +116,8 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
               Container(
                   margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
                   padding: EdgeInsets.all(8),
-                  child: CustomText(
-                    text: widget.item.name,
-                    size: getProportionateScreenWidth(14),
-                    weight: FontWeight.bold,
-                  )),
+                  child: Text(widget.item.desc,
+                      style: Theme.of(context).textTheme.titleLarge)),
               SizedBox(height: 10),
               Container(
                 padding: EdgeInsets.all(8),
