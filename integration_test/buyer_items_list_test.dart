@@ -21,6 +21,33 @@ void main() {
       await tester.pumpAndSettle();
       await tester.pump(const Duration(seconds: 1));
 
+      // // find two input fields in login page
+      // final loginTextFormsFind = find.byType(TextFormField);
+      // expect(loginTextFormsFind, findsNWidgets(2));
+
+      // final emailFormFind = loginTextFormsFind.first;
+      // final passwordFormFind = loginTextFormsFind.last;
+
+      // // enter a valid credential to the form fields
+      // await tester.enterText(emailFormFind, 'user1@gmail.com');
+      // await tester.pumpAndSettle();
+      // await tester.enterText(passwordFormFind, '123456');
+      // await tester.pumpAndSettle();
+
+      // // try login
+      // await tester.tap(find.byType(ElevatedButton).last);
+      // await tester.pumpAndSettle();
+      // await tester.pump(const Duration(seconds: 3));
+
+      // // Find add to cart button
+      // final loginedCartButton =
+      //     find.byKey(const Key('home_add_to_cart_button_1'));
+      // expect(loginedCartButton, findsOneWidget);
+      // await tester.tap(loginedCartButton.first);
+      // await tester.pumpAndSettle();
+      // await tester.pump(const Duration(seconds: 1));
+
+      // Added to cart successfully toast displayed
       expect(find.byType(SnackBar), findsOneWidget);
 
       await tester.pump(const Duration(seconds: 3));

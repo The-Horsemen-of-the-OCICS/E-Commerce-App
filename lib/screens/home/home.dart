@@ -4,9 +4,13 @@ import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 import '../../../size_config.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
+  @override
+  _HomeState createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

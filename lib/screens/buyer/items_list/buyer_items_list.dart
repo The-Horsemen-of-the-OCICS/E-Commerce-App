@@ -13,6 +13,10 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import '../../../models/auth.dart';
+import '../../../models/user.dart';
+import '../../login.dart';
+
 class BuyerItemsList extends StatefulWidget {
   const BuyerItemsList({Key? key}) : super(key: key);
 
@@ -130,6 +134,14 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
                     IconButton(
                         key: Key("item_detail_add_to_cart_button_${item.id}"),
                         onPressed: () {
+                          // if (user == null) {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const MyLoginPage()),
+                          //   ).then((value) {});
+                          //   return;
+                          // }
                           cartList.add(CartItem(
                             id: item.id.toString(),
                             name: item.name,
@@ -151,6 +163,8 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
 
   @override
   Widget build(BuildContext context) {
+    // User? user = Provider.of<AuthModel>(context).getCurrentUser();
+
     final category =
         ModalRoute.of(context)!.settings.arguments as ItemCategory?;
 
@@ -176,264 +190,303 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
 
     return Consumer<CartList>(builder: (context, cartList, _) {
       return Scaffold(
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverList(
-                key: const Key('buyer_items_list'),
-                delegate: SliverChildListDelegate([
-                  SizedBox(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            category != null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 15, top: 30),
-                                    child: Text(category.name,
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.left),
-                                  )
-                                : const Padding(
-                                    padding: EdgeInsets.only(left: 15, top: 30),
-                                    child: Text('Categories',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.left),
-                                  ),
-                            category != null
-                                ? const SizedBox(height: 0)
-                                : SizedBox(
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      padding: const EdgeInsets.only(
-                                          left: 25, top: 25, right: 25),
-                                      itemCount: _categories.length,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: (() {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const BuyerItemsList(),
-                                                settings: RouteSettings(
-                                                  arguments: _categories[index],
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                          child: Padding(
-                                            padding:
-                                                index == _categories.length - 1
+          appBar: category != null
+              ? AppBar(
+                  title: const Text(
+                    'Category',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  foregroundColor: Colors.black,
+                  backgroundColor: Colors.white)
+              : null,
+          body: Center(
+              child: Container(
+            constraints: const BoxConstraints(maxWidth: 1000),
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverList(
+                    key: const Key('buyer_items_list'),
+                    delegate: SliverChildListDelegate([
+                      SizedBox(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                category != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 15, top: 30),
+                                        child: Text(category.name,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.left),
+                                      )
+                                    : const Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 15, top: 30),
+                                        child: Text('Categories',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.left),
+                                      ),
+                                category != null
+                                    ? const SizedBox(height: 0)
+                                    : SizedBox(
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          padding: const EdgeInsets.only(
+                                              left: 25, top: 25, right: 25),
+                                          itemCount: _categories.length,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: (() {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const BuyerItemsList(),
+                                                    settings: RouteSettings(
+                                                      arguments:
+                                                          _categories[index],
+                                                    ),
+                                                  ),
+                                                );
+                                              }),
+                                              child: Padding(
+                                                padding: index ==
+                                                        _categories.length - 1
                                                     ? EdgeInsets.zero
                                                     : const EdgeInsets.only(
                                                         right: 40),
-                                            child: Column(children: [
-                                              Image.network(
-                                                  _categories[index].icon,
-                                                  width: 30,
-                                                  height: 30),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10),
-                                                child: Text(
-                                                    _categories[index].name,
-                                                    style: const TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                    textAlign:
-                                                        TextAlign.center),
-                                              )
-                                            ]),
-                                          ),
-                                        );
-                                      },
+                                                child: Column(children: [
+                                                  Image.network(
+                                                      _categories[index].icon,
+                                                      width: 30,
+                                                      height: 30),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 10),
+                                                    child: Text(
+                                                        _categories[index].name,
+                                                        style: const TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                  )
+                                                ]),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        height: 90,
+                                      )
+                              ]),
+                          height: category != null ? 90 : 180)
+                    ])),
+                PagedSliverGrid(
+                    pagingController: _pagingController,
+                    builderDelegate: PagedChildBuilderDelegate<Item>(
+                      itemBuilder: (context, item, index) {
+                        if (index % 2 == 0) {
+                          return GestureDetector(
+                            onTap: (() {
+                              showItemDetail(context, item, cartList);
+                            }),
+                            child: Card(
+                              margin:
+                                  const EdgeInsets.only(left: 15, right: 7.5),
+                              color: Colors.white,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: item.image,
+                                      width: (screenSize.width - 45) / 2,
+                                      fit: BoxFit.cover,
                                     ),
-                                    height: 90,
-                                  )
-                          ]),
-                      height: category != null ? 90 : 180)
-                ])),
-            PagedSliverGrid(
-                pagingController: _pagingController,
-                builderDelegate: PagedChildBuilderDelegate<Item>(
-                  itemBuilder: (context, item, index) {
-                    if (index % 2 == 0) {
-                      return GestureDetector(
-                        onTap: (() {
-                          showItemDetail(context, item, cartList);
-                        }),
-                        child: Card(
-                          margin: const EdgeInsets.only(left: 15, right: 7.5),
-                          color: Colors.white,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: item.image,
-                                  width: (screenSize.width - 45) / 2,
-                                  fit: BoxFit.cover,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 15, top: 10),
-                                  child: Text(item.name,
-                                      style: const TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 15, top: 5),
-                                  child: Text(item.desc,
-                                      style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, top: 10, right: 15),
-                                  child: Row(
-                                    children: [
-                                      Text("\$${item.price}",
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, top: 10),
+                                      child: Text(item.name,
                                           style: const TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 239, 83, 80),
-                                              fontSize: 17,
+                                              color: Colors.black87,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold)),
-                                      const Spacer(),
-                                      IconButton(
-                                          key: Key(
-                                              "home_add_to_cart_button_${item.id}"),
-                                          onPressed: () {
-                                            cartList.add(CartItem(
-                                              id: item.id.toString(),
-                                              name: item.name,
-                                              itemPrice: item.price.toDouble(),
-                                              image: item.image,
-                                              quantity: 1,
-                                            ));
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: const Text(
-                                                    'Added to cart successfully'),
-                                                action: SnackBarAction(
-                                                  label: '',
-                                                  onPressed: () {
-                                                    // Code to execute.
-                                                  },
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          icon: const Icon(
-                                              Icons.add_shopping_cart))
-                                    ],
-                                  ),
-                                )
-                              ]),
-                        ),
-                      );
-                    } else {
-                      return GestureDetector(
-                        onTap: (() {
-                          showItemDetail(context, item, cartList);
-                        }),
-                        child: Card(
-                          margin: const EdgeInsets.only(left: 7.5, right: 15),
-                          color: Colors.white,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: item.image,
-                                  width: (screenSize.width - 45) / 2,
-                                  fit: BoxFit.cover,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 15, top: 10),
-                                  child: Text(item.name,
-                                      style: const TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 15, top: 5),
-                                  child: Text(item.desc,
-                                      style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, top: 10, right: 15),
-                                  child: Row(
-                                    children: [
-                                      Text("\$${item.price}",
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, top: 5),
+                                      child: Text(item.desc,
                                           style: const TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 239, 83, 80),
-                                              fontSize: 17,
+                                              color: Colors.grey,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal)),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, top: 10, right: 15),
+                                      child: Row(
+                                        children: [
+                                          Text("\$${item.price}",
+                                              style: const TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 239, 83, 80),
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.bold)),
+                                          const Spacer(),
+                                          IconButton(
+                                              key: Key(
+                                                  "home_add_to_cart_button_${item.id}"),
+                                              onPressed: () {
+                                                // if (user == null) {
+                                                //   Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) =>
+                                                //             const MyLoginPage()),
+                                                //   ).then((value) {});
+                                                //   return;
+                                                // }
+                                                cartList.add(CartItem(
+                                                  id: item.id.toString(),
+                                                  name: item.name,
+                                                  itemPrice:
+                                                      item.price.toDouble(),
+                                                  image: item.image,
+                                                  quantity: 1,
+                                                ));
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: const Text(
+                                                        'Added to cart successfully'),
+                                                    action: SnackBarAction(
+                                                      label: '',
+                                                      onPressed: () {
+                                                        // Code to execute.
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                  Icons.add_shopping_cart))
+                                        ],
+                                      ),
+                                    )
+                                  ]),
+                            ),
+                          );
+                        } else {
+                          return GestureDetector(
+                            onTap: (() {
+                              showItemDetail(context, item, cartList);
+                            }),
+                            child: Card(
+                              margin:
+                                  const EdgeInsets.only(left: 7.5, right: 15),
+                              color: Colors.white,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: item.image,
+                                      width: (screenSize.width - 45) / 2,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, top: 10),
+                                      child: Text(item.name,
+                                          style: const TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold)),
-                                      const Spacer(),
-                                      IconButton(
-                                          onPressed: () {
-                                            cartList.add(CartItem(
-                                              id: item.id.toString(),
-                                              name: item.name,
-                                              itemPrice: item.price.toDouble(),
-                                              image: item.image,
-                                              quantity: 1,
-                                            ));
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: const Text(
-                                                    'Added to cart successfully'),
-                                                action: SnackBarAction(
-                                                  label: '',
-                                                  onPressed: () {
-                                                    // Code to execute.
-                                                  },
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          icon: const Icon(
-                                              Icons.add_shopping_cart))
-                                    ],
-                                  ),
-                                )
-                              ]),
-                        ),
-                      );
-                    }
-                  },
-                ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 0,
-                    mainAxisSpacing: 15,
-                    childAspectRatio: 0.63))
-          ],
-        ),
-      );
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, top: 5),
+                                      child: Text(item.desc,
+                                          style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal)),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, top: 10, right: 15),
+                                      child: Row(
+                                        children: [
+                                          Text("\$${item.price}",
+                                              style: const TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 239, 83, 80),
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.bold)),
+                                          const Spacer(),
+                                          IconButton(
+                                              onPressed: () {
+                                                // if (user == null) {
+                                                //   Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) =>
+                                                //             const MyLoginPage()),
+                                                //   ).then((value) {});
+                                                //   return;
+                                                // }
+                                                cartList.add(CartItem(
+                                                  id: item.id.toString(),
+                                                  name: item.name,
+                                                  itemPrice:
+                                                      item.price.toDouble(),
+                                                  image: item.image,
+                                                  quantity: 1,
+                                                ));
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: const Text(
+                                                        'Added to cart successfully'),
+                                                    action: SnackBarAction(
+                                                      label: '',
+                                                      onPressed: () {
+                                                        // Code to execute.
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                  Icons.add_shopping_cart))
+                                        ],
+                                      ),
+                                    )
+                                  ]),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 0,
+                            mainAxisSpacing: 15,
+                            childAspectRatio: 0.63))
+              ],
+            ),
+          )));
     });
   }
 
