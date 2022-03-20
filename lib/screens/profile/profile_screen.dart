@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   bool _isEditEnabled = false;
   Icon barActionIcon = const Icon(Icons.search);
-  Widget customSearchBar = const Text("All User OrdersX");
+  Widget customSearchBar = const Text("All User Orders");
 
   @override
   Widget build(BuildContext context) {
@@ -148,8 +148,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     size: 28,
                   ),
                   title: TextFormField(
+                    key: const Key("order_search_textform"),
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(16),
+                      LengthLimitingTextInputFormatter(30),
                     ],
                     controller: searchText,
                     onChanged: (val) {
