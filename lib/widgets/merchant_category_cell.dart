@@ -92,6 +92,7 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
         });
 
     final editItemCategoryButton = InkWell(
+        key: Key('edit_category_button'),
         child: Container(
           child: const Icon(
             Icons.edit,

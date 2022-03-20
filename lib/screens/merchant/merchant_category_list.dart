@@ -138,6 +138,7 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
       width: 630,
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
+          key: const Key('catgory_name_input_box'),
           maxLength: 30,
           maxLines: 1,
           controller: _name,
@@ -153,6 +154,7 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
     );
 
     final submitCategoryButton = ElevatedButton(
+        key: const Key('catgory_submit_button'),
         style: ElevatedButton.styleFrom(
             onPrimary: Colors.black,
             primary: Colors.black,
@@ -182,6 +184,7 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
                 fontWeight: FontWeight.bold)));
 
     final iconUrlInputBox = Container(
+      key: const Key('category_image_input_box'),
       width: 630,
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
