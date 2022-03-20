@@ -36,7 +36,7 @@ class InvoiceGenerator {
                 width: 50,
                 child: BarcodeWidget(
                   barcode: Barcode.qrCode(),
-                  data: order.id,
+                  data: order.toString(),
                 ),
               ),
             ],
@@ -56,7 +56,7 @@ class InvoiceGenerator {
   static Widget buildCustomerAddress(Order order) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('UserId: ${order.userId}'),
+          Text('Customer name: ${order.userName}'),
           Text(order.shippingAddress),
         ],
       );

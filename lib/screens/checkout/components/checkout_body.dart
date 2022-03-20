@@ -34,6 +34,8 @@ void createNewOrder(
   final postBody = jsonEncode(<String, dynamic>{
     'id': newId,
     'userId': user.id,
+    'userName': user.name,
+    'userEmail': user.email,
     'cartList': cartList.cartItems,
     'overallPrice': overallPrice,
     'orderDate': orderDate,
@@ -43,6 +45,8 @@ void createNewOrder(
   await InvoiceGenerator.generate(Order(
       id: newId,
       userId: user.id,
+      userName: user.name,
+      userEmail: user.email,
       cartList: cartList.cartItems,
       overallPrice: overallPrice,
       orderDate: orderDate,
