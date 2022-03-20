@@ -25,6 +25,14 @@ Future<List<Order>> fetchOrders(http.Client client, String userId) async {
   return compute(parseOrders, response.body);
 }
 
+// GET by user email
+Future<List<Order>> fetchOrdersByEmail(
+    http.Client client, String userEmail) async {
+  final response = await client
+      .get(Uri.parse(NetworkConfig.API_BASE_URL + 'order/email/' + userEmail));
+  return compute(parseOrders, response.body);
+}
+
 // GETALL
 Future<List<Order>> fetchAllOrders(http.Client client) async {
   final response =
