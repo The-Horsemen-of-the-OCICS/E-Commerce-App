@@ -9,44 +9,44 @@ import 'package:ecommerceapp/main.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   group('Merchant Items', () {
-    // testWidgets('As a merchant, I can view a list of items',
-    //     (WidgetTester tester) async {
-    //   app.main();
-    //   await tester.pumpAndSettle();
+    testWidgets('As a merchant, I can view a list of items',
+        (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
 
-    //   // find login button on home page
-    //   final homeLoginButtonFind = find.byKey(const Key("home_login_button"));
-    //   expect(homeLoginButtonFind, findsOneWidget);
+      // find login button on home page
+      final homeLoginButtonFind = find.byKey(const Key("home_login_button"));
+      expect(homeLoginButtonFind, findsOneWidget);
 
-    //   // tap and enter login page
-    //   await tester.tap(homeLoginButtonFind);
-    //   await tester.pumpAndSettle();
+      // tap and enter login page
+      await tester.tap(homeLoginButtonFind);
+      await tester.pumpAndSettle();
 
-    //   // find two input fields
-    //   final textFormsFind = find.byType(TextFormField);
-    //   expect(textFormsFind, findsNWidgets(2));
+      // find two input fields
+      final textFormsFind = find.byType(TextFormField);
+      expect(textFormsFind, findsNWidgets(2));
 
-    //   final emailFormFind = textFormsFind.first;
-    //   final passwordFormFind = textFormsFind.last;
+      final emailFormFind = textFormsFind.first;
+      final passwordFormFind = textFormsFind.last;
 
-    //   await tester.enterText(emailFormFind, 'admin@gmail.com');
-    //   await tester.pumpAndSettle();
-    //   await tester.enterText(passwordFormFind, '123456');
-    //   await tester.pumpAndSettle();
+      await tester.enterText(emailFormFind, 'admin@gmail.com');
+      await tester.pumpAndSettle();
+      await tester.enterText(passwordFormFind, '123456');
+      await tester.pumpAndSettle();
 
-    //   // find the login button
-    //   final loginButtonFind = find.byType(ElevatedButton);
-    //   expect(loginButtonFind, findsOneWidget);
+      // find the login button
+      final loginButtonFind = find.byType(ElevatedButton);
+      expect(loginButtonFind, findsOneWidget);
 
-    //   // try login
-    //   await tester.tap(find.byType(ElevatedButton).last);
-    //   await tester.pumpAndSettle();
+      // try login
+      await tester.tap(find.byType(ElevatedButton).last);
+      await tester.pumpAndSettle();
 
-    //   // enter merchant items page
-    //   NavigatorState navigator = tester.state(find.byType(Navigator));
-    //   navigator.pushNamed(AppRoutes.merchantItems);
-    //   await tester.pumpAndSettle();
-    // });
+      // enter merchant items page
+      NavigatorState navigator = tester.state(find.byType(Navigator));
+      navigator.pushNamed(AppRoutes.merchantItems);
+      await tester.pumpAndSettle();
+    });
 
     testWidgets('As a merchant, I can add a new item',
         (WidgetTester tester) async {
@@ -97,8 +97,7 @@ void main() {
         const Offset(0, 50), // delta to move
       );
       await tester.pumpAndSettle();
-      await tester.enterText(
-          itemNameInputField, 'New Item' + DateTime.now().toIso8601String());
+      await tester.enterText(itemNameInputField, 'Integration Test Item');
       await tester.pumpAndSettle();
 
       // find the desc name input field
@@ -170,6 +169,119 @@ void main() {
           find.byKey(const Key('submit_item_button'));
 
       await tester.tap(submitItemButton);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('As a merchant, I can edit an item',
+        (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      // find login button on home page
+      final homeLoginButtonFind = find.byKey(const Key("home_login_button"));
+      expect(homeLoginButtonFind, findsOneWidget);
+
+      // tap and enter login page
+      await tester.tap(homeLoginButtonFind);
+      await tester.pumpAndSettle();
+
+      // find two input fields
+      final textFormsFind = find.byType(TextFormField);
+      expect(textFormsFind, findsNWidgets(2));
+
+      final emailFormFind = textFormsFind.first;
+      final passwordFormFind = textFormsFind.last;
+
+      await tester.enterText(emailFormFind, 'admin@gmail.com');
+      await tester.pumpAndSettle();
+      await tester.enterText(passwordFormFind, '123456');
+      await tester.pumpAndSettle();
+
+      // find the login button
+      final loginButtonFind = find.byType(ElevatedButton);
+      expect(loginButtonFind, findsOneWidget);
+
+      // try login
+      await tester.tap(find.byType(ElevatedButton).last);
+      await tester.pumpAndSettle();
+
+      // enter merchant items page
+      NavigatorState navigator = tester.state(find.byType(Navigator));
+      navigator.pushNamed(AppRoutes.merchantItems);
+      await tester.pumpAndSettle();
+
+      // find the item name input field
+      final Finder editedItem = find.text("Integration Test Item");
+      await tester.ensureVisible(editedItem);
+      await tester.pumpAndSettle();
+      await tester.dragUntilVisible(
+        editedItem, // what you want to find
+        find.byType(SingleChildScrollView), // widget you want to scroll
+        const Offset(0, 50), // delta to move
+      );
+      await tester.pumpAndSettle();
+
+      final Finder editItemButton = find.byKey(const Key('edit_item_key')).last;
+      await tester.ensureVisible(editItemButton);
+      await tester.pumpAndSettle();
+      await tester.tap(editItemButton);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('As a merchant, I can delete an item',
+        (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      // find login button on home page
+      final homeLoginButtonFind = find.byKey(const Key("home_login_button"));
+      expect(homeLoginButtonFind, findsOneWidget);
+
+      // tap and enter login page
+      await tester.tap(homeLoginButtonFind);
+      await tester.pumpAndSettle();
+
+      // find two input fields
+      final textFormsFind = find.byType(TextFormField);
+      expect(textFormsFind, findsNWidgets(2));
+
+      final emailFormFind = textFormsFind.first;
+      final passwordFormFind = textFormsFind.last;
+
+      await tester.enterText(emailFormFind, 'admin@gmail.com');
+      await tester.pumpAndSettle();
+      await tester.enterText(passwordFormFind, '123456');
+      await tester.pumpAndSettle();
+
+      // find the login button
+      final loginButtonFind = find.byType(ElevatedButton);
+      expect(loginButtonFind, findsOneWidget);
+
+      // try login
+      await tester.tap(find.byType(ElevatedButton).last);
+      await tester.pumpAndSettle();
+
+      // enter merchant items page
+      NavigatorState navigator = tester.state(find.byType(Navigator));
+      navigator.pushNamed(AppRoutes.merchantItems);
+      await tester.pumpAndSettle();
+
+      // find the item name input field
+      final Finder deletedItem = find.text("Integration Test Item");
+      await tester.ensureVisible(deletedItem);
+      await tester.pumpAndSettle();
+      await tester.dragUntilVisible(
+        deletedItem, // what you want to find
+        find.byType(SingleChildScrollView), // widget you want to scroll
+        const Offset(0, 50), // delta to move
+      );
+      await tester.pumpAndSettle();
+
+      final Finder deleteItemButton =
+          find.byKey(const Key('delete_item_key')).last;
+      await tester.ensureVisible(deleteItemButton);
+      await tester.pumpAndSettle();
+      await tester.tap(deleteItemButton);
       await tester.pumpAndSettle();
     });
   });
