@@ -58,7 +58,7 @@ class _BuyerItemsListState extends State<BuyerItemsList> {
   }
 
   Future<List<Item>> fetchItemsByCategory(
-      http.Client client, int categoryId) async {
+      http.Client client, String categoryId) async {
     final response = await client.get(Uri.parse(
         NetworkConfig.API_BASE_URL + 'item/category/' + categoryId.toString()));
 

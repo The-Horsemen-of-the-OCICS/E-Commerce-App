@@ -44,12 +44,12 @@ class AuthModel {
   Future<bool> login(String email, String password) async {
     if (email == "admin@gmail.com" && password == "123456") {
       _loginType = Type.merchant;
-      _user = await fetchUser(http.Client(), "0");
+      _user = await fetchUser(http.Client(), "623d5633607835026d13135f");
       _isLoggedIn = true;
       return true;
     } else if (email == "user1@gmail.com" && password == "123456") {
       _loginType = Type.buyer;
-      _user = await fetchUser(http.Client(), "1");
+      _user = await fetchUser(http.Client(), "623d56e3607835026d131360");
       _isLoggedIn = true;
       return true;
     }

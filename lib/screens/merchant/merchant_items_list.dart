@@ -86,7 +86,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
         .toList();
   }
 
-  Future<void> deleteItemById(http.Client client, int id) async {
+  Future<void> deleteItemById(http.Client client, String id) async {
     await client.delete(
         Uri.parse(NetworkConfig.API_BASE_URL + 'item/' + id.toString()));
   }
@@ -137,7 +137,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
     if (_merchantCategories.isEmpty) {
       fetchCategories(http.Client()).then((categories) {
         setState(() {
-          categories.insert(0, ItemCategory(id: -1, name: "-", icon: ""));
+          categories.insert(0, ItemCategory(id: "-1", name: "-", icon: ""));
           _merchantCategories = categories;
         });
       });
@@ -248,7 +248,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
           (ItemCategory itemCategory) {
             return DropdownMenuItem(
               child: Text(itemCategory.name),
-              value: itemCategory.id.toString(),
+              value: itemCategory.id,
             );
           },
         ).toList(),
@@ -276,12 +276,12 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             Item item = Item(
-                id: Random().nextInt(999999),
+                id: "temp",
                 name: _name.text,
                 desc: _desc.text,
                 price: double.parse(_price.text),
                 image: _image.text,
-                categoryId: int.parse(_categoryId));
+                categoryId: _categoryId);
 
             createItem(http.Client(), item).then((createdItem) {
               setState(() {

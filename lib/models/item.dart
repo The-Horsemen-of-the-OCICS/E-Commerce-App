@@ -1,10 +1,10 @@
 class Item {
-  int id;
+  String id;
   String name;
   String desc;
   double price;
   String image;
-  int categoryId;
+  String categoryId;
 
   Item(
       {required this.id,
@@ -15,13 +15,14 @@ class Item {
       required this.categoryId});
 
   factory Item.fromJson(Map<String, dynamic> json) {
+    print(json);
     return Item(
-      id: int.parse(json['id'] as String),
+      id: json['id'] as String,
       name: json['name'] as String,
       desc: json['description'] as String,
       price: json['price'] as double,
       image: json['image'] as String,
-      categoryId: int.parse(json['categoryId'] as String),
+      categoryId: json['categoryId'],
     );
   }
 }

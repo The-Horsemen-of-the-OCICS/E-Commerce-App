@@ -13,7 +13,7 @@ class MerchantEditCategory extends StatelessWidget {
   static const routeName = '/merchant/editCategory';
 
   Future<void> editCategoryById(
-      http.Client client, int id, String newName, String newIcon) async {
+      http.Client client, String id, String newName, String newIcon) async {
     final response = await client.put(
       Uri.parse(NetworkConfig.API_BASE_URL + 'category/' + id.toString()),
       headers: <String, String>{
