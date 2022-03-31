@@ -29,9 +29,9 @@ class AuthModel {
     _isLoggedIn = false;
   }
 
-  Future<User> fetchUser(http.Client client, String userId) async {
+  Future<User> fetchUser(http.Client client, String email) async {
     final response = await client
-        .get(Uri.parse(NetworkConfig.API_BASE_URL + 'user/$userId'));
+        .get(Uri.parse(NetworkConfig.API_BASE_URL + 'user/email/$email'));
     return compute(parseUser, response.body);
   }
 
@@ -44,12 +44,12 @@ class AuthModel {
   Future<bool> login(String email, String password) async {
     if (email == "admin@gmail.com" && password == "123456") {
       _loginType = Type.merchant;
-      _user = await fetchUser(http.Client(), "0");
+      _user = await fetchUser(http.Client(), email);
       _isLoggedIn = true;
       return true;
-    } else if (email == "user1@gmail.com" && password == "123456") {
+    } else if ((email == "user1@gmail.com" || email == "user2@gmail.com") && password == "123456") {
       _loginType = Type.buyer;
-      _user = await fetchUser(http.Client(), "1");
+      _user = await fetchUser(http.Client(), email);
       _isLoggedIn = true;
       return true;
     }
