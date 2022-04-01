@@ -56,12 +56,12 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
               'Content-Type': 'application/json; charset=UTF-8',
             },
             body: jsonEncode(<String, dynamic>{
-              'id': item.id.toString(),
+              'id': item.id,
               'name': item.name,
               'description': item.desc,
               'price': item.price,
               'image': item.image,
-              'categoryId': item.categoryId.toString(),
+              'categoryId': item.categoryId,
               'date': DateTime.now().toString()
             }));
 
@@ -86,9 +86,8 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
         .toList();
   }
 
-  Future<void> deleteItemById(http.Client client, int id) async {
-    await client.delete(
-        Uri.parse(NetworkConfig.API_BASE_URL + 'item/' + id.toString()));
+  Future<void> deleteItemById(http.Client client, String id) async {
+    await client.delete(Uri.parse(NetworkConfig.API_BASE_URL + 'item/' + id));
   }
 
   @override
@@ -137,7 +136,7 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
     if (_merchantCategories.isEmpty) {
       fetchCategories(http.Client()).then((categories) {
         setState(() {
-          categories.insert(0, ItemCategory(id: -1, name: "-", icon: ""));
+          categories.insert(0, ItemCategory(id: "-1", name: "-", icon: ""));
           _merchantCategories = categories;
         });
       });
@@ -276,12 +275,12 @@ class _MerchantItemsListState extends State<MerchantItemsList> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             Item item = Item(
-                id: Random().nextInt(999999),
+                id: "",
                 name: _name.text,
                 desc: _desc.text,
                 price: double.parse(_price.text),
                 image: _image.text,
-                categoryId: int.parse(_categoryId));
+                categoryId: _categoryId);
 
             createItem(http.Client(), item).then((createdItem) {
               setState(() {

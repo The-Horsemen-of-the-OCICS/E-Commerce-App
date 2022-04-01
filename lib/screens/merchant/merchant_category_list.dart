@@ -31,7 +31,7 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
         .toList();
   }
 
-  Future<void> deleteCategoryById(http.Client client, int id) async {
+  Future<void> deleteCategoryById(http.Client client, String id) async {
     await client.delete(
         Uri.parse(NetworkConfig.API_BASE_URL + 'category/' + id.toString()));
   }
@@ -164,10 +164,8 @@ class _MerchantCategoryListState extends State<MerchantCategoryList> {
             )),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            ItemCategory itemCategory = ItemCategory(
-                id: Random().nextInt(999999),
-                name: _name.text,
-                icon: _icon.text);
+            ItemCategory itemCategory =
+                ItemCategory(id: "", name: _name.text, icon: _icon.text);
 
             createItemCategory(http.Client(), itemCategory)
                 .then((createdItemCategory) {

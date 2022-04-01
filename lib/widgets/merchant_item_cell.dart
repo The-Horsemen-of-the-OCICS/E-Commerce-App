@@ -163,12 +163,12 @@ class _MerchantItemCellState extends State<MerchantItemCell> {
 }
 
 class EditItemArguments {
-  final int id;
+  final String id;
   final String name;
   final String desc;
   final double price;
   final String image;
-  final int categoryId;
+  final String categoryId;
   final List<ItemCategory> categories;
   final Function editItem;
 

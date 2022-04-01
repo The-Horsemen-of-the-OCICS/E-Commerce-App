@@ -24,7 +24,7 @@ class MerchantEditItem extends StatelessWidget {
 
   Future<void> editItemById(
       http.Client client,
-      int id,
+      String id,
       String newName,
       String newDesc,
       double newPrice,
@@ -190,7 +190,7 @@ class MerchantEditItem extends StatelessWidget {
                 desc: _desc.text,
                 price: double.parse(_price.text),
                 image: _image.text,
-                categoryId: int.parse(_categoryId)));
+                categoryId: _categoryId));
           });
         },
         child: const Text('Submit',

@@ -1,5 +1,5 @@
 class ItemCategory {
-  int id;
+  String id;
   String name;
   String icon;
 
@@ -7,9 +7,9 @@ class ItemCategory {
 
   factory ItemCategory.fromJson(Map<String, dynamic> json) {
     return ItemCategory(
-      id: int.parse(json['id'] as String),
-      name: json['name'],
-      icon: json['icon'],
+      id: json['id'] as String,
+      name: json['name'] as String,
+      icon: json['icon'] as String,
     );
   }
 }

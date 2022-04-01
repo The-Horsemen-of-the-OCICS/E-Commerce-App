@@ -28,7 +28,7 @@ class MerchantCategoryCell extends StatefulWidget {
 
 class _MerchantItemCellState extends State<MerchantCategoryCell> {
   Future<List<Item>> fetchItemsByCategory(
-      http.Client client, int categoryId) async {
+      http.Client client, String categoryId) async {
     final response = await client.get(Uri.parse(
         NetworkConfig.API_BASE_URL + 'item/category/' + categoryId.toString()));
 
@@ -39,7 +39,7 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
 
   Future<void> editItemById(
       http.Client client,
-      int id,
+      String id,
       String newName,
       String newDesc,
       double newPrice,
@@ -181,7 +181,7 @@ class _MerchantItemCellState extends State<MerchantCategoryCell> {
 }
 
 class EditCategoryArguments {
-  final int id;
+  final String id;
   final String name;
   final String icon;
   final Function editItemCategory;
