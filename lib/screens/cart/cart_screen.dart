@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/models/cartList.dart';
 import 'package:ecommerceapp/screens/drawer/navigation_drawer.dart';
@@ -6,8 +8,26 @@ import 'components/body.dart';
 import 'components/check_out_card.dart';
 import 'package:ecommerceapp/routes/app_routes.dart';
 import '../../../models/auth.dart';
+import 'package:ecommerceapp/models/item.dart';
 import 'package:ecommerceapp/models/user.dart';
 import 'package:ecommerceapp/screens/login.dart';
+import 'package:http/http.dart' as http;
+import 'package:ecommerceapp/utils/network_config.dart';
+import 'package:flutter/foundation.dart';
+
+Future<List<Item>> fetchItems(http.Client client) async {
+  final response =
+      await client.get(Uri.parse(NetworkConfig.API_BASE_URL + 'item/'));
+
+  return compute(parseItems, response.body);
+}
+
+Future<List<Item>> parseItems(String responseBody) async {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  List<Item> items = parsed.map<Item>((json) => Item.fromJson(json)).toList();
+
+  return items;
+}
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -16,6 +36,20 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  List<Item>? itemList;
+  @override
+  void initState() {
+    super.initState();
+
+    // fetchName function is a asynchronously to GET http data
+    fetchItems(http.Client()).then((result) {
+      // Once we receive our name we trigger rebuild.
+      setState(() {
+        itemList = result;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     User? user = Provider.of<AuthModel>(context).getCurrentUser();
@@ -60,8 +94,6 @@ class _CartScreenState extends State<CartScreen> {
           ));
     }
     return Consumer<CartList>(builder: (context, cartList, _) {
-      var cartListPrice = cartList.getCartListPrice();
-
       if (cartList.cartItems.isEmpty) {
         return Scaffold(
           appBar: buildAppBar(context),
@@ -71,6 +103,8 @@ class _CartScreenState extends State<CartScreen> {
           ),
         );
       } else {
+        cartList.update(itemList);
+        var cartListPrice = cartList.getCartListPrice();
         return Scaffold(
           appBar: buildAppBar(context),
           drawer: const NavigationDrawer(),

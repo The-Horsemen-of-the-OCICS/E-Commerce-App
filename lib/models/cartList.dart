@@ -1,9 +1,10 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:ecommerceapp/models/item.dart';
 import 'cartItem.dart';
 
 class CartList extends ChangeNotifier {
-  final List<CartItem> _cartItems = [];
+  List<CartItem> _cartItems = [];
 
   UnmodifiableListView<CartItem> get cartItems =>
       UnmodifiableListView(_cartItems);
@@ -54,5 +55,22 @@ class CartList extends ChangeNotifier {
       total += item.quantity * item.itemPrice;
     }
     return total;
+  }
+
+  void update(List<Item>? itemList) {
+    if (itemList != null) {
+      List<CartItem> newList = [];
+      itemList.forEach((item) {
+        _cartItems.forEach((cItem) {
+          if (item.id == cItem.id) {
+            cItem.name = item.name;
+            cItem.image = item.image;
+            cItem.itemPrice = item.price;
+            newList.add(cItem);
+          }
+        });
+      });
+      _cartItems = List.from(newList);
+    }
   }
 }
